@@ -1,7 +1,7 @@
 <template>
   <el-container id="app">
     <el-aside width="inherit">
-      <el-menu id="nav" :default-active="$route.path" :collapse="isCollapse" background-color="#262130" text-color="#fff" active-text-color="#ffd04b" router>
+      <el-menu id="nav" :default-active="activeNav" :collapse="isCollapse" background-color="#282a36" text-color="#fff" active-text-color="#ffd04b" router>
         <el-menu-item index="" @click="isCollapse=!isCollapse">
           <i class="el-icon-fa-bars"></i><span slot="title">{{ isCollapse ? $t('menu.expand') : $t('menu.collapse') }}</span>
         </el-menu-item>
@@ -22,7 +22,7 @@
         </el-menu-item>
       </el-menu>
     </el-aside>
-    <el-container class="a">
+    <el-container>
       <el-main id="content">
         <router-view/>
       </el-main>
@@ -42,6 +42,12 @@ export default {
     isCollapse () {
       localStorage.setItem('isCollapse', this.isCollapse.toString())
     }
+  },
+  computed: {
+    activeNav () {
+      const segments = this.$route.path.match(/^(\/[^/]+).*/)
+      return segments[1]
+    }
   }
 }
 </script>
@@ -52,7 +58,7 @@ export default {
 @import "style/iconfont/iconfont.css";
 
 #app {
-  font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+  font-family: Monaco, Menlo, Consolas, monospace, "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -65,8 +71,5 @@ export default {
 #content {
   padding: 0;
   height: 100vh;
-}
-.a {
-  width: 100%;
 }
 </style>

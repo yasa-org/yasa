@@ -5,19 +5,19 @@
         <el-select slot="prepend" v-model="selectedCollection" :value="selectedCollection">
           <el-option v-for="c in collections" :key="c" :value="c"></el-option>
         </el-select>
-        <el-button slot="append" icon="el-icon-search" @click="onQuery" :loading="loading">{{ $t('discover.numHit', [numHit]) }}</el-button>
+        <el-button slot="append" icon="el-icon-search" @click="onQuery" :loading="state.loadingMore">{{ $t('discover.numHit', [numHit]) }}</el-button>
       </el-input>
     </el-header>
     <el-container>
       <el-aside width="183px">
-        <el-table ref="selectedFields" :data="selectedFields" v-loading="loadingFields">
+        <el-table ref="selectedFields" :data="selectedFields" v-loading="state.loadingFields">
           <el-table-column prop="name" label="Selected Fields">
             <div slot-scope="scope" class="field-row">
               {{ scope.row.name }} <el-button class="operate-field-button" type="text" icon="el-icon-minus" @click="removeField(scope.row)"></el-button>
             </div>
           </el-table-column>
         </el-table>
-        <el-table ref="availableFields" :data="availableFields" v-loading="loadingFields">
+        <el-table ref="availableFields" :data="availableFields" v-loading="state.loadingFields">
           <el-table-column prop="name" label="Available Fields">
             <div slot-scope="scope" class="field-row">
               {{ scope.row.name }} <el-button class="operate-field-button" type="text" icon="el-icon-plus" @click="addField(scope.row)"></el-button>
@@ -26,7 +26,7 @@
         </el-table>
       </el-aside>
       <el-main>
-        <el-table height="calc(100% - 28px)" ref="filteredDocs" :data="filteredDocs" v-loading="loading" stripe>
+        <el-table height="calc(100% - 28px)" ref="filteredDocs" :data="filteredDocs" v-loading="state.loadingMore" stripe>
           <el-table-column type="expand">
             <template slot-scope="props">
               <el-table :data="fields" stripe>
@@ -40,7 +40,7 @@
           <el-table-column v-if="selectedFields.length===0" label="_source" :formatter="sourceFormatter"></el-table-column>
           <el-table-column v-for="f in selectedFields" :key="f.name" :prop="f.name" :label="f.name"></el-table-column>
         </el-table>
-        <el-button id="load-more" type="text" :loading="loadingMore" @click="loadMore">加载更多</el-button>
+        <el-button id="load-more" type="text" :loading="state.loadingMore" @click="loadMore">{{ $t('common.loadMore') }}</el-button>
       </el-main>
     </el-container>
   </el-container>
@@ -60,10 +60,15 @@ export default {
       filteredDocs: [],
       inputQueryString: undefined,
       q: '*:*',
-      loading: false,
-      loadingFields: false,
-      loadingMore: false,
-      result: {}
+      result: {},
+      state: {
+        loadingCollections: true,
+        loadingCollectionsSuccess: true,
+        loadingFields: true,
+        loadingFieldsSuccess: true,
+        loadingMore: true,
+        loadingMoreSuccess: true
+      }
     }
   },
   created () {
@@ -71,31 +76,56 @@ export default {
   },
   methods: {
     loadCollections () {
-      this.$http.jsonp('/solr/admin/collections', {
-        params: {
-          action: 'LIST',
-          wt: 'json'
-        },
-        jsonp: 'json.wrf'
-      }).then((res) => {
-        this.collections = res.data.collections
-      }, () => this.$message.error(''))
+      this.state.loadingCollections = true
+      this.$http.jsonp('/solr/admin/info/system?wt=json', {jsonp: 'json.wrf'}).then(res => {
+        if (res.data.mode === 'solrcloud') {
+          this.$http.jsonp('/solr/admin/collections', {
+            params: {
+              action: 'LIST',
+              wt: 'json'
+            },
+            jsonp: 'json.wrf'
+          }).then((res) => {
+            this.collections = res.data.collections
+            this.state.loadingCollections = false
+            this.state.loadingCollectionsSuccess = true
+          }, () => {
+            this.state.loadingCollections = false
+            this.state.loadingCollectionsSuccess = false
+          })
+        } else {
+          this.$http.jsonp('/solr/admin/cores', {
+            params: {
+              wt: 'json'
+            },
+            jsonp: 'json.wrf'
+          }).then((res) => {
+            this.collections = Object.keys(res.data.status)
+            this.state.loadingCollections = false
+            this.state.loadingCollectionsSuccess = true
+          }, () => {
+            this.state.loadingCollections = false
+            this.state.loadingCollectionsSuccess = false
+          })
+        }
+      })
     },
     loadFields () {
       if (!this.selectedCollection) return
 
-      this.loadingFields = true
+      this.state.loadingFields = true
 
       this.$http.get(`/solr/${this.selectedCollection}/schema/fields?wt=csv`).then(res => {
         this.fields = res.data.split(',').map(f => ({name: f}))
-        this.loadingFields = false
+        this.state.loadingFields = false
+        this.state.loadingFieldsSuccess = true
       }, () => {
-        this.$message.error('')
-        this.loadingFields = false
+        this.state.loadingFields = false
+        this.state.loadingFieldsSuccess = false
       })
     },
     loadDocs () {
-      this.loading = true
+      this.state.loadingMore = true
       this.$http.get(`/solr/${this.selectedCollection}/select?wt=json`, {
         params: {
           q: this.q,
@@ -104,33 +134,35 @@ export default {
           cursorMark: '*'
         }
       }).then(res => {
-        this.loading = false
         this.result = res.data
+        this.state.loadingMore = false
+        this.state.loadingMoreSuccess = true
       }, () => {
-        this.loading = false
-        this.$message.error('')
+        this.state.loadingMore = false
+        this.state.loadingMoreSuccess = false
       })
     },
     loadMore () {
-      this.loadingMore = true
+      this.state.loadingMore = true
       this.$http.get(`/solr/${this.selectedCollection}/select?wt=json`, {
         params: {
           q: this.q,
           sort: 'id desc',
           rows: 50,
-          cursorMark: this.result.response.nextCursorMark
+          cursorMark: this.result.nextCursorMark
         }
       }).then(res => {
-        this.loadingMore = false
         this.filteredDocs.push(...res.data.response.docs)
+        this.state.loadingMore = false
+        this.state.loadingMoreSuccess = true
       }, () => {
-        this.loadingMore = false
-        this.$message.error('')
+        this.state.loadingMore = false
+        this.state.loadingMoreSuccess = false
       })
     },
 
     onQuery () {
-      if (this.loading) return
+      if (this.state.loadingMore) return
       this.q = this.inputQueryString || '*:*'
       this.loadDocs()
     },

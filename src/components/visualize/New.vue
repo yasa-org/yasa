@@ -9,7 +9,7 @@
     <el-row :gutter="8">
       <el-col :span="4" :md="4" :sm="6" :xs="8" v-for="chart in charts" :key="chart.title">
         <el-card align="center" shadow="hover">
-          <el-button type="text" @click="newChart">
+          <el-button type="text" @click="newChart" :disabled="chart.title!=='Line'">
             <img class="image" :src="chart.icon">
             <div style="padding: 14px;">{{ chart.title }}</div>
           </el-button>
@@ -31,12 +31,12 @@ export default {
   data () {
     return {
       charts: [
-        {title: 'Area', icon: ImageArea},
-        {title: 'Heat Map', icon: ImageHeatMap},
-        {title: 'Horizontal bar', icon: ImageHorizontalBar},
         {title: 'Line', icon: ImageLine},
+        {title: 'Vertical Bar', icon: ImageVerticalBar},
+        {title: 'Horizontal bar', icon: ImageHorizontalBar},
+        {title: 'Area', icon: ImageArea},
         {title: 'Pie', icon: ImagePie},
-        {title: 'Vertical Bar', icon: ImageVerticalBar}
+        {title: 'Heat Map', icon: ImageHeatMap}
       ]
     }
   },
@@ -54,6 +54,10 @@ export default {
 }
 .el-card {
   margin-bottom: 8px;
+}
+.el-button {
+  width: 100%;
+  height: 100%;
 }
 .image {
   height: 46px;

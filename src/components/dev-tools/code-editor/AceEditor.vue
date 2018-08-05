@@ -5,6 +5,7 @@
 <script>
 import ace from 'brace'
 import 'brace/mode/json'
+import 'brace/theme/github'
 import './mode/yasa'
 export default {
   name: 'code-editor',
@@ -14,7 +15,12 @@ export default {
       required: true
     },
     lang: String,
-    theme: String,
+    theme: {
+      type: String,
+      default () {
+        return 'ace/theme/github'
+      }
+    },
     height: String,
     width: String,
     options: Object,
@@ -40,6 +46,9 @@ export default {
     },
     lang () {
       this.editor.session.setMode(`ace/mode/${this.lang}`)
+    },
+    theme () {
+      this.editor.setTheme(this.theme)
     }
   },
   beforeDestroy: function () {
@@ -49,6 +58,7 @@ export default {
   mounted: function () {
     this.editor = ace.edit(this.$el)
     this.editor.$blockScrolling = Infinity
+    this.editor.setTheme(this.theme)
     this.editor.setValue(this.value)
     this.editor.renderer.setShowGutter(this.showGutter)
     this.editor.setOptions({

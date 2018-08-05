@@ -1,10 +1,10 @@
 <template>
   <div id="root">
     <el-row>
-      <el-col :span="10">
-        <code-editor ref="codeEditor" id="code-editor" v-model="content" :value="content" lang="yasa" show-gutter></code-editor>
+      <el-col :span="12">
+        <code-editor ref="codeEditor" id="code-editor" v-model="content" :value="content" lang="yasa" theme="ace/theme/dawn" show-gutter></code-editor>
       </el-col>
-      <el-col :span="14">
+      <el-col :span="12">
         <tree-view id="result" :data="result" :options="resultOptions"></tree-view>
       </el-col>
     </el-row>
@@ -13,6 +13,7 @@
 
 <script>
 import CodeEditor from './code-editor/AceEditor'
+import 'brace/theme/dawn'
 
 export default {
   name: 'dev-tools',
@@ -21,7 +22,7 @@ export default {
   },
   data () {
     return {
-      content: '',
+      content: localStorage.getItem('DevTool::Content') || '',
       result: {},
       resultOptions: {
         rootObjectKey: 'result',
@@ -45,7 +46,7 @@ export default {
         }
         const commandLine = editor.session.doc.getLine(startRow)
         const dataLines = editor.session.doc.getLines(startRow + 1, endRow).join('\n')
-        console.log(commandLine, dataLines)
+        console.log('commandLine=%s, dataLines=%s', commandLine, dataLines)
 
         const methodAndUrl = commandLine.split(/\s+/)
         let method = 'GET'
@@ -54,10 +55,9 @@ export default {
           method = methodAndUrl[0]
           url = methodAndUrl[1]
         }
-        const data = JSON.parse(dataLines)
+        const data = dataLines ? JSON.parse(dataLines) : {}
         data.wt = 'json'
-        console.log(method, url)
-        console.log(data)
+        console.log('method=%s, url=%s, data=%o', method, url, data)
 
         switch (method) {
           case 'GET':
@@ -74,6 +74,11 @@ export default {
         win: 'ctrl-enter'
       }
     })
+  },
+  watch: {
+    content () {
+      localStorage.setItem('DevTool::Content', this.content)
+    }
   },
   methods: {
   }
