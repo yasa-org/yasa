@@ -12,6 +12,15 @@ import TreeView from 'vue-json-tree-view'
 import './style/theme/index.css'
 import './style/style.less'
 
+import ECharts from 'vue-echarts/components/ECharts'
+import 'echarts/lib/chart/bar'
+import 'echarts/lib/chart/line'
+import 'echarts/lib/component/tooltip'
+import 'echarts/lib/component/axis'
+import 'echarts/lib/component/axisPointer'
+import 'echarts/lib/component/legend'
+import 'echarts/lib/component/legendScroll'
+
 Vue.use(VueI18n)
 Vue.use(Vuex)
 Vue.use(ElementUI, { locale, size: 'mini' })
@@ -26,6 +35,8 @@ Vue.http.interceptors.push((req, next) => {
     return res
   })
 })
+
+Vue.component('chart', ECharts)
 
 Vue.config.productionTip = false
 
@@ -54,7 +65,9 @@ const messages = {
     },
     visualize: {
       metrics: 'Metrics',
-      buckets: 'Buckets'
+      buckets: 'Buckets',
+      xAxis: 'X-Axis',
+      yAxis: 'Y-Axis'
     }
   }
 }

@@ -2,7 +2,7 @@
   <el-container id="chart-root">
     <el-header height="28px">
       <el-input v-model="inputQueryString" :placeholder="$t('discover.queryInputHint')" @keyup.enter.native="onQuery">
-        <el-select slot="prepend" v-model="selectedCollection" :value="selectedCollection">
+        <el-select slot="prepend" v-model="selectedCollection" :value="selectedCollection" :loading="state.loadingCollections">
           <el-option v-for="c in collections" :key="c" :value="c"></el-option>
         </el-select>
         <el-button slot="append" icon="el-icon-search" @click="onQuery" :loading="state.loadingMore">{{ $t('discover.numHit', [numHit]) }}</el-button>
@@ -13,7 +13,7 @@
         <chart-form :fields="fields" @submit="onSubmit"></chart-form>
       </el-aside>
       <el-main>
-        <el-table height="100%"></el-table>
+        <chart class="chart" ref="chart" :options="chartOptions" auto-resize/>
       </el-main>
     </el-container>
   </el-container>
@@ -23,7 +23,7 @@
 import ChartForm from './ChartForm'
 
 export default {
-  name: 'chart',
+  name: 'yasa-chart',
   components: {ChartForm},
   data () {
     return {
@@ -37,6 +37,36 @@ export default {
         loadingCollectionsSuccess: true,
         loadingFields: true,
         loadingFieldsSuccess: true
+      },
+      chartOptions: {
+        dataset: {
+          source: []
+        },
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {}
+        },
+        legend: {},
+        xAxis: {
+          type: 'category',
+          axisTick: {
+            alignWithLabel: true
+          },
+          axisLabel: {
+            rotate: 45
+          }
+        },
+        yAxis: {},
+        series: [
+          {name: 'xAxis', type: 'line', dimensions: ['val', 'yAxis']}
+        ],
+        grid: {
+          left: 10,
+          right: 20,
+          bottom: 10,
+          top: 40,
+          containLabel: true
+        }
       }
     }
   },
@@ -85,7 +115,7 @@ export default {
       this.state.loadingFields = true
 
       this.$http.get(`/solr/${this.selectedCollection}/schema/fields?wt=csv`).then(res => {
-        this.fields = res.data.split(',').map(f => ({name: f}))
+        this.fields = res.data.split(',').map(f => ({name: f.trim()})).sort((a, b) => a.name.localeCompare(b.name))
         this.state.loadingFields = false
         this.state.loadingFieldsSuccess = true
       }, () => {
@@ -97,6 +127,26 @@ export default {
     },
     onSubmit (xAxis, yAxis) {
       console.log('xAxis=%o, yAxis=%o', xAxis, yAxis)
+      this.$http.jsonp(`/solr/${this.selectedCollection}/query?w=json`, {
+        params: {
+          q: '*:*',
+          rows: 0,
+          'json.facet': JSON.stringify({
+            xAxis: {
+              type: 'terms',
+              field: xAxis.field,
+              limit: 50,
+              sort: 'index',
+              facet: {
+                yAxis: `unique(${yAxis.field})`
+              }
+            }
+          })
+        },
+        jsonp: 'json.wrf'
+      }).then(res => {
+        this.chartOptions.dataset.source = res.data.facets.xAxis.buckets
+      })
     }
   },
   watch: {
@@ -135,5 +185,9 @@ export default {
 }
 .el-select {
   width: 290px;
+}
+.chart {
+  width: 100%;
+  height: 100%;
 }
 </style>
