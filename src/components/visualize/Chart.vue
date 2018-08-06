@@ -40,7 +40,7 @@ export default {
       },
       chartOptions: {
         dataset: {
-          source: []
+          source: [{}]
         },
         tooltip: {
           trigger: 'axis',
