@@ -5,7 +5,7 @@
         <code-editor ref="codeEditor" id="code-editor" v-model="content" :value="content" lang="yasa" theme="ace/theme/dawn" show-gutter></code-editor>
       </el-col>
       <el-col :span="12">
-        <tree-view id="result" :data="result" :options="resultOptions"></tree-view>
+        <tree-view id="result" :data="result" :options="resultOptions" v-loading="state.loading"></tree-view>
       </el-col>
     </el-row>
   </div>
@@ -27,6 +27,9 @@ export default {
       resultOptions: {
         rootObjectKey: 'result',
         maxDepth: Infinity
+      },
+      state: {
+        loading: false
       }
     }
   },
@@ -61,8 +64,12 @@ export default {
 
         switch (method) {
           case 'GET':
+            this.state.loading = true
             this.$http.jsonp(url, {params: data, jsonp: 'json.wrf'}).then(res => {
               this.result = res.data
+              this.state.loading = false
+            }, () => {
+              this.state.loading = false
             })
             break
           default:

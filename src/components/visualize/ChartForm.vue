@@ -8,8 +8,7 @@
       <el-form>
         <el-form-item label="Aggregation" v-if="false">
           <el-select v-model="xAxis.aggregation" :value="xAxis.aggregation" filterable>
-            <el-option v-for="a in xAggregations" :key="a" :value="a">
-            </el-option>
+            <el-option v-for="a in xAggregations" :key="a" :value="a"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="Field">
@@ -18,7 +17,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="Custom Label">
-          <el-input></el-input>
+          <el-input v-model="xAxis.customLabel" placeholder="X axis label"></el-input>
         </el-form-item>
       </el-form>
     </el-card>
@@ -36,7 +35,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="Custom Label">
-          <el-input></el-input>
+          <el-input v-model="yAxis.customLabel" placeholder="Y axis label"></el-input>
         </el-form-item>
       </el-form>
     </el-card>
@@ -60,7 +59,8 @@ export default {
       xAggregations: ['Date Histogram', 'Date Range', 'Histogram', 'Terms'],
       yAxis: {
         aggregation: undefined,
-        field: undefined
+        field: undefined,
+        customLabel: undefined
       },
       xAxis: {
         aggregation: undefined,

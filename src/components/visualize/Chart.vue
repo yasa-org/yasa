@@ -2,7 +2,7 @@
   <el-container id="chart-root">
     <el-header height="28px">
       <el-input v-model="inputQueryString" :placeholder="$t('discover.queryInputHint')" @keyup.enter.native="onQuery">
-        <el-select slot="prepend" v-model="selectedCollection" :value="selectedCollection" :loading="state.loadingCollections">
+        <el-select slot="prepend" :value="collection" :loading="state.loadingCollections">
           <el-option v-for="c in collections" :key="c" :value="c"></el-option>
         </el-select>
         <el-button slot="append" icon="el-icon-search" @click="onQuery" :loading="state.loadingMore">{{ $t('discover.numHit', [numHit]) }}</el-button>
@@ -21,6 +21,7 @@
 
 <script>
 import ChartForm from './ChartForm'
+import {mapState, mapMutations} from 'vuex'
 
 export default {
   name: 'yasa-chart',
@@ -28,19 +29,29 @@ export default {
   data () {
     return {
       numHit: 0,
-      collections: [],
-      selectedCollection: undefined,
       fields: [],
       inputQueryString: undefined,
       state: {
         loadingCollections: true,
         loadingCollectionsSuccess: true,
         loadingFields: true,
-        loadingFieldsSuccess: true
+        loadingFieldsSuccess: true,
+        loadingChartData: false
       },
-      chartOptions: {
+      chartDataSource: [{}],
+      xAxisOptions: {},
+      yAxisOptions: {}
+    }
+  },
+  created () {
+    this.loadCollections()
+  },
+  computed: {
+    ...mapState(['collections', 'collection']),
+    chartOptions () {
+      return {
         dataset: {
-          source: [{}]
+          source: this.chartDataSource
         },
         tooltip: {
           trigger: 'axis',
@@ -70,51 +81,14 @@ export default {
       }
     }
   },
-  created () {
-    this.loadCollections()
-  },
   methods: {
-    loadCollections () {
-      this.state.loadingCollections = true
-      this.$http.jsonp('/solr/admin/info/system?wt=json', {jsonp: 'json.wrf'}).then(res => {
-        if (res.data.mode === 'solrcloud') {
-          this.$http.jsonp('/solr/admin/collections', {
-            params: {
-              action: 'LIST',
-              wt: 'json'
-            },
-            jsonp: 'json.wrf'
-          }).then((res) => {
-            this.collections = res.data.collections
-            this.state.loadingCollections = false
-            this.state.loadingCollectionsSuccess = true
-          }, () => {
-            this.state.loadingCollections = false
-            this.state.loadingCollectionsSuccess = false
-          })
-        } else {
-          this.$http.jsonp('/solr/admin/cores', {
-            params: {
-              wt: 'json'
-            },
-            jsonp: 'json.wrf'
-          }).then((res) => {
-            this.collections = Object.keys(res.data.status)
-            this.state.loadingCollections = false
-            this.state.loadingCollectionsSuccess = true
-          }, () => {
-            this.state.loadingCollections = false
-            this.state.loadingCollectionsSuccess = false
-          })
-        }
-      })
-    },
+    ...mapMutations(['setCollection']),
     loadFields () {
-      if (!this.selectedCollection) return
+      if (!this.collection) return
 
       this.state.loadingFields = true
 
-      this.$http.get(`/solr/${this.selectedCollection}/schema/fields?wt=csv`).then(res => {
+      this.$http.get(`/solr/${this.collection}/schema/fields?wt=csv`).then(res => {
         this.fields = res.data.split(',').map(f => ({name: f.trim()})).sort((a, b) => a.name.localeCompare(b.name))
         this.state.loadingFields = false
         this.state.loadingFieldsSuccess = true
@@ -126,8 +100,11 @@ export default {
     onQuery () {
     },
     onSubmit (xAxis, yAxis) {
-      console.log('xAxis=%o, yAxis=%o', xAxis, yAxis)
-      this.$http.jsonp(`/solr/${this.selectedCollection}/query?w=json`, {
+      this.xAxisOptions = xAxis
+      this.yAxisOptions = yAxis
+      if (this.state.loadingChartData) return
+      this.state.loadingChartData = true
+      this.$http.jsonp(`/solr/${this.collection}/query?w=json`, {
         params: {
           q: '*:*',
           rows: 0,
@@ -145,22 +122,30 @@ export default {
         },
         jsonp: 'json.wrf'
       }).then(res => {
-        this.chartOptions.dataset.source = res.data.facets.xAxis.buckets
+        this.chartDataSource = res.data.facets.xAxis.buckets
+        this.state.loadingChartData = false
       })
     }
   },
   watch: {
     collections () {
       if (this.collections.length > 0) {
-        this.selectedCollection = this.collections[0]
+        this.setCollection(this.collections[0])
       }
     },
-    selectedCollection () {
+    collection () {
       this.result = {}
       this.loadFields()
     },
     result () {
       this.numHit = ((this.result || {}).response || {}).numFound || 0
+    },
+    'state.loadingChartData' () {
+      if (this.state.loadingChartData) {
+        this.$refs.chart.showLoading()
+      } else {
+        this.$refs.chart.hideLoading()
+      }
     }
   }
 }

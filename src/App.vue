@@ -31,12 +31,16 @@
 </template>
 
 <script>
+import {mapActions} from 'vuex'
 export default {
   name: 'App',
   data () {
     return {
       isCollapse: localStorage.getItem('isCollapse') === 'true'
     }
+  },
+  created () {
+    this.loadCollections()
   },
   watch: {
     isCollapse () {
@@ -48,6 +52,9 @@ export default {
       const segments = this.$route.path.match(/^(\/[^/]+).*/)
       return segments[1]
     }
+  },
+  methods: {
+    ...mapActions(['loadCollections'])
   }
 }
 </script>
