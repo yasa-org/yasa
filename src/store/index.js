@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 
 import _ from '../util'
 import discover from './discover'
+import visualize from './visualize'
 
 Vue.use(Vuex)
 
@@ -24,7 +25,10 @@ export default new Vuex.Store({
   mutations: {
     setCollections: _.set('collections'),
     setLoadingCollections: _.set('loadingCollections'),
-    setCollection: _.set('collection'),
+    setCollection: (state, val) => {
+      state.collection = val
+      localStorage.setItem('collection', state.collection)
+    },
     setFields: _.set('fields'),
     setLoadingFields: _.set('loadingFields')
   },
@@ -56,6 +60,7 @@ export default new Vuex.Store({
     }
   },
   modules: {
-    discover
+    discover,
+    visualize
   }
 })

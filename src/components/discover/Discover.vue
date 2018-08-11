@@ -50,12 +50,16 @@
 import {mapState, mapMutations, mapActions} from 'vuex'
 export default {
   name: 'discover',
-  data () {
+  data: function () {
     return {
       inputQueryString: undefined
     }
   },
-  created () {
+  created: function () {
+    this.selectCollection()
+  },
+  mounted: function () {
+    this.inputQueryString = this.queryString === '*:*' ? undefined : this.queryString
   },
   computed: {
     ...mapState(['collections', 'fields']),
@@ -78,6 +82,14 @@ export default {
     ...mapActions(['loadFields']),
     ...mapActions('discover', ['loadMore']),
 
+    selectCollection () {
+      if (localStorage.getItem('collection')) {
+        this.setCollection(localStorage.getItem('collection'))
+      } else if (this.collections.length > 0) {
+        this.setCollection(this.collections[0])
+      }
+    },
+
     onQuery () {
       if (this.loadingMore) return
       this.setQueryString(this.inputQueryString || '*:*')
@@ -92,9 +104,7 @@ export default {
   },
   watch: {
     collections () {
-      if (this.collections.length > 0) {
-        this.setCollection(this.collections[0])
-      }
+      this.selectCollection()
     },
     collection () {
       this.setResult({})

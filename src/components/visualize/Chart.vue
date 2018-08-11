@@ -2,10 +2,10 @@
   <el-container id="chart-root">
     <el-header height="28px">
       <el-input v-model="inputQueryString" :placeholder="$t('discover.queryInputHint')" @keyup.enter.native="onQuery">
-        <el-select slot="prepend" :value="collection" :loading="state.loadingCollections">
+        <el-select slot="prepend" v-model="collection" :value="collection" :loading="$store.state.loadingCollections">
           <el-option v-for="c in collections" :key="c" :value="c"></el-option>
         </el-select>
-        <el-button slot="append" icon="el-icon-search" @click="onQuery" :loading="state.loadingMore">{{ $t('discover.numHit', [numHit]) }}</el-button>
+        <el-button slot="append" icon="el-icon-search" @click="onQuery" :loading="$store.state.loadingMore">{{ $t('discover.numHit', [numHit]) }}</el-button>
       </el-input>
     </el-header>
     <el-container>
@@ -21,7 +21,7 @@
 
 <script>
 import ChartForm from './ChartForm'
-import {mapState, mapMutations} from 'vuex'
+import {mapState, mapMutations, mapActions} from 'vuex'
 
 export default {
   name: 'yasa-chart',
@@ -29,25 +29,20 @@ export default {
   data () {
     return {
       numHit: 0,
-      fields: [],
-      inputQueryString: undefined,
-      state: {
-        loadingCollections: true,
-        loadingCollectionsSuccess: true,
-        loadingFields: true,
-        loadingFieldsSuccess: true,
-        loadingChartData: false
-      },
-      chartDataSource: [{}],
-      xAxisOptions: {},
-      yAxisOptions: {}
+      inputQueryString: undefined
     }
   },
-  created () {
-    this.loadCollections()
-  },
   computed: {
-    ...mapState(['collections', 'collection']),
+    ...mapState(['collections', 'fields']),
+    ...mapState('visualize', ['chartDataSource', 'loadingChartData']),
+    collection: {
+      get () {
+        return this.$store.state.collection
+      },
+      set (val) {
+        this.setCollection(val)
+      }
+    },
     chartOptions () {
       return {
         dataset: {
@@ -83,48 +78,15 @@ export default {
   },
   methods: {
     ...mapMutations(['setCollection']),
-    loadFields () {
-      if (!this.collection) return
-
-      this.state.loadingFields = true
-
-      this.$http.get(`/solr/${this.collection}/schema/fields?wt=csv`).then(res => {
-        this.fields = res.data.split(',').map(f => ({name: f.trim()})).sort((a, b) => a.name.localeCompare(b.name))
-        this.state.loadingFields = false
-        this.state.loadingFieldsSuccess = true
-      }, () => {
-        this.state.loadingFields = false
-        this.state.loadingFieldsSuccess = false
-      })
-    },
+    ...mapMutations('visualize', ['setXAxisOptions', 'setYAxisOptions']),
+    ...mapActions(['loadFields']),
+    ...mapActions('visualize', ['loadChartData']),
     onQuery () {
     },
     onSubmit (xAxis, yAxis) {
-      this.xAxisOptions = xAxis
-      this.yAxisOptions = yAxis
-      if (this.state.loadingChartData) return
-      this.state.loadingChartData = true
-      this.$http.jsonp(`/solr/${this.collection}/query?w=json`, {
-        params: {
-          q: '*:*',
-          rows: 0,
-          'json.facet': JSON.stringify({
-            xAxis: {
-              type: 'terms',
-              field: xAxis.field,
-              limit: 50,
-              sort: 'index',
-              facet: {
-                yAxis: `unique(${yAxis.field})`
-              }
-            }
-          })
-        },
-        jsonp: 'json.wrf'
-      }).then(res => {
-        this.chartDataSource = res.data.facets.xAxis.buckets
-        this.state.loadingChartData = false
-      })
+      this.setXAxisOptions(xAxis)
+      this.setYAxisOptions(yAxis)
+      this.loadChartData()
     }
   },
   watch: {
@@ -134,14 +96,13 @@ export default {
       }
     },
     collection () {
-      this.result = {}
       this.loadFields()
     },
     result () {
       this.numHit = ((this.result || {}).response || {}).numFound || 0
     },
-    'state.loadingChartData' () {
-      if (this.state.loadingChartData) {
+    loadingChartData () {
+      if (this.loadingChartData) {
         this.$refs.chart.showLoading()
       } else {
         this.$refs.chart.hideLoading()
