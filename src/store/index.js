@@ -30,12 +30,7 @@ const store = new Vuex.Store({
       localStorage.setItem('currentCollection', state.collection)
     },
     setFields: _.set('fields'),
-    setLoadingFields: _.set('loadingFields'),
-    initialiseStore (state) {
-      if (localStorage.getItem('store')) {
-        this.replaceState(Object.assign(state, JSON.parse(localStorage.getItem('store'))))
-      }
-    }
+    setLoadingFields: _.set('loadingFields')
   },
   actions: {
     loadCollections: (context) => {
