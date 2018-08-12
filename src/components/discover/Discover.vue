@@ -55,10 +55,8 @@ export default {
       inputQueryString: undefined
     }
   },
-  created: function () {
-    this.selectCollection()
-  },
   mounted: function () {
+    this.selectCollection()
     this.inputQueryString = this.queryString === '*:*' ? undefined : this.queryString
   },
   computed: {

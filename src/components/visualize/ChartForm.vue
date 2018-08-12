@@ -1,41 +1,28 @@
 <template>
   <div>
     <div align="right">
-      <el-button icon="el-icon-fa-play" type="primary" @click="$emit('submit', xAxis, yAxis)"></el-button>
+      <el-button icon="el-icon-fa-play" type="primary" @click="submit"></el-button>
     </div>
     <el-card shadow="never" id="buckets">
-      <div slot="header">{{ $t('visualize.xAxis') }}</div>
-      <el-form>
-        <el-form-item label="Aggregation" v-if="false">
-          <el-select v-model="xAxis.aggregation" :value="xAxis.aggregation" filterable>
-            <el-option v-for="a in xAggregations" :key="a" :value="a"></el-option>
-          </el-select>
+      <div slot="header">{{ $t('visualize.title') }}</div>
+      <el-form ref="form" :rules="validateRules" :model="formData">
+        <el-form-item prop="title" label="Title">
+          <el-input v-model="formData.title" :placeholder="$t('visualize.titleHint')"></el-input>
         </el-form-item>
-        <el-form-item label="Field">
-          <el-select v-model="xAxis.field" :value="xAxis.field" filterable>
+        <el-form-item prop="xField" label="X-Axis Field">
+          <el-select v-model="formData.xField" :value="formData.xField" filterable>
             <el-option v-for="f in fields" :key="f.name" :value="f.name"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="Custom Label">
-          <el-input v-model="xAxis.customLabel" placeholder="X axis label"></el-input>
+        <el-form-item prop="yField" label="Y-Axis Field">
+          <el-select v-model="formData.yField" :value="formData.yField" filterable>
+            <el-option v-for="f in fields" :key="f.name" :value="f.name"></el-option>
+          </el-select>
         </el-form-item>
-      </el-form>
-    </el-card>
-    <el-card shadow="never" id="metrics">
-      <div slot="header">{{ $t('visualize.yAxis') }}</div>
-      <el-form>
-        <el-form-item label="Aggregation">
-          <el-select v-model="yAxis.aggregation" :value="yAxis.aggregation" filterable>
+        <el-form-item prop="yFieldAggregation" label="Aggregation">
+          <el-select v-model="formData.yFieldAggregation" :value="formData.yFieldAggregation" filterable>
             <el-option v-for="a in yAggregations" :key="a" :value="a"></el-option>
           </el-select>
-        </el-form-item>
-        <el-form-item label="Field">
-          <el-select v-model="yAxis.field" :value="yAxis.field" filterable>
-            <el-option v-for="f in fields" :key="f.name" :value="f.name"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="Custom Label">
-          <el-input v-model="yAxis.customLabel" placeholder="Y axis label"></el-input>
         </el-form-item>
       </el-form>
     </el-card>
@@ -55,17 +42,36 @@ export default {
   },
   data: function () {
     return {
-      yAggregations: ['Average', 'Count', 'Max', 'Median', 'Min', 'Sum'],
+      yAggregations: ['Average', 'Count', 'Unique', 'Max', 'Min', 'Sum'],
       xAggregations: ['Date Histogram', 'Date Range', 'Histogram', 'Terms'],
-      yAxis: {
-        aggregation: undefined,
-        field: undefined,
-        customLabel: undefined
+      formData: {
+        title: undefined,
+        xField: undefined,
+        yField: undefined,
+        yFieldAggregation: undefined
       },
-      xAxis: {
-        aggregation: undefined,
-        field: undefined
+      validateRules: {
+        yFieldAggregation: [{ required: true, message: this.$t('visualize.aggregationIsRequired'), trigger: 'change' }],
+        xField: [{ required: true, message: this.$t('visualize.fieldIsRequired'), trigger: 'change' }],
+        yField: [{ required: true, message: this.$t('visualize.fieldIsRequired'), trigger: 'change' }]
       }
+    }
+  },
+  computed: {
+
+  },
+  methods: {
+    submit () {
+      this.$refs.form.validate((valid) => {
+        if (valid) {
+          this.$emit('submit', this.formData)
+        } else return false
+      })
+    }
+  },
+  watch: {
+    fields () {
+      this.formData = {}
     }
   }
 }

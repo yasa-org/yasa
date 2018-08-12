@@ -28,13 +28,15 @@ export default {
   components: {ChartForm},
   data () {
     return {
-      numHit: 0,
       inputQueryString: undefined
     }
   },
+  mounted () {
+    this.selectCollection()
+  },
   computed: {
     ...mapState(['collections', 'fields']),
-    ...mapState('visualize', ['chartDataSource', 'loadingChartData']),
+    ...mapState('visualize', ['chartDataSource', 'loadingChartData', 'result', 'formData']),
     collection: {
       get () {
         return this.$store.state.collection
@@ -42,6 +44,22 @@ export default {
       set (val) {
         this.setCollection(val)
       }
+    },
+    chartType () {
+      const type = this.$route.query['type'].toLowerCase()
+      switch (type) {
+        case 'line':
+        case 'area':
+          return 'line'
+        case 'vertical bar':
+          return 'bar'
+        default:
+          return undefined
+      }
+    },
+    areaStyle () {
+      const type = this.$route.query['type'].toLowerCase()
+      return type === 'area' ? {} : undefined
     },
     chartOptions () {
       return {
@@ -64,7 +82,7 @@ export default {
         },
         yAxis: {},
         series: [
-          {name: 'xAxis', type: 'line', dimensions: ['val', 'yAxis']}
+          {name: this.formData.title || 'xAxis', type: this.chartType, dimensions: ['val', 'yAxis'], areaStyle: this.areaStyle, smooth: true}
         ],
         grid: {
           left: 10,
@@ -74,32 +92,35 @@ export default {
           containLabel: true
         }
       }
+    },
+    numHit () {
+      return ((this.result || {}).response || {}).numFound || 0
     }
   },
   methods: {
     ...mapMutations(['setCollection']),
-    ...mapMutations('visualize', ['setXAxisOptions', 'setYAxisOptions']),
+    ...mapMutations('visualize', ['setFormData', 'setResult', 'setQueryString']),
     ...mapActions(['loadFields']),
     ...mapActions('visualize', ['loadChartData']),
-    onQuery () {
-    },
-    onSubmit (xAxis, yAxis) {
-      this.setXAxisOptions(xAxis)
-      this.setYAxisOptions(yAxis)
+    onSubmit (formData) {
+      this.setFormData(formData)
       this.loadChartData()
+    },
+    onQuery () {
+      this.setQueryString(this.inputQueryString)
+      this.loadChartData()
+    },
+    selectCollection () {
+      if (localStorage.getItem('collection')) {
+        this.setCollection(localStorage.getItem('collection'))
+      } else if (this.collections.length > 0) {
+        this.setCollection(this.collections[0])
+      }
     }
   },
   watch: {
     collections () {
-      if (this.collections.length > 0) {
-        this.setCollection(this.collections[0])
-      }
-    },
-    collection () {
-      this.loadFields()
-    },
-    result () {
-      this.numHit = ((this.result || {}).response || {}).numFound || 0
+      this.selectCollection()
     },
     loadingChartData () {
       if (this.loadingChartData) {
@@ -107,6 +128,11 @@ export default {
       } else {
         this.$refs.chart.hideLoading()
       }
+    },
+    collection () {
+      this.setFormData({})
+      this.setResult({})
+      this.loadFields()
     }
   }
 }

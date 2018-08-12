@@ -24,10 +24,14 @@ const messages = {
       selectedFields: 'Selected Fields'
     },
     visualize: {
+      title: 'Visualize',
       metrics: 'Metrics',
       buckets: 'Buckets',
+      titleHint: 'Type chart title here',
       xAxis: 'X-Axis',
-      yAxis: 'Y-Axis'
+      yAxis: 'Y-Axis',
+      aggregationIsRequired: 'Aggregation is required',
+      fieldIsRequired: 'Field is required'
     }
   }
 }

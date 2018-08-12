@@ -9,7 +9,7 @@
     <el-row :gutter="8">
       <el-col :span="4" :md="4" :sm="6" :xs="8" v-for="chart in charts" :key="chart.title">
         <el-card align="center" shadow="hover">
-          <el-button type="text" @click="newChart" :disabled="chart.title!=='Line'">
+          <el-button type="text" @click="newChart(chart.title)">
             <img class="image" :src="chart.icon">
             <div style="padding: 14px;">{{ chart.title }}</div>
           </el-button>
@@ -41,8 +41,8 @@ export default {
     }
   },
   methods: {
-    newChart () {
-      this.$router.push('/visualize/chart')
+    newChart (type) {
+      this.$router.push({path: '/visualize/chart', query: { type: type }})
     }
   }
 }
