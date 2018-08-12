@@ -1,6 +1,6 @@
 import Vue from 'vue'
 
-import _ from '../util'
+import _ from '../../util/index'
 
 const aggregationJsonFacet = (formData) => {
   const agg = formData.yFieldAggregation.toLowerCase()

@@ -3,7 +3,7 @@ import Vuex from 'vuex'
 
 import _ from '../util'
 import discover from './discover'
-import visualize from './visualize'
+import visualize from './visualize/visualize'
 
 Vue.use(Vuex)
 
@@ -14,28 +14,34 @@ const params = {
   jsonp: 'json.wrf'
 }
 
-export default new Vuex.Store({
+const store = new Vuex.Store({
   state: {
     collections: [],
-    loadingCollections: true,
+    loadingCollections: false,
     collection: undefined,
     fields: [],
-    loadingFields: true
+    loadingFields: false
   },
   mutations: {
     setCollections: _.set('collections'),
     setLoadingCollections: _.set('loadingCollections'),
     setCollection: (state, val) => {
       state.collection = val
-      localStorage.setItem('collection', state.collection)
+      localStorage.setItem('currentCollection', state.collection)
     },
     setFields: _.set('fields'),
-    setLoadingFields: _.set('loadingFields')
+    setLoadingFields: _.set('loadingFields'),
+    initialiseStore (state) {
+      if (localStorage.getItem('store')) {
+        this.replaceState(Object.assign(state, JSON.parse(localStorage.getItem('store'))))
+      }
+    }
   },
   actions: {
     loadCollections: (context) => {
+      if (context.state.loadingCollections) return
       context.commit('setLoadingCollections', true)
-      Vue.http.jsonp('/solr/admin/info/system?wt=json', {jsonp: 'json.wrf'}).then(res => {
+      Vue.http.jsonp('/solr/admin/info/system', params).then(res => {
         if (res.data.mode === 'solrcloud') {
           Vue.http.jsonp('/solr/admin/collections?action=LIST', params).then((res) => {
             context.commit('setCollections', res.data.collections)
@@ -50,8 +56,7 @@ export default new Vuex.Store({
       })
     },
     loadFields: (context) => {
-      if (!context.state.collection) return
-
+      if (!context.state.collection || context.state.loadingFields) return
       context.commit('setLoadingFields', true)
       Vue.http.get(`/solr/${context.state.collection}/schema/fields?wt=csv`).then(res => {
         context.commit('setFields', res.data.split(',').map(f => ({name: f.trim()})).sort((a, b) => a.name.localeCompare(b.name)))
@@ -64,3 +69,4 @@ export default new Vuex.Store({
     visualize
   }
 })
+export default store

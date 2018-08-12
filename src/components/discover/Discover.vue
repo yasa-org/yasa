@@ -1,7 +1,7 @@
 <template>
   <el-container id="root">
     <el-header height="28px">
-      <el-input v-model="inputQueryString" :placeholder="$t('discover.queryInputHint')" @keyup.enter.native="onQuery">
+      <el-input v-model="localQueryString" :placeholder="$t('discover.queryInputHint')" @keyup.enter.native="onQuery">
         <el-select slot="prepend" v-model="collection" :value="collection" :loading="$store.state.loadingCollections">
           <el-option v-for="c in collections" :key="c" :value="c"></el-option>
         </el-select>
@@ -52,15 +52,17 @@ export default {
   name: 'discover',
   data: function () {
     return {
-      inputQueryString: undefined
+      localQueryString: undefined
     }
   },
   mounted: function () {
-    this.selectCollection()
-    this.inputQueryString = this.queryString === '*:*' ? undefined : this.queryString
+    this.localQueryString = this.queryString === '*:*' ? undefined : this.queryString
+    if (!this.collection) {
+      this.selectCollection()
+    }
   },
   computed: {
-    ...mapState(['collections', 'fields']),
+    ...mapState(['collections', 'collection', 'fields']),
     ...mapState('discover', ['queryString', 'docs', 'result', 'numHit', 'loadingMore', 'availableFields', 'selectedFields']),
     collection: {
       get () {
@@ -90,7 +92,7 @@ export default {
 
     onQuery () {
       if (this.loadingMore) return
-      this.setQueryString(this.inputQueryString || '*:*')
+      this.setQueryString(this.localQueryString || '*:*')
       this.setResult({})
       this.setDocs([])
       this.loadMore()

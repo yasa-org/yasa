@@ -1,7 +1,7 @@
 <template>
   <el-container id="chart-root">
     <el-header height="28px">
-      <el-input v-model="inputQueryString" :placeholder="$t('discover.queryInputHint')" @keyup.enter.native="onQuery">
+      <el-input v-model="localQueryString" :placeholder="$t('discover.queryInputHint')" @keyup.enter.native="onQuery">
         <el-select slot="prepend" v-model="collection" :value="collection" :loading="$store.state.loadingCollections">
           <el-option v-for="c in collections" :key="c" :value="c"></el-option>
         </el-select>
@@ -28,11 +28,12 @@ export default {
   components: {ChartForm},
   data () {
     return {
-      inputQueryString: undefined
+      localQueryString: undefined
     }
   },
   mounted () {
     this.selectCollection()
+    this.localQueryString = this.queryString === '*:*' ? undefined : this.queryString
   },
   computed: {
     ...mapState(['collections', 'fields']),
@@ -107,7 +108,7 @@ export default {
       this.loadChartData()
     },
     onQuery () {
-      this.setQueryString(this.inputQueryString)
+      this.setQueryString(this.localQueryString)
       this.loadChartData()
     },
     selectCollection () {

@@ -9,7 +9,7 @@
     <el-row :gutter="8">
       <el-col :span="4" :md="4" :sm="6" :xs="8" v-for="chart in charts" :key="chart.title">
         <el-card align="center" shadow="hover">
-          <el-button type="text" @click="newChart(chart.title)">
+          <el-button type="text" @click="newChart(chart.title)" :disabled="chart.title==='Pie'">
             <img class="image" :src="chart.icon">
             <div style="padding: 14px;">{{ chart.title }}</div>
           </el-button>
@@ -21,8 +21,6 @@
 
 <script>
 import ImageArea from '../../assets/charts-icon/area.svg'
-import ImageHeatMap from '../../assets/charts-icon/heat-map.svg'
-import ImageHorizontalBar from '../../assets/charts-icon/horizontal-bar.svg'
 import ImageLine from '../../assets/charts-icon/line.svg'
 import ImagePie from '../../assets/charts-icon/pie.svg'
 import ImageVerticalBar from '../../assets/charts-icon/vertical-bar.svg'
@@ -33,10 +31,8 @@ export default {
       charts: [
         {title: 'Line', icon: ImageLine},
         {title: 'Vertical Bar', icon: ImageVerticalBar},
-        {title: 'Horizontal bar', icon: ImageHorizontalBar},
         {title: 'Area', icon: ImageArea},
-        {title: 'Pie', icon: ImagePie},
-        {title: 'Heat Map', icon: ImageHeatMap}
+        {title: 'Pie', icon: ImagePie}
       ]
     }
   },
