@@ -40,6 +40,7 @@ export default {
   },
   actions: {
     loadMore (context) {
+      console.log('loading more')
       context.commit('setLoadingMore', true)
       Vue.http.get(`/solr/${context.rootState.collection}/select?wt=json`, {
         params: {
