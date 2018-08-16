@@ -52,6 +52,7 @@ export default {
           url = methodAndUrl[1]
         }
         const data = dataLines ? JSON.parse(dataLines) : {}
+        data.wt = 'json'
         switch (method) {
           case 'GET':
             this.doGet({url, data})
@@ -65,6 +66,7 @@ export default {
         win: 'ctrl-enter'
       }
     })
+    editor.focus()
   },
   methods: {
     ...mapMutations('devtools', ['setContent', 'setResult', 'setLoading']),
