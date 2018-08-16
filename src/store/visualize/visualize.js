@@ -61,7 +61,13 @@ export default {
     setLoadingFields: _.set('loadingFields'),
     setFormData: _.set('formData'),
     setQueryString: _.set('queryString'),
-    setResult: _.set('result')
+    setResult: _.set('result'),
+    reset: (state) => {
+      state.formData = {}
+      state.chartDataSource = [{}]
+      state.queryString = undefined
+      state.result = {}
+    }
   },
   actions: {
     loadChartData: (context) => {

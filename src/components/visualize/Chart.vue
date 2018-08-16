@@ -35,7 +35,7 @@ export default {
     this.selectCollection()
   },
   mounted () {
-    this.localQueryString = this.queryString === '*:*' ? undefined : this.queryString
+    this.reset()
   },
   computed: {
     ...mapState(['collections']),
@@ -101,7 +101,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('visualize', ['setCollection', 'setFormData', 'setResult', 'setQueryString']),
+    ...mapMutations('visualize', ['setCollection', 'setFormData', 'setResult', 'setQueryString', 'reset']),
     ...mapActions('visualize', ['loadFields', 'loadChartData']),
     onSubmit (formData) {
       this.setFormData(formData)
