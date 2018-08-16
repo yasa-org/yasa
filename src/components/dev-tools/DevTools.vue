@@ -5,7 +5,7 @@
         <code-editor ref="codeEditor" id="code-editor" v-model="content" :value="content" lang="yasa" theme="ace/theme/dawn" show-gutter></code-editor>
       </el-col>
       <el-col :span="12">
-        <tree-view id="result" :data="result" :options="resultOptions" v-loading="state.loading"></tree-view>
+        <tree-view id="result" :data="result" :options="treeOptions" v-loading="loading"></tree-view>
       </el-col>
     </el-row>
   </div>
@@ -13,23 +13,17 @@
 
 <script>
 import CodeEditor from './code-editor/AceEditor'
+import {mapState, mapMutations, mapActions} from 'vuex'
 import 'brace/theme/dawn'
 
 export default {
   name: 'dev-tools',
-  components: {
-    CodeEditor
-  },
+  components: {CodeEditor},
   data () {
     return {
-      content: localStorage.getItem('DevTool::Content') || '',
-      result: {},
-      resultOptions: {
+      treeOptions: {
         rootObjectKey: 'result',
         maxDepth: Infinity
-      },
-      state: {
-        loading: false
       }
     }
   },
@@ -49,7 +43,6 @@ export default {
         }
         const commandLine = editor.session.doc.getLine(startRow)
         const dataLines = editor.session.doc.getLines(startRow + 1, endRow).join('\n')
-        console.log('commandLine=%s, dataLines=%s', commandLine, dataLines)
 
         const methodAndUrl = commandLine.split(/\s+/)
         let method = 'GET'
@@ -59,18 +52,9 @@ export default {
           url = methodAndUrl[1]
         }
         const data = dataLines ? JSON.parse(dataLines) : {}
-        data.wt = 'json'
-        console.log('method=%s, url=%s, data=%o', method, url, data)
-
         switch (method) {
           case 'GET':
-            this.state.loading = true
-            this.$http.jsonp(url, {params: data, jsonp: 'json.wrf'}).then(res => {
-              this.result = res.data
-              this.state.loading = false
-            }, () => {
-              this.state.loading = false
-            })
+            this.doGet({url, data})
             break
           default:
             break
@@ -82,12 +66,20 @@ export default {
       }
     })
   },
-  watch: {
-    content () {
-      localStorage.setItem('DevTool::Content', this.content)
-    }
-  },
   methods: {
+    ...mapMutations('devtools', ['setContent', 'setResult', 'setLoading']),
+    ...mapActions('devtools', ['doGet'])
+  },
+  computed: {
+    ...mapState('devtools', ['result', 'loading']),
+    content: {
+      get () {
+        return this.$store.state.devtools.content
+      },
+      set (val) {
+        this.setContent(val)
+      }
+    }
   }
 }
 </script>

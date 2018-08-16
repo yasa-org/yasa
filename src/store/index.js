@@ -4,6 +4,7 @@ import Vuex from 'vuex'
 import _ from '../util'
 import discover from './discover'
 import visualize from './visualize/visualize'
+import devtools from './dev-tools/dev-tools'
 
 Vue.use(Vuex)
 
@@ -17,20 +18,11 @@ const params = {
 const store = new Vuex.Store({
   state: {
     collections: [],
-    loadingCollections: false,
-    collection: undefined,
-    fields: [],
-    loadingFields: false
+    loadingCollections: false
   },
   mutations: {
     setCollections: _.set('collections'),
-    setLoadingCollections: _.set('loadingCollections'),
-    setCollection: (state, val) => {
-      state.collection = val
-      localStorage.setItem('currentCollection', state.collection)
-    },
-    setFields: _.set('fields'),
-    setLoadingFields: _.set('loadingFields')
+    setLoadingCollections: _.set('loadingCollections')
   },
   actions: {
     loadCollections: (context) => {
@@ -49,19 +41,12 @@ const store = new Vuex.Store({
           }, () => context.commit('setLoadingCollections', false))
         }
       })
-    },
-    loadFields: (context) => {
-      if (!context.state.collection || context.state.loadingFields) return
-      context.commit('setLoadingFields', true)
-      Vue.http.get(`/solr/${context.state.collection}/schema/fields?wt=csv`).then(res => {
-        context.commit('setFields', res.data.split(',').map(f => ({name: f.trim()})).sort((a, b) => a.name.localeCompare(b.name)))
-        context.commit('setLoadingFields', false)
-      }, () => context.commit('setLoadingFields', false))
     }
   },
   modules: {
     discover,
-    visualize
+    visualize,
+    devtools
   }
 })
 export default store

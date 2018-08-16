@@ -59,7 +59,7 @@ export default {
     this.editor = ace.edit(this.$el)
     this.editor.$blockScrolling = Infinity
     this.editor.setTheme(this.theme)
-    this.editor.setValue(this.value)
+    this.editor.setValue(this.value, 1)
     this.editor.renderer.setShowGutter(this.showGutter)
     this.editor.setOptions({
       readOnly: this.readOnly,

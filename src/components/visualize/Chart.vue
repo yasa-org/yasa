@@ -5,7 +5,7 @@
         <el-select slot="prepend" v-model="collection" :value="collection" :loading="$store.state.loadingCollections">
           <el-option v-for="c in collections" :key="c" :value="c"></el-option>
         </el-select>
-        <el-button slot="append" icon="el-icon-search" @click="onQuery" :loading="$store.state.loadingMore">{{ $t('discover.numHit', [numHit]) }}</el-button>
+        <el-button slot="append" icon="el-icon-search" @click="onQuery" :loading="loadingChartData">{{ $t('discover.numHit', [numHit]) }}</el-button>
       </el-input>
     </el-header>
     <el-container>
@@ -31,16 +31,18 @@ export default {
       localQueryString: undefined
     }
   },
-  mounted () {
+  created () {
     this.selectCollection()
+  },
+  mounted () {
     this.localQueryString = this.queryString === '*:*' ? undefined : this.queryString
   },
   computed: {
-    ...mapState(['collections', 'fields']),
-    ...mapState('visualize', ['chartDataSource', 'loadingChartData', 'result', 'formData']),
+    ...mapState(['collections']),
+    ...mapState('visualize', ['fields', 'chartDataSource', 'loadingChartData', 'result', 'formData']),
     collection: {
       get () {
-        return this.$store.state.collection
+        return this.$store.state.visualize.collection
       },
       set (val) {
         this.setCollection(val)
@@ -99,10 +101,8 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['setCollection']),
-    ...mapMutations('visualize', ['setFormData', 'setResult', 'setQueryString']),
-    ...mapActions(['loadFields']),
-    ...mapActions('visualize', ['loadChartData']),
+    ...mapMutations('visualize', ['setCollection', 'setFormData', 'setResult', 'setQueryString']),
+    ...mapActions('visualize', ['loadFields', 'loadChartData']),
     onSubmit (formData) {
       this.setFormData(formData)
       this.loadChartData()
@@ -112,9 +112,7 @@ export default {
       this.loadChartData()
     },
     selectCollection () {
-      if (localStorage.getItem('collection')) {
-        this.setCollection(localStorage.getItem('collection'))
-      } else if (this.collections.length > 0) {
+      if (this.collections.length > 0) {
         this.setCollection(this.collections[0])
       }
     }

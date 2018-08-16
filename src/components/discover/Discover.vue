@@ -10,14 +10,14 @@
     </el-header>
     <el-container>
       <el-aside width="183px">
-        <el-table ref="selectedFields" :data="selectedFields" v-loading="$store.state.loadingFields">
+        <el-table ref="selectedFields" :data="selectedFields" v-loading="loadingFields">
           <el-table-column prop="name" :label="$t('discover.selectedFields')">
             <div slot-scope="scope" class="field-row">
               {{ scope.row.name }} <el-button class="operate-field-button" type="text" icon="el-icon-minus" @click="removeSelectedField(scope.row)"></el-button>
             </div>
           </el-table-column>
         </el-table>
-        <el-table ref="availableFields" :data="availableFields" v-loading="$store.state.loadingFields">
+        <el-table ref="availableFields" :data="availableFields" v-loading="loadingFields">
           <el-table-column prop="name" :label="$t('discover.availableFields')">
             <div slot-scope="scope" class="field-row">
               {{ scope.row.name }} <el-button class="operate-field-button" type="text" icon="el-icon-plus" @click="addSelectedField(scope.row)"></el-button>
@@ -62,11 +62,11 @@ export default {
     }
   },
   computed: {
-    ...mapState(['collections', 'collection', 'fields']),
-    ...mapState('discover', ['queryString', 'docs', 'result', 'numHit', 'loadingMore', 'availableFields', 'selectedFields']),
+    ...mapState(['collections']),
+    ...mapState('discover', ['loadingFields', 'fields', 'queryString', 'docs', 'result', 'numHit', 'loadingMore', 'availableFields', 'selectedFields']),
     collection: {
       get () {
-        return this.$store.state.collection
+        return this.$store.state.discover.collection
       },
       set (val) {
         this.setCollection(val)
@@ -74,13 +74,12 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['setCollections', 'setCollection', 'setFields']),
+    ...mapMutations(['setCollections']),
     ...mapMutations('discover', [
-      'setAvailableFields', 'setSelectedFields', 'setQueryString', 'setDocs', 'addDocs', 'setResult',
-      'addSelectedField', 'removeSelectedField'
+      'setCollection', 'setFields', 'setAvailableFields', 'setSelectedFields', 'setQueryString', 'setDocs', 'addDocs',
+      'setResult', 'addSelectedField', 'removeSelectedField'
     ]),
-    ...mapActions(['loadFields']),
-    ...mapActions('discover', ['loadMore']),
+    ...mapActions('discover', ['loadMore', 'loadFields']),
 
     selectCollection () {
       if (localStorage.getItem('collection')) {

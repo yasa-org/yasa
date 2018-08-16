@@ -9,6 +9,7 @@ Vue.use(Router)
 
 export default new Router({
   routes: [
+    {path: '/', redirect: '/discover'},
     {path: '/discover', component: Discover},
 
     {path: '/visualize', component: VisualizeNew},

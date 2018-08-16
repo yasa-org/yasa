@@ -5,6 +5,9 @@ import _ from '../util'
 export default {
   namespaced: true,
   state: {
+    collection: undefined,
+    fields: [],
+    loadingFields: false,
     availableFields: [],
     selectedFields: [],
     queryString: '*:*',
@@ -17,6 +20,9 @@ export default {
     numHit: 0
   },
   mutations: {
+    setCollection: _.set('collection'),
+    setFields: _.set('fields'),
+    setLoadingFields: _.set('loadingFields'),
     setAvailableFields: _.set('availableFields'),
     setSelectedFields: _.set('selectedFields'),
     setQueryString: _.set('queryString'),
@@ -40,9 +46,8 @@ export default {
   },
   actions: {
     loadMore (context) {
-      console.log('loading more')
       context.commit('setLoadingMore', true)
-      Vue.http.get(`/solr/${context.rootState.collection}/select?wt=json`, {
+      Vue.http.get(`/solr/${context.state.collection}/select?wt=json`, {
         params: {
           q: context.state.queryString,
           sort: 'id desc',
@@ -54,6 +59,14 @@ export default {
         context.commit('addDocs', res.data.response.docs)
         context.commit('setLoadingMore', false)
       }, () => context.commit('setLoadingMore', false))
+    },
+    loadFields: (context) => {
+      if (!context.state.collection || context.state.loadingFields) return
+      context.commit('setLoadingFields', true)
+      Vue.http.get(`/solr/${context.state.collection}/schema/fields?wt=csv`).then(res => {
+        context.commit('setFields', res.data.split(',').map(f => ({name: f.trim()})).sort((a, b) => a.name.localeCompare(b.name)))
+        context.commit('setLoadingFields', false)
+      }, () => context.commit('setLoadingFields', false))
     }
   }
 }

@@ -46,6 +46,9 @@ const aggregationJsonFacet = (formData) => {
 export default {
   namespaced: true,
   state: {
+    collection: undefined,
+    fields: [],
+    loadingFields: false,
     queryString: undefined,
     formData: {},
     chartDataSource: [{}],
@@ -53,6 +56,9 @@ export default {
     result: {}
   },
   mutations: {
+    setCollection: _.set('collection'),
+    setFields: _.set('fields'),
+    setLoadingFields: _.set('loadingFields'),
     setFormData: _.set('formData'),
     setQueryString: _.set('queryString'),
     setResult: _.set('result')
@@ -61,7 +67,7 @@ export default {
     loadChartData: (context) => {
       if (context.state.loadingChartData) return
       context.state.loadingChartData = true
-      Vue.http.jsonp(`/solr/${context.rootState.collection}/query?w=json`, {
+      Vue.http.jsonp(`/solr/${context.state.collection}/query?w=json`, {
         params: {
           q: context.state.queryString || '*:*',
           rows: 0,
@@ -76,6 +82,14 @@ export default {
         context.state.loadingChartData = false
         context.state.result = res.data
       }, () => (context.state.loadingChartData = false))
+    },
+    loadFields: (context) => {
+      if (!context.state.collection || context.state.loadingFields) return
+      context.commit('setLoadingFields', true)
+      Vue.http.get(`/solr/${context.state.collection}/schema/fields?wt=csv`).then(res => {
+        context.commit('setFields', res.data.split(',').map(f => ({name: f.trim()})).sort((a, b) => a.name.localeCompare(b.name)))
+        context.commit('setLoadingFields', false)
+      }, () => context.commit('setLoadingFields', false))
     }
   }
 }

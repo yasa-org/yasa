@@ -1,3 +1,8 @@
 export default {
-  set: key => (state, value) => { state[key] = value }
+  set: (key, persist) => (state, value) => {
+    state[key] = value
+    if (persist) {
+      localStorage.setItem(key, value)
+    }
+  }
 }
