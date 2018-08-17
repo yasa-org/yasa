@@ -4,6 +4,7 @@ import Discover from '../components/discover/Discover'
 import VisualizeNew from '../components/visualize/Visualize'
 import VisualizeChart from '../components/visualize/Chart'
 import DevTools from '../components/dev-tools/DevTools'
+import Collections from '../components/management/Collections'
 
 Vue.use(Router)
 
@@ -15,6 +16,8 @@ export default new Router({
     {path: '/visualize', component: VisualizeNew},
     {path: '/visualize/chart', component: VisualizeChart},
 
-    {path: '/dev-tools', component: DevTools}
+    {path: '/dev-tools', component: DevTools},
+
+    {path: '/management/collections', component: Collections}
   ]
 })

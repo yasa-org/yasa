@@ -1,6 +1,6 @@
 import Vue from 'vue'
 
-import _ from '../util'
+import _ from '../../util/index'
 
 export default {
   namespaced: true,

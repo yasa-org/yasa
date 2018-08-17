@@ -17,9 +17,14 @@
         <el-menu-item index="/dev-tools">
           <i class="el-icon-yasa-code"></i><span slot="title">{{ $t('menu.devTools') }}</span>
         </el-menu-item>
-        <el-menu-item index="/management">
-          <i class="el-icon-yasa-manage"></i><span slot="title">{{ $t('menu.management') }}</span>
-        </el-menu-item>
+        <el-submenu index="/management">
+          <template slot="title">
+            <i class="el-icon-yasa-manage"></i><span slot="title">{{ $t('menu.management') }}</span>
+          </template>
+          <el-menu-item index="/management/collections">
+            <i class="el-icon-yasa-collections"></i><span slot="title">Collections</span>
+          </el-menu-item>
+        </el-submenu>
       </el-menu>
     </el-aside>
     <el-container>
@@ -50,6 +55,10 @@ export default {
   computed: {
     activeNav () {
       const segments = this.$route.path.match(/^(\/[^/]+).*/)
+      const firstSegment = segments[1]
+      if (firstSegment === '/management') {
+        return this.$route.path
+      }
       return segments[1]
     }
   },
