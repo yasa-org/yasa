@@ -18,17 +18,20 @@ const params = {
 const store = new Vuex.Store({
   state: {
     collections: [],
-    loadingCollections: false
+    loadingCollections: false,
+    solrMode: undefined
   },
   mutations: {
     setCollections: _.set('collections'),
-    setLoadingCollections: _.set('loadingCollections')
+    setLoadingCollections: _.set('loadingCollections'),
+    setSolrMode: _.set('solrMode')
   },
   actions: {
     loadCollections: (context) => {
       if (context.state.loadingCollections) return
       context.commit('setLoadingCollections', true)
       Vue.http.get('/solr/admin/info/system', params).then(res => {
+        context.commit('setSolrMode', res.data.mode)
         if (res.data.mode === 'solrcloud') {
           Vue.http.get('/solr/admin/collections?action=LIST', params).then((res) => {
             context.commit('setCollections', res.data.collections)

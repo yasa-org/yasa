@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import Dashboard from '../components/dashboard/Dashboard'
 import Discover from '../components/discover/Discover'
 import VisualizeNew from '../components/visualize/Visualize'
 import VisualizeChart from '../components/visualize/Chart'
@@ -11,7 +12,10 @@ Vue.use(Router)
 
 export default new Router({
   routes: [
-    {path: '/', redirect: '/discover'},
+    {path: '/', redirect: '/dashboard'},
+
+    {path: '/dashboard', component: Dashboard},
+
     {path: '/discover', component: Discover},
 
     {path: '/visualize', component: VisualizeNew},

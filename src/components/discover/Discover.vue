@@ -82,8 +82,9 @@ export default {
     ...mapActions('discover', ['loadMore', 'loadFields']),
 
     selectCollection () {
-      if (localStorage.getItem('collection')) {
-        this.setCollection(localStorage.getItem('collection'))
+      const lastCollection = localStorage.getItem('collection')
+      if (lastCollection && this.collections.includes(lastCollection)) {
+        this.setCollection(lastCollection)
       } else if (this.collections.length > 0) {
         this.setCollection(this.collections[0])
       }

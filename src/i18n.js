@@ -14,8 +14,14 @@ const messages = {
       dashboard: 'Dashboard',
       management: 'Management'
     },
+    dashboard: {
+    },
     common: {
-      loadMore: 'Load More'
+      loadMore: 'Load More',
+      justNow: 'Just Now',
+      nMinutesAgo: '{0} minutes ago',
+      nHoursAgo: '{0} hours ago',
+      nDaysAgo: '{0} days ago'
     },
     discover: {
       numHit: '{0} hits',

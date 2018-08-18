@@ -5,19 +5,19 @@
         <el-menu-item index="" @click="isCollapse=!isCollapse">
           <i class="el-icon-fa-bars"></i><span slot="title">{{ isCollapse ? $t('menu.expand') : $t('menu.collapse') }}</span>
         </el-menu-item>
+        <el-menu-item index="/dashboard">
+          <i class="el-icon-yasa-dashboard"></i><span slot="title">{{ $t('menu.dashboard') }}</span>
+        </el-menu-item>
         <el-menu-item index="/discover">
           <i class="el-icon-yasa-discovery"></i><span slot="title">{{ $t('menu.discover') }}</span>
         </el-menu-item>
         <el-menu-item index="/visualize">
           <i class="el-icon-yasa-chart"></i><span slot="title">{{ $t('menu.visualize') }}</span>
         </el-menu-item>
-        <el-menu-item index="/dashboard">
-          <i class="el-icon-yasa-dashboard"></i><span slot="title">{{ $t('menu.dashboard') }}</span>
-        </el-menu-item>
         <el-menu-item index="/dev-tools">
           <i class="el-icon-yasa-code"></i><span slot="title">{{ $t('menu.devTools') }}</span>
         </el-menu-item>
-        <el-submenu index="/management">
+        <el-submenu index="/management" v-if="solrMode==='solrcloud'">
           <template slot="title">
             <i class="el-icon-yasa-manage"></i><span slot="title">{{ $t('menu.management') }}</span>
           </template>
@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import {mapActions} from 'vuex'
+import {mapState, mapActions} from 'vuex'
 export default {
   name: 'App',
   data () {
@@ -56,6 +56,7 @@ export default {
     }
   },
   computed: {
+    ...mapState(['solrMode']),
     activeNav () {
       const segments = this.$route.path.match(/^(\/[^/]+).*/)
       const firstSegment = segments[1]

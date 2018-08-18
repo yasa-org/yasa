@@ -73,13 +73,12 @@ export default {
     loadChartData: (context) => {
       if (context.state.loadingChartData) return
       context.state.loadingChartData = true
-      Vue.http.jsonp(`/solr/${context.state.collection}/query?w=json`, {
+      Vue.http.get(`/solr/${context.state.collection}/query?w=json`, {
         params: {
           q: context.state.queryString || '*:*',
           rows: 0,
           'json.facet': JSON.stringify(aggregationJsonFacet(context.state.formData))
-        },
-        jsonp: 'json.wrf'
+        }
       }).then(res => {
         context.state.chartDataSource = res.data['facets'].xAxis.buckets.reverse()
         if (context.state.formData.yFieldAggregation.toLowerCase() === 'count') {
