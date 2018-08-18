@@ -21,6 +21,9 @@
           <template slot="title">
             <i class="el-icon-yasa-manage"></i><span slot="title">{{ $t('menu.management') }}</span>
           </template>
+          <el-menu-item index="/management/tree">
+            <i class="el-icon-yasa-tree"></i><span slot="title">Tree</span>
+          </el-menu-item>
           <el-menu-item index="/management/collections">
             <i class="el-icon-yasa-collections"></i><span slot="title">Collections</span>
           </el-menu-item>

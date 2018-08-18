@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 
 import collections from './collections'
+import tree from './tree'
 
 Vue.use(Vuex)
 
@@ -14,6 +15,7 @@ export default {
   actions: {
   },
   modules: {
-    collections
+    collections,
+    tree
   }
 }

@@ -80,13 +80,6 @@ export default {
         shard.name = name
         return shard
       })
-    },
-    replicasFormatter (replicas) {
-      return Object.keys(replicas).map(name => {
-        const replica = replicas[name]
-        replica.name = name
-        return replica
-      })
     }
   },
   created () {

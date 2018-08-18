@@ -14,7 +14,7 @@ export default {
       type: String,
       required: true
     },
-    lang: String,
+    mode: String,
     theme: {
       type: String,
       default () {
@@ -44,11 +44,14 @@ export default {
       })
       this.editor.renderer.$cursorLayer.element.style.display = this.readOnly ? 'none' : 'display'
     },
-    lang () {
-      this.editor.session.setMode(`ace/mode/${this.lang}`)
+    mode () {
+      this.editor.session.setMode(this.mode)
     },
     theme () {
       this.editor.setTheme(this.theme)
+    },
+    value () {
+      this.editor.setValue(this.value, 1)
     }
   },
   beforeDestroy: function () {
@@ -68,7 +71,7 @@ export default {
     })
     this.editor.renderer.$cursorLayer.element.style.display = this.readOnly ? 'none' : 'display'
     this.editor.session.setUseWrapMode(true)
-    this.editor.session.setMode(`ace/mode/${this.lang}`)
+    this.editor.session.setMode(this.mode)
     this.editor.on('change', () => {
       this.$emit('input', this.editor.getValue())
     })
