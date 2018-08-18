@@ -1,6 +1,30 @@
-# yasa
+# YASA - Yet Another Solr Admin 
 
-> Yet Another Solr Admin
+## Functionality
+
+### Dashboard
+
+![dashboard](https://user-images.githubusercontent.com/15965696/44301073-c3ec9c00-a343-11e8-8917-44d90657af9b.png)
+
+### Discover
+
+![discover](https://user-images.githubusercontent.com/15965696/44301075-c64ef600-a343-11e8-972a-7c8445d1fb79.png)
+
+### Visualize
+
+![visualize](https://user-images.githubusercontent.com/15965696/44301078-c8b15000-a343-11e8-98f9-135897212be8.png)
+
+### Dev Tools
+
+![dev-tools](https://user-images.githubusercontent.com/15965696/44301074-c5b65f80-a343-11e8-85de-f5bc859ed221.png)
+
+### Zookeeper Tree Management
+
+![management-tree](https://user-images.githubusercontent.com/15965696/44301077-c8b15000-a343-11e8-8ed8-16f786ca8671.png)
+
+### Collections Management
+
+![management-collections](https://user-images.githubusercontent.com/15965696/44301076-c818b980-a343-11e8-906c-d72f7637f380.png)
 
 ## Build Setup
 
@@ -13,9 +37,19 @@ npm run dev
 
 # build for production with minification
 npm run build
-
-# build for production and view the bundle analyzer report
-npm run build --report
 ```
 
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+## Todo
+
+- More visualization charts
+- Documentations
+
+## Contribution
+
+Find this project useful? Any contributions are highly appreciated. You can open issues or pull requests to help make this project better.
+
+## Acknowledgements
+
+- Thanks to the great work of Solr community.
+
+- This project is greatly inspired by [Kibana](https://github.com/elastic/kibana).
