@@ -8,7 +8,7 @@
 
 ### Discover
 
-![discover](https://user-images.githubusercontent.com/15965696/44301075-c64ef600-a343-11e8-972a-7c8445d1fb79.png)
+![discover](https://user-images.githubusercontent.com/15965696/44305860-90e2f080-a3b5-11e8-8d85-ee3a2f247919.png)
 
 ### Visualize
 
