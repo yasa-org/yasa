@@ -93,6 +93,6 @@ export default {
   height: 100vh;
 }
 .el-collapse-item__content {
-  padding-bottom: 0px;
+  padding-bottom: 0 !important;
 }
 </style>
