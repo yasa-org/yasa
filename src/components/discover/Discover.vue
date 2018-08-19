@@ -9,21 +9,36 @@
       </el-input>
     </el-header>
     <el-container>
-      <el-aside width="183px">
-        <el-table ref="selectedFields" :data="selectedFields" v-loading="loadingFields">
-          <el-table-column prop="name" :label="$t('discover.selectedFields')">
-            <div slot-scope="scope" class="field-row">
-              {{ scope.row.name }} <el-button class="operate-field-button" type="text" icon="el-icon-minus" @click="removeSelectedField(scope.row)"></el-button>
+      <el-aside width="200px">
+        <header v-if="selectedFields.length > 0">Selected Fields</header>
+        <el-collapse v-if="selectedFields.length > 0">
+          <el-collapse-item v-for="f in selectedFields" :key="f.name">
+            <template slot="title">
+              <el-button class="operate-field-button" type="text" icon="el-icon-minus" @click.stop="removeSelectedField(f)">{{ f.name }}</el-button>
+            </template>
+            <div class="field-stats" v-for="fStat in (fieldsStats[f.name] || {}).buckets || []" :key="fStat.val" v-loading="loadingFieldsStats">
+              <div class="value">{{ fStat.val || '(null or empty)' }}</div>
+              <el-tooltip :content="`${fStat.count}/${fieldsStats.count}`" placement="top">
+                <el-progress :text-inside="true" :stroke-width="18" :percentage="Math.round(fStat.count / fieldsStats.count * 10000) / 100"></el-progress>
+              </el-tooltip>
             </div>
-          </el-table-column>
-        </el-table>
-        <el-table ref="availableFields" :data="availableFields" v-loading="loadingFields">
-          <el-table-column prop="name" :label="$t('discover.availableFields')">
-            <div slot-scope="scope" class="field-row">
-              {{ scope.row.name }} <el-button class="operate-field-button" type="text" icon="el-icon-plus" @click="addSelectedField(scope.row)"></el-button>
+          </el-collapse-item>
+        </el-collapse>
+        <header v-if="availableFields.length > 0">Available Fields</header>
+        <el-collapse v-if="availableFields.length > 0">
+          <el-collapse-item v-for="f in availableFields" :key="f.name">
+            <template slot="title">
+              <el-button class="operate-field-button" type="text" icon="el-icon-plus" @click.stop="addSelectedField(f)">{{ f.name }}</el-button>
+            </template>
+            <div style="height: 42px" v-if="loadingFieldsStats" v-loading="loadingFieldsStats"></div>
+            <div class="field-stats" v-for="fStat in (fieldsStats[f.name] || {}).buckets || []" :key="fStat.val">
+              <div class="value">{{ fStat.val || '(null or empty)' }}</div>
+              <el-tooltip :content="`${fStat.count}/${fieldsStats.count}`" placement="top">
+                <el-progress :text-inside="true" :stroke-width="18" :percentage="Math.round(fStat.count / fieldsStats.count * 10000) / 100"></el-progress>
+              </el-tooltip>
             </div>
-          </el-table-column>
-        </el-table>
+          </el-collapse-item>
+        </el-collapse>
       </el-aside>
       <el-main>
         <el-table height="calc(100% - 28px)" ref="docs" :data="docs" v-loading="loadingMore" stripe>
@@ -38,7 +53,7 @@
             </template>
           </el-table-column>
           <el-table-column v-if="selectedFields.length===0" label="_source" :formatter="sourceFormatter"></el-table-column>
-          <el-table-column v-for="f in selectedFields" :key="f.name" :prop="f.name" :label="f.name"></el-table-column>
+          <el-table-column v-for="f in selectedFields" :key="f.name" :prop="f.name" :label="f.name" show-overflow-tooltip></el-table-column>
         </el-table>
         <el-button id="load-more" type="text" :loading="loadingMore" @click="loadMore">{{ $t('common.loadMore') }}</el-button>
       </el-main>
@@ -63,7 +78,10 @@ export default {
   },
   computed: {
     ...mapState(['collections']),
-    ...mapState('discover', ['loadingFields', 'fields', 'queryString', 'docs', 'result', 'numHit', 'loadingMore', 'availableFields', 'selectedFields']),
+    ...mapState('discover', [
+      'loadingFields', 'fields', 'queryString', 'docs',
+      'result', 'numHit', 'loadingMore', 'availableFields',
+      'selectedFields', 'fieldsStats', 'loadingFieldsStats']),
     collection: {
       get () {
         return this.$store.state.discover.collection
@@ -79,7 +97,7 @@ export default {
       'setCollection', 'setFields', 'setAvailableFields', 'setSelectedFields', 'setQueryString', 'setDocs', 'addDocs',
       'setResult', 'addSelectedField', 'removeSelectedField'
     ]),
-    ...mapActions('discover', ['loadMore', 'loadFields']),
+    ...mapActions('discover', ['loadMore', 'loadFields', 'loadFieldsStats']),
 
     selectCollection () {
       const lastCollection = localStorage.getItem('collection')
@@ -115,6 +133,7 @@ export default {
     fields () {
       this.setAvailableFields(Array(...this.fields))
       this.setSelectedFields([])
+      this.loadFieldsStats()
     }
   }
 }
@@ -129,24 +148,47 @@ export default {
 }
 .el-aside {
   border-right: 1px solid lightgray;
+  overflow-x: hidden;
 }
 .el-main {
   padding: 0;
 }
 .el-select {
-  width: 181px;
+  width: 198px;
 }
 .el-col {
   height: 100%;
 }
-.operate-field-button {
-  float: right;
+.el-button {
+  max-width: calc(100% - 30px);
 }
-.field-row {
-  line-height: 28px;
-  cursor: pointer
+.el-button span {
+  max-width: 40px;
+  clear: both;
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.operate-field-button {
+  margin-left: 8px;
 }
 #load-more {
   width: 100%;
+}
+header {
+  padding: 8px;
+}
+.field-stats {
+  padding: 8px;
+  border-top: lightgrey 1px dashed;
+}
+.field-stats .value {
+  max-width: 100%;
+  clear: both;
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 </style>

@@ -8,6 +8,8 @@ export default {
     collection: undefined,
     fields: [],
     loadingFields: false,
+    loadingFieldsStats: false,
+    fieldsStats: {},
     availableFields: [],
     selectedFields: [],
     queryString: '*:*',
@@ -23,6 +25,8 @@ export default {
     setCollection: _.set('collection'),
     setFields: _.set('fields'),
     setLoadingFields: _.set('loadingFields'),
+    setLoadingFieldsStats: _.set('loadingFieldsStats'),
+    setFieldsStats: _.set('fieldsStats'),
     setAvailableFields: _.set('availableFields'),
     setSelectedFields: _.set('selectedFields'),
     setQueryString: _.set('queryString'),
@@ -67,6 +71,29 @@ export default {
         context.commit('setFields', res.data.split(',').map(f => ({name: f.trim()})).sort((a, b) => a.name.localeCompare(b.name)))
         context.commit('setLoadingFields', false)
       }, () => context.commit('setLoadingFields', false))
+    },
+    loadFieldsStats: (context) => {
+      if (context.state.fields.length === 0 || context.state.loadingFieldsStats) return
+      context.commit('setLoadingFieldsStats', true)
+      const jsonFacet = {}
+      context.state.fields.forEach(f => {
+        jsonFacet[f.name] = {
+          type: 'terms',
+          field: f.name,
+          limit: 5
+        }
+      })
+      Vue.http.get(`/solr/${context.state.collection}/select`, {
+        params: {
+          q: '*:*',
+          rows: 0,
+          wt: 'json',
+          'json.facet': JSON.stringify(jsonFacet)
+        }
+      }).then(res => {
+        context.commit('setLoadingFieldsStats', false)
+        context.commit('setFieldsStats', res.data.facets)
+      }, () => context.commit('setLoadingFieldsStats', false))
     }
   }
 }
