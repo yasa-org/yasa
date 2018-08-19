@@ -37,6 +37,8 @@ npm run dev
 
 # build for production with minification
 npm run build
+
+# Backup the Solr webapp folder (`solr-x-y-z/server/solr-webapp/webapp`), and copy everything generated under `dist` folder to `solr-x-y-z/server/solr-webapp/webapp`  
 ```
 
 ## Todo
