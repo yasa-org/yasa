@@ -74,7 +74,6 @@ export default {
     },
     loadFieldsStats: (context) => {
       if (context.state.fields.length === 0 || context.state.loadingFieldsStats) return
-      context.commit('setLoadingFieldsStats', true)
       const jsonFacet = {}
       context.state.fields.forEach(f => {
         jsonFacet[f.name] = {
@@ -83,9 +82,11 @@ export default {
           limit: 5
         }
       })
+      context.commit('setFieldsStats', [])
+      context.commit('setLoadingFieldsStats', true)
       Vue.http.get(`/solr/${context.state.collection}/select`, {
         params: {
-          q: '*:*',
+          q: context.state.queryString,
           rows: 0,
           wt: 'json',
           'json.facet': JSON.stringify(jsonFacet)

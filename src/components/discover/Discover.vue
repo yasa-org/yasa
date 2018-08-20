@@ -9,14 +9,15 @@
       </el-input>
     </el-header>
     <el-container>
-      <el-aside width="200px">
+      <el-aside width="200px" v-loading="loadingFields">
         <header v-if="selectedFields.length > 0">Selected Fields</header>
         <el-collapse v-if="selectedFields.length > 0">
           <el-collapse-item v-for="f in selectedFields" :key="f.name">
             <template slot="title">
               <el-button class="operate-field-button" type="text" icon="el-icon-minus" @click.stop="removeSelectedField(f)">{{ f.name }}</el-button>
             </template>
-            <div class="field-stats" v-for="fStat in (fieldsStats[f.name] || {}).buckets || []" :key="fStat.val" v-loading="loadingFieldsStats">
+            <div style="height: 42px;" class="field-stats" v-if="loadingFieldsStats" v-loading="loadingFieldsStats"></div>
+            <div class="field-stats" v-for="fStat in (fieldsStats[f.name] || {}).buckets || []" :key="fStat.val">
               <div class="value">{{ fStat.val || '(null or empty)' }}</div>
               <el-tooltip :content="`${fStat.count}/${fieldsStats.count}`" placement="top">
                 <el-progress :text-inside="true" :stroke-width="18" :percentage="Math.round(fStat.count / fieldsStats.count * 10000) / 100"></el-progress>
@@ -30,7 +31,7 @@
             <template slot="title">
               <el-button class="operate-field-button" type="text" icon="el-icon-plus" @click.stop="addSelectedField(f)">{{ f.name }}</el-button>
             </template>
-            <div style="height: 42px" v-if="loadingFieldsStats" v-loading="loadingFieldsStats"></div>
+            <div style="height: 42px;" class="field-stats" v-if="loadingFieldsStats" v-loading="loadingFieldsStats"></div>
             <div class="field-stats" v-for="fStat in (fieldsStats[f.name] || {}).buckets || []" :key="fStat.val">
               <div class="value">{{ fStat.val || '(null or empty)' }}</div>
               <el-tooltip :content="`${fStat.count}/${fieldsStats.count}`" placement="top">
@@ -114,6 +115,7 @@ export default {
       this.setResult({})
       this.setDocs([])
       this.loadMore()
+      this.loadFieldsStats()
     },
 
     sourceFormatter (row) {
@@ -159,7 +161,7 @@ export default {
 .el-col {
   height: 100%;
 }
-.el-button {
+.el-button.operate-field-button {
   max-width: calc(100% - 30px);
 }
 .el-button span {
