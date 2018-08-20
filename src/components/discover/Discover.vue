@@ -42,7 +42,7 @@
         </el-collapse>
       </el-aside>
       <el-main>
-        <el-table height="calc(100% - 28px)" ref="docs" :data="docs" v-loading="loadingMore" stripe>
+        <el-table height="calc(100% - 28px)" ref="docs" :data="docs" stripe>
           <el-table-column type="expand">
             <template slot-scope="props">
               <el-table :data="fields" stripe>

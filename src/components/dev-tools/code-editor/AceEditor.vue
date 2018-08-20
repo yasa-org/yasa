@@ -51,6 +51,7 @@ export default {
       this.editor.setTheme(this.theme)
     },
     value () {
+      if (this.value === this.editor.getValue()) return
       this.editor.setValue(this.value, 1)
     }
   },

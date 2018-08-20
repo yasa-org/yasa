@@ -2,14 +2,14 @@
   <el-row id="dashboard-root">
     <el-col :lg="12" :sm="24" :xs="24">
       <el-collapse v-model="activeNames">
-        <el-collapse-item name="instance">
+        <el-collapse-item name="instance" v-loading="loadingSystemInfo">
           <template slot="title"><i class="el-icon-yasa-instance"></i> Instance</template>
           <el-form label-width="120px" label-position="left">
             <el-form-item label="Mode">{{ system.mode }}</el-form-item>
             <el-form-item label="Start">{{ startTime }}</el-form-item>
           </el-form>
         </el-collapse-item>
-        <el-collapse-item name="versions">
+        <el-collapse-item name="versions" v-loading="loadingSystemInfo">
           <template slot="title"><i class="el-icon-yasa-version"></i> Versions</template>
           <el-form label-width="120px" label-position="left">
             <el-form-item label="Solr Spec">{{ (system.lucene || {})['solr-spec-version'] }}</el-form-item>
@@ -18,7 +18,7 @@
             <el-form-item label="Lucene Impl">{{ (system.lucene || {})['lucene-impl-version'] }}</el-form-item>
           </el-form>
         </el-collapse-item>
-        <el-collapse-item name="jvm">
+        <el-collapse-item name="jvm" v-loading="loadingSystemInfo">
           <template slot="title"><i class="el-icon-yasa-java"></i> JVM</template>
           <el-form label-width="120px" label-position="left">
             <el-form-item label="Runtime">{{ (system.jvm || {}).name }} {{ (system.jvm || {}).version }}</el-form-item>
@@ -32,7 +32,7 @@
     </el-col>
     <el-col :lg="12" :sm="24">
       <el-collapse v-model="activeNames">
-        <el-collapse-item name="system">
+        <el-collapse-item name="system" v-loading="loadingSystemInfo">
           <template slot="title"><i class="el-icon-yasa-system"></i> System</template>
           <el-row align="center">
             <el-col :lg="12" :sm="24" align="center">
@@ -45,7 +45,7 @@
             </el-col>
           </el-row>
         </el-collapse-item>
-        <el-collapse-item name="jvm-memory">
+        <el-collapse-item name="jvm-memory" v-loading="loadingSystemInfo">
           <template slot="title"><i class="el-icon-yasa-java"></i> JVM Memory</template>
           <el-row align="center">
             <el-col align="center">
@@ -64,14 +64,17 @@ export default {
   name: 'Dashboard',
   data () {
     return {
+      loadingSystemInfo: false,
       activeNames: ['instance', 'versions', 'jvm', 'system', 'jvm-memory'],
       system: {}
     }
   },
   created () {
+    this.loadingSystemInfo = true
     this.$http.get('/solr/admin/info/system?wt=json').then(res => {
+      this.loadingSystemInfo = false
       this.system = res.data
-    })
+    }, () => (this.loadingSystemInfo = false))
   },
   computed: {
     startTime () {

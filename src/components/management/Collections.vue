@@ -36,10 +36,10 @@
         </template>
       </el-table-column>
       <el-table-column prop="name" label="Collection" show-overflow-tooltip></el-table-column>
-      <el-table-column prop="shards" label="Shard Count" :formatter="shardCountFormatter" show-overflow-tooltip></el-table-column>
-      <el-table-column prop="maxShardsPerNode" label="Max Shards Per Node" :formatter="shardCountFormatter" show-overflow-tooltip></el-table-column>
+      <el-table-column prop="shards" label="Shards" :formatter="shardCountFormatter" show-overflow-tooltip></el-table-column>
+      <el-table-column prop="maxShardsPerNode" label="MaxShards/Node" :formatter="shardCountFormatter" show-overflow-tooltip></el-table-column>
       <el-table-column prop="replicationFactor" label="Replication Factor" show-overflow-tooltip></el-table-column>
-      <el-table-column prop="configName" label="Config Name" show-overflow-tooltip></el-table-column>
+      <el-table-column prop="configName" label="Config" show-overflow-tooltip></el-table-column>
       <el-table-column prop="autoAddReplicas" label="Auto Add Replicas" show-overflow-tooltip></el-table-column>
       <el-table-column label="Operations">
         <template slot-scope="scope">
@@ -139,7 +139,7 @@ export default {
       this.$prompt('Alias Name', 'Create Alias').then(({ value }) => {
         const loading = this.$loading({
           lock: true,
-          text: 'Deleting',
+          text: 'Creating',
           spinner: 'el-icon-loading',
           background: 'rgba(0, 0, 0, 0.7)'
         })
