@@ -18,7 +18,7 @@
             </template>
             <div style="height: 42px;" class="field-stats" v-if="loadingFieldsStats" v-loading="loadingFieldsStats"></div>
             <div class="field-stats" v-for="fStat in (fieldsStats[f.name] || {}).buckets || []" :key="fStat.val">
-              <div class="value">{{ fStat.val || '(null or empty)' }}</div>
+              <div class="value">{{ fStat.val }}</div>
               <el-tooltip :content="`${fStat.count}/${fieldsStats.count}`" placement="top">
                 <el-progress :text-inside="true" :stroke-width="18" :percentage="Math.round(fStat.count / fieldsStats.count * 10000) / 100"></el-progress>
               </el-tooltip>
@@ -33,7 +33,7 @@
             </template>
             <div style="height: 42px;" class="field-stats" v-if="loadingFieldsStats" v-loading="loadingFieldsStats"></div>
             <div class="field-stats" v-for="fStat in (fieldsStats[f.name] || {}).buckets || []" :key="fStat.val">
-              <div class="value">{{ fStat.val || '(null or empty)' }}</div>
+              <div class="value">{{ fStat.val }}</div>
               <el-tooltip :content="`${fStat.count}/${fieldsStats.count}`" placement="top">
                 <el-progress :text-inside="true" :stroke-width="18" :percentage="Math.round(fStat.count / fieldsStats.count * 10000) / 100"></el-progress>
               </el-tooltip>

@@ -1,10 +1,10 @@
 <template>
   <div>
-    <div align="right">
-      <el-button icon="el-icon-fa-play" type="primary" @click="submit"></el-button>
-    </div>
     <el-card shadow="never" id="buckets">
-      <div slot="header">{{ $t('visualize.title') }}</div>
+      <div slot="header" style="line-height: 28px">
+        {{ $t('visualize.title') }}
+        <el-button style="float: right" icon="el-icon-fa-play" type="primary" @click="submit"></el-button>
+      </div>
       <el-form ref="form" :rules="validateRules" :model="formData">
         <el-form-item prop="title" label="Title">
           <el-input v-model="formData.title" :placeholder="$t('visualize.titleHint')"></el-input>
@@ -78,7 +78,7 @@ export default {
 </script>
 
 <style scoped>
-#buckets, #metrics {
+#buckets {
   margin-top: 12px;
 }
 .el-select, .el-input {

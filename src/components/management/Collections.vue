@@ -101,9 +101,8 @@ export default {
       })
     },
     loadAliases () {
-      this.$http.get('/solr/admin/collections?action=LISTALIASES&wt=json').then(res => {
-        this.aliases = res.data.aliases || {}
-        console.log(this.aliases)
+      this.$http.get('/solr/admin/zookeeper?wt=json&detail=true&path=/aliases.json').then(res => {
+        this.aliases = JSON.parse(res.data.znode.data || '{}').collection || {}
       }, () => {})
     },
     reloadCollection (row) {
