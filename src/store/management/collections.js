@@ -1,6 +1,7 @@
 import Vue from 'vue'
 
 import _ from '../../util'
+import newCollection from './new-collection'
 
 const params = {
   params: {
@@ -34,5 +35,8 @@ export default {
         }, () => context.commit('setLoadingDetailedCollections', false))
       }
     }
+  },
+  modules: {
+    newCollection
   }
 }

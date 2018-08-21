@@ -1,6 +1,9 @@
 <template>
-  <div style="height: 100%;">
-    <el-table :data="detailedCollections" v-loading="loadingDetailedCollections" height="100%">
+  <div id="collections-root">
+    <div id="operations" align="right">
+      <el-button icon="el-icon-plus" type="primary" @click="createCollectionDialogVisible=true">New</el-button>
+    </div>
+    <el-table id="collections" :data="detailedCollections" v-loading="loadingDetailedCollections" height="100%">
       <el-table-column type="expand">
         <template slot-scope="props">
           <el-table :data="shardsFormatter(props.row.shards)">
@@ -73,13 +76,18 @@
         <el-button type="danger" @click="doDeleteAliasOfCollection" :loading="deletingAlias">Delete</el-button>
       </template>
     </el-dialog>
+    <el-dialog title="New Collection" :visible.sync="createCollectionDialogVisible">
+      <new-collection-form @done="done"></new-collection-form>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import {mapState, mapMutations, mapActions} from 'vuex'
+import NewCollectionForm from './NewCollectionForm'
 export default {
   name: 'Collections',
+  components: {NewCollectionForm},
   computed: {
     ...mapState(['solrMode']),
     ...mapState('management/collections', ['detailedCollections', 'loadingDetailedCollections']),
@@ -165,6 +173,10 @@ export default {
         this.deleteAliasDialogVisible = false
         this.loadAliases()
       })
+    },
+    done () {
+      this.createCollectionDialogVisible = false
+      this.loadDetailedCollections()
     }
   },
   watch: {
@@ -182,6 +194,7 @@ export default {
   data () {
     return {
       deleteAliasDialogVisible: false,
+      createCollectionDialogVisible: false,
       aliases: [],
       selectedCollection: undefined,
       selectedAlias: undefined,
@@ -192,7 +205,18 @@ export default {
 </script>
 
 <style scoped>
+#collections-root {
+  height: calc(100% - 52px);
+  padding-top: 12px;
+}
+#operations {
+  margin-right: 12px;
+}
 .el-select {
   width: 100%;
+}
+#collections {
+  margin-top: 12px;
+  border-top: 1px dashed #282a36;
 }
 </style>
