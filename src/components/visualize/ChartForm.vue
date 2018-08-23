@@ -10,18 +10,23 @@
           <el-input v-model="formData.title" :placeholder="$t('visualize.titleHint')"></el-input>
         </el-form-item>
         <el-form-item prop="xField" label="X-Axis Field">
-          <el-select v-model="formData.xField" :value="formData.xField" filterable>
+          <el-select v-model="formData.xField" :value="formData.xField" :loading="loadingFields" filterable>
             <el-option v-for="f in fields" :key="f.name" :value="f.name"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item prop="yField" label="Y-Axis Field">
-          <el-select v-model="formData.yField" :value="formData.yField" filterable>
+          <el-select v-model="formData.yField" :value="formData.yField" :loading="loadingFields" filterable>
             <el-option v-for="f in fields" :key="f.name" :value="f.name"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item prop="yFieldAggregation" label="Aggregation">
           <el-select v-model="formData.yFieldAggregation" :value="formData.yFieldAggregation" filterable>
             <el-option v-for="a in yAggregations" :key="a" :value="a"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item prop="type" label="Type">
+          <el-select v-model="formData.type" placeholder="Select a chart type">
+            <el-option v-for="type in chartTypes" :key="type.value" :value="type.value" :label="type.label"></el-option>
           </el-select>
         </el-form-item>
       </el-form>
@@ -38,27 +43,35 @@ export default {
       default () {
         return []
       }
+    },
+    loadingFields: {
+      type: Boolean,
+      default: false
     }
   },
   data: function () {
     return {
+      chartTypes: [
+        {label: 'Line', value: 'line'},
+        {label: 'Bar', value: 'bar'},
+        {label: 'Area', value: 'area'}
+      ],
       yAggregations: ['Average', 'Count', 'Unique', 'Max', 'Min', 'Sum'],
       xAggregations: ['Date Histogram', 'Date Range', 'Histogram', 'Terms'],
       formData: {
+        type: 'line',
         title: undefined,
         xField: undefined,
         yField: undefined,
         yFieldAggregation: undefined
       },
       validateRules: {
+        type: [{ required: true, message: this.$t('visualize.typeIsRequired'), trigger: 'change' }],
         yFieldAggregation: [{ required: true, message: this.$t('visualize.aggregationIsRequired'), trigger: 'change' }],
         xField: [{ required: true, message: this.$t('visualize.fieldIsRequired'), trigger: 'change' }],
         yField: [{ required: true, message: this.$t('visualize.fieldIsRequired'), trigger: 'change' }]
       }
     }
-  },
-  computed: {
-
   },
   methods: {
     submit () {
@@ -71,7 +84,9 @@ export default {
   },
   watch: {
     fields () {
-      this.formData = {}
+      this.formData = {
+        type: 'line'
+      }
     }
   }
 }

@@ -50,7 +50,9 @@ export default {
     fields: [],
     loadingFields: false,
     queryString: undefined,
-    formData: {},
+    formData: {
+      type: 'line'
+    },
     chartDataSource: [{}],
     loadingChartData: false,
     result: {}
@@ -63,7 +65,9 @@ export default {
     setQueryString: _.set('queryString'),
     setResult: _.set('result'),
     reset: (state) => {
-      state.formData = {}
+      state.formData = {
+        type: 'line'
+      }
       state.chartDataSource = [{}]
       state.queryString = undefined
       state.result = {}

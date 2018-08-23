@@ -10,7 +10,7 @@
     </el-header>
     <el-container>
       <el-aside>
-        <chart-form :fields="fields" @submit="onSubmit"></chart-form>
+        <chart-form :fields="fields" :loading-fields="loadingFields" @submit="onSubmit"></chart-form>
       </el-aside>
       <el-main>
         <chart class="chart" ref="chart" :options="chartOptions" auto-resize/>
@@ -39,7 +39,7 @@ export default {
   },
   computed: {
     ...mapState(['collections']),
-    ...mapState('visualize', ['fields', 'chartDataSource', 'loadingChartData', 'result', 'formData']),
+    ...mapState('visualize', ['loadingFields', 'fields', 'chartDataSource', 'loadingChartData', 'result', 'formData']),
     collection: {
       get () {
         return this.$store.state.visualize.collection
@@ -49,19 +49,19 @@ export default {
       }
     },
     chartType () {
-      const type = this.$route.query['type'].toLowerCase()
+      const type = this.formData.type
       switch (type) {
         case 'line':
         case 'area':
           return 'line'
-        case 'vertical bar':
+        case 'bar':
           return 'bar'
         default:
-          return undefined
+          return 'line'
       }
     },
     areaStyle () {
-      const type = this.$route.query['type'].toLowerCase()
+      const type = this.formData.type
       return type === 'area' ? {} : undefined
     },
     chartOptions () {

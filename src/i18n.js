@@ -37,7 +37,8 @@ const messages = {
       xAxis: 'X-Axis',
       yAxis: 'Y-Axis',
       aggregationIsRequired: 'Aggregation is required',
-      fieldIsRequired: 'Field is required'
+      fieldIsRequired: 'Field is required',
+      typeIsRequired: 'Chart type is required'
     }
   }
 }
