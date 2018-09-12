@@ -24,6 +24,9 @@
           <el-menu-item index="/management/tree">
             <i class="el-icon-yasa-tree"></i><span slot="title">Tree</span>
           </el-menu-item>
+          <el-menu-item index="/management/config-sets">
+            <i class="el-icon-yasa-config"></i><span slot="title">Config Set</span>
+          </el-menu-item>
           <el-menu-item index="/management/collections">
             <i class="el-icon-yasa-collections"></i><span slot="title">Collections</span>
           </el-menu-item>

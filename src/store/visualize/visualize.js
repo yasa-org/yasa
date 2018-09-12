@@ -3,22 +3,22 @@ import Vue from 'vue'
 import _ from '../../util/index'
 
 const aggregationJsonFacet = (formData) => {
-  const agg = formData.yFieldAggregation.toLowerCase()
-  switch (agg) {
-    case 'count':
-      return {
-        xAxis: {
+  const result = {}
+  formData.charts.forEach(c => {
+    const agg = c.yFieldAggregation.toLowerCase()
+    switch (agg) {
+      case 'count':
+        result[c.title] = {
           type: 'terms',
           field: formData.xField,
           sort: 'index desc'
         }
-      }
-    case 'min':
-    case 'max':
-    case 'sum':
-    case 'unique':
-      return {
-        xAxis: {
+        break
+      case 'min':
+      case 'max':
+      case 'sum':
+      case 'unique':
+        result[c.title] = {
           type: 'terms',
           field: formData.xField,
           sort: 'index desc',
@@ -26,10 +26,9 @@ const aggregationJsonFacet = (formData) => {
             yAxis: `${agg}(${formData.yField})`
           }
         }
-      }
-    case 'average':
-      return {
-        xAxis: {
+        break
+      case 'average':
+        result[c.title] = {
           type: 'terms',
           field: formData.xField,
           sort: 'index desc',
@@ -37,10 +36,10 @@ const aggregationJsonFacet = (formData) => {
             yAxis: `avg(${formData.yField})`
           }
         }
-      }
-    default:
-      return undefined
-  }
+        break
+    }
+  })
+  return result
 }
 
 export default {
@@ -84,10 +83,24 @@ export default {
           'json.facet': JSON.stringify(aggregationJsonFacet(context.state.formData))
         }
       }).then(res => {
-        context.state.chartDataSource = res.data['facets'].xAxis.buckets.reverse()
-        if (context.state.formData.yFieldAggregation.toLowerCase() === 'count') {
-          context.state.chartDataSource.forEach(it => (it['yAxis'] = it.count))
+        const dataSource = {}
+        for (let index in context.state.formData.charts) {
+          const c = context.state.formData.charts[index]
+          const dataSource = res.data['facets'][c.title].buckets.reverse()
+          if (c.yFieldAggregation.toLowerCase() === 'count') {
+            dataSource.forEach(it => (it['yAxis'] = it.count))
+          }
         }
+        context.state.formData.charts.map(c => {
+          const dataSource = res.data['facets'][c.title].buckets.reverse()
+          if (c.yFieldAggregation.toLowerCase() === 'count') {
+            dataSource.forEach(it => (it['yAxis'] = it.count))
+          }
+          return dataSource
+        })
+        console.log('%o', context.state.chartDataSource)
+
+        context.state.chartDataSource = dataSource
         context.state.loadingChartData = false
         context.state.result = res.data
       }, () => (context.state.loadingChartData = false))

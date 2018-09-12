@@ -5,6 +5,7 @@ import Discover from '../components/discover/Discover'
 import VisualizeChart from '../components/visualize/Chart'
 import DevTools from '../components/dev-tools/DevTools'
 import Collections from '../components/management/Collections'
+import ConfigSet from '../components/management/ConfigSets'
 import Tree from '../components/management/Tree'
 
 Vue.use(Router)
@@ -22,6 +23,7 @@ export default new Router({
 
     {path: '/dev-tools', component: DevTools},
 
+    {path: '/management/config-sets', component: ConfigSet},
     {path: '/management/collections', component: Collections},
     {path: '/management/tree', component: Tree}
   ]
