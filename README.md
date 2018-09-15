@@ -1,5 +1,7 @@
 # YASA - Yet Another Solr Admin 
-[![Solr Version](https://img.shields.io/badge/Solr-6.1.0-D9411E.svg)](http://lucene.apache.org/solr/)
+[![Build Status](https://travis-ci.org/kezhenxu94/yasa.svg?branch=master)](https://travis-ci.org/kezhenxu94/yasa)
+[![Release Version](https://img.shields.io/github/release/kezhenxu94/yasa.svg)](https://github.com/kezhenxu94/yasa/releases)
+[![Solr Version](https://img.shields.io/badge/SolrCloud-6.1.0+-D9411E.svg)](http://lucene.apache.org/solr/)
 [![Vuejs Version](https://img.shields.io/badge/Vuejs-2.5.2-4fc08d.svg)](https://vuejs.org)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
