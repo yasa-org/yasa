@@ -2,3 +2,5 @@
 /config/
 /dist/
 /*.js
+/src/style/iconfont/
+/src/style/theme/
