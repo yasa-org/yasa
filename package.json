@@ -38,6 +38,7 @@
     "chalk": "^2.0.1",
     "copy-webpack-plugin": "^4.0.1",
     "css-loader": "^0.28.0",
+    "element-theme": "^2.0.1",
     "element-theme-chalk": "^2.4.5",
     "eslint": "^4.15.0",
     "eslint-config-standard": "^10.2.1",
