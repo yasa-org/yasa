@@ -22,7 +22,7 @@ jobs:
             ${{ runner.os }}-build-
             ${{ runner.os }}-
       - name: Install prerequisites
-        run: npm i && npm i element-theme -g
+        run: npm i && sudo npm i element-theme -g
       - name: Setup Node
         uses: actions/setup-node@v1
         with:
