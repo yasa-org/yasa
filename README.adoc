@@ -1,8 +1,11 @@
-= YASA - Yet Another Solr Admin
+:org-name: yasa-org
+:project-name: YASA
 
-image:https://api.codacy.com/project/badge/Grade/06babe7d11d94e6e86c613a537475903[caption="Code Quality", link=https://www.codacy.com/gh/yasa-org/yasa?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=yasa-org/yasa&amp;utm_campaign=Badge_Grade]
-image:https://github.com/yasa-org/yasa/workflows/Build/badge.svg?branch=master[capition="Build Status", link=https://github.com/yasa-org/yasa/actions?query=branch%3Amaster]
-image:https://img.shields.io/github/release/yasa-org/yasa.svg[capition="Release Version", link=https://github.com/yasa-org/yasa/releases]
+= {project-name} - Yet Another Solr Admin
+
+image:https://api.codacy.com/project/badge/Grade/06babe7d11d94e6e86c613a537475903[caption="Code Quality", link=https://www.codacy.com/gh/{org-name}/{project-name}?utm_source=github.com&amp;utm_medium=referral&amp;utm_content={org-name}/{project-name}&amp;utm_campaign=Badge_Grade]
+image:https://github.com/{org-name}/{project-name}/workflows/Build/badge.svg?branch=master[capition="Build Status", link=https://github.com/{org-name}/{project-name}/actions?query=branch%3Amaster]
+image:https://img.shields.io/github/release/{org-name}/{project-name}.svg[capition="Release Version", link=https://github.com/{org-name}/{project-name}/releases]
 image:https://img.shields.io/badge/SolrCloud-6.1.0+-D9411E.svg[capition="Solr Version", link=http://lucene.apache.org/solr/]
 image:https://img.shields.io/badge/Vuejs-2.5.2-4fc08d.svg[capition="Vuejs Version", link=https://vuejs.org]
 image:https://img.shields.io/badge/License-MIT-yellow.svg[capition="License", link=https://opensource.org/licenses/MIT]
@@ -29,11 +32,11 @@ image:https://img.shields.io/badge/License-MIT-yellow.svg[capition="License", li
 
 === Standalone Mode
 
-You can install **YASA** in standalone mode without affecting the official Solr Admin. Here is how:
+You can install **{project-name}** in the standalone mode without affecting the official Solr Admin. Here is how:
 
-- Download link:https://github.com/yasa-org/yasa/releases[the latest release] of YASA
-- Extract files from `yasa-vX.Y.tgz` (where `X.Y` is the version number) to a directory, say `YASA_HOME`
-- Configure your Nginx server and proxy `/solr/**` to your actual Solr Admin address, e.g. `http://127.0.0.1:8983/solr`.
+- Download link:https://github.com/{org-name}/{project-name}/releases[the latest release] of {project-name}.
+- Extract files from `{project-name}-vX.Y.tgz` (where `X.Y` is the version number) to a directory, say `{project-name}_HOME`.
+- Configure your Nginx server and proxy `/solr/**` to your actual Solr Admin address, for example, `http://127.0.0.1:8983/solr`.
 
 Here is a Nginx configuration sample:
 
@@ -63,7 +66,7 @@ http {
   server {
     server_name 127.0.0.1;
     listen 7389;
-    root <YASA_HOME>; # replace <YASA_HOME> with your actual directory path
+    root <{project-name}_HOME>; # replace <{project-name}_HOME> with your actual directory path
 
     location /solr/ {
       location /solr/static/ {
@@ -79,21 +82,21 @@ http {
 
 === Integration Mode
 
-You can also replace the official admin interface with **YASA**:
+You can also replace the official admin interface with **{project-name}**:
 
-- Download link:https://github.com/yasa-org/yasa/releases[the latest release] of YASA
-- Extract files from `yasa-vX.Y.tgz` (where `X.Y` is the version number) to a directory, say `YASA_HOME`
+- Download link:https://github.com/{org-name}/{project-name}/releases[the latest release] of {project-name}
+- Extract files from `{project-name}-vX.Y.tgz` (where `X.Y` is the version number) to a directory, say `{project-name}_HOME`
 - (Optional but recommended) Backup the Solr webapp folder (`solr-x-y-z/server/solr-webapp/webapp`, where `x-y-z` is the version number)
-- Copy everything under `${YASA_HOME}/dist/` folder to `solr-x-y-z/server/solr-webapp/webapp`
+- Copy everything under `${{project-name}_HOME}/dist/` folder to `solr-x-y-z/server/solr-webapp/webapp`
 
 === Development Mode
 
-If you are interesting in `YASA` and want to contribute, you can run `YASA` in dev mode:
+If you are interested in `{project-name}` and want to contribute, you can run `{project-name}` in dev mode:
 
 [source,bash]
 ----
 # pull source code
-git clone https://github.com/yasa-org/yasa
+git clone https://github.com/{org-name}/{project-name}
 
 # install dependencies
 npm i
