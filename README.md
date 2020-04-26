@@ -1,6 +1,6 @@
 # YASA - Yet Another Solr Admin 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/2375beb667384ea09086b1c9ba02ddd8)](https://app.codacy.com/app/kezhenxu94/yasa?utm_source=github.com&utm_medium=referral&utm_content=kezhenxu94/yasa&utm_campaign=Badge_Grade_Dashboard)
-[![Build Status](https://travis-ci.org/kezhenxu94/yasa.svg?branch=master)](https://travis-ci.org/kezhenxu94/yasa)
+[![Build Status](https://travis-ci.org/kezhenxu94/yasa.svg?branch=master)](https://github.com/yasa-org/yasa/actions?query=branch%3Amaster)
 [![Release Version](https://img.shields.io/github/release/kezhenxu94/yasa.svg)](https://github.com/kezhenxu94/yasa/releases)
 [![Solr Version](https://img.shields.io/badge/SolrCloud-6.1.0+-D9411E.svg)](http://lucene.apache.org/solr/)
 [![Vuejs Version](https://img.shields.io/badge/Vuejs-2.5.2-4fc08d.svg)](https://vuejs.org)
