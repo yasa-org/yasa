@@ -41,7 +41,7 @@ You can install **{project-name}** in the standalone mode without affecting the 
 Here is a Nginx configuration sample:
 
 .nginx.conf
-[source,nginx]
+[source,nginx,subs="verbatim,attributes"]
 ----
 worker_processes auto;
 
@@ -93,7 +93,7 @@ You can also replace the official admin interface with **{project-name}**:
 
 If you are interested in `{project-name}` and want to contribute, you can run `{project-name}` in dev mode:
 
-[source,bash]
+[source,bash,subs="verbatim,attributes"]
 ----
 # pull source code
 git clone https://github.com/{org-name}/{project-name}
