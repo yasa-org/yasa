@@ -82,124 +82,143 @@
   </div>
 </template>
 
-<script>
-import {mapState, mapMutations, mapActions} from 'vuex'
-import NewCollectionForm from './NewCollectionForm'
-export default {
-  name: 'Collections',
-  components: {NewCollectionForm},
-  computed: {
-    ...mapState(['solrMode']),
-    ...mapState('management/collections', ['detailedCollections', 'loadingDetailedCollections']),
-    filteredAliases () {
-      return Object.keys(this.aliases).filter(k => this.aliases[k] === this.selectedCollection)
-    }
-  },
-  methods: {
-    ...mapMutations('management/collections', ['setDetailedCollections', 'setLoadingDetailedCollections']),
-    ...mapActions('management/collections', ['loadDetailedCollections']),
-    shardCountFormatter (row) {
-      return Object.keys(row.shards).length
-    },
-    shardsFormatter (shards) {
-      return Object.keys(shards).map(name => {
-        const shard = shards[name]
-        shard.name = name
-        return shard
+<script lang="ts">
+import { Component, Vue, Watch } from 'vue-property-decorator'
+import { State, namespace } from 'vuex-class'
+import NewCollectionForm from './NewCollectionForm.vue'
+
+const Store = namespace('management/collections')
+
+@Component({
+  components: {
+    NewCollectionForm
+  }
+})
+export default class Collections extends Vue {
+  private deleteAliasDialogVisible = false
+  private createCollectionDialogVisible = false
+  private aliases = []
+  private selectedCollection = ''
+  private selectedAlias = ''
+  private deletingAlias = false
+
+  @State private solrMode!: string
+
+  @Store.State private detailedCollections!: any
+  @Store.State private loadingDetailedCollections!: boolean
+
+  @Store.Mutation private setDetailedCollections!: (detailedCollections: any[]) => void
+  @Store.Mutation private setLoadingDetailedCollections!: (loadingDetailedCollections: boolean) => void
+
+  @Store.Action private loadDetailedCollections!: () => void
+
+  private get filteredAliases () {
+    return Object.keys(this.aliases).filter(k => this.aliases[k] === this.selectedCollection)
+  }
+
+  private shardCountFormatter (row) {
+    return Object.keys(row.shards).length
+  }
+
+  private shardsFormatter (shards) {
+    return Object.keys(shards).map(name => {
+      const shard = shards[name]
+      shard.name = name
+      return shard
+    })
+  }
+
+  private loadAliases () {
+    this.$http.get('/solr/admin/zookeeper?wt=json&detail=true&path=/aliases.json').then(res => {
+      this.aliases = JSON.parse(res.data.znode.data || '{}').collection || {}
+    }, () => ({}))
+  }
+
+  private reloadCollection (row) {
+    this.$confirm(`Do you want to reload collection "${row.name}"`, 'Reload Collection').then(() => {
+      const loading = this.$loading({
+        lock: true,
+        text: 'Reloading',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
       })
-    },
-    loadAliases () {
-      this.$http.get('/solr/admin/zookeeper?wt=json&detail=true&path=/aliases.json').then(res => {
-        this.aliases = JSON.parse(res.data.znode.data || '{}').collection || {}
-      }, () => {})
-    },
-    reloadCollection (row) {
-      this.$confirm(`Do you want to reload collection "${row.name}"`, 'Reload Collection').then(() => {
-        const loading = this.$loading({
-          lock: true,
-          text: 'Reloading',
-          spinner: 'el-icon-loading',
-          background: 'rgba(0, 0, 0, 0.7)'
-        })
-        this.$http.get(`/solr/admin/collections?action=RELOAD&name=${row.name}`).then(() => {
-          loading.close()
-          this.$notify.success(`Collection "${row.name}" has been reloaded`)
-        })
-      }).catch(() => {})
-    },
-    deleteCollection (row) {
-      this.$confirm(`Do you want to delete collection "${row.name}"`, 'Delete Collection').then(() => {
-        const loading = this.$loading({
-          lock: true,
-          text: 'Deleting',
-          spinner: 'el-icon-loading',
-          background: 'rgba(0, 0, 0, 0.7)'
-        })
-        this.$http.get(`/solr/admin/collections?action=DELETE&name=${row.name}`).then(() => {
-          loading.close()
-          this.$notify.success(`Collection "${row.name}" has been deleted`)
-          this.loadDetailedCollections()
-        })
-      }).catch(() => this.loadDetailedCollections())
-    },
-    createAliasForCollection (row) {
-      this.$prompt('Alias Name', 'Create Alias').then(({ value }) => {
-        const loading = this.$loading({
-          lock: true,
-          text: 'Creating',
-          spinner: 'el-icon-loading',
-          background: 'rgba(0, 0, 0, 0.7)'
-        })
-        this.$http.get(`/solr/admin/collections?action=CREATEALIAS&name=${value}&collections=${row.name}`).then(() => {
-          loading.close()
-          this.$notify.success(`Alias "${value}" for collection "${row.name}" has been created`)
-          this.loadDetailedCollections()
-          this.loadAliases()
-        }, () => loading.close())
-      }).catch(() => {})
-    },
-    deleteAliasOfCollection (row) {
-      this.deleteAliasDialogVisible = true
-      this.selectedCollection = row.name
-    },
-    doDeleteAliasOfCollection () {
-      this.$http.get(`/solr/admin/collections?action=DELETEALIAS&name=${this.selectedAlias}`).then(res => {
-        this.deletingAlias = false
-        this.deleteAliasDialogVisible = false
-        this.$notify.success(`Alias "${this.selectedAlias}" of collection ${this.selectedCollection} is deleted`)
-        this.loadAliases()
-      }, () => {
-        this.deletingAlias = false
-        this.deleteAliasDialogVisible = false
-        this.loadAliases()
+      this.$http.get(`/solr/admin/collections?action=RELOAD&name=${row.name}`).then(() => {
+        loading.close()
+        this.$notify.success(`Collection "${row.name}" has been reloaded`)
       })
-    },
-    done () {
-      this.createCollectionDialogVisible = false
-      this.loadDetailedCollections()
-    }
-  },
-  watch: {
-    solrMode () {
-      this.loadDetailedCollections()
-    },
-    aliases () {
-      this.selectedAlias = undefined
-    }
-  },
+    }).catch(() => ({}))
+  }
+
+  private deleteCollection (row) {
+    this.$confirm(`Do you want to delete collection "${row.name}"`, 'Delete Collection').then(() => {
+      const loading = this.$loading({
+        lock: true,
+        text: 'Deleting',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      })
+      this.$http.get(`/solr/admin/collections?action=DELETE&name=${row.name}`).then(() => {
+        loading.close()
+        this.$notify.success(`Collection "${row.name}" has been deleted`)
+        this.loadDetailedCollections()
+      })
+    }).catch(() => this.loadDetailedCollections())
+  }
+
+  private createAliasForCollection (row) {
+    this.$prompt('Alias Name', 'Create Alias').then(({ value }) => {
+      const loading = this.$loading({
+        lock: true,
+        text: 'Creating',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      })
+      this.$http.get(`/solr/admin/collections?action=CREATEALIAS&name=${value}&collections=${row.name}`).then(() => {
+        loading.close()
+        this.$notify.success(`Alias "${value}" for collection "${row.name}" has been created`)
+        this.loadDetailedCollections()
+        this.loadAliases()
+      }, () => loading.close())
+    }).catch(() => ({}))
+  }
+
+  private deleteAliasOfCollection (row) {
+    this.deleteAliasDialogVisible = true
+    this.selectedCollection = row.name
+  }
+
+  private doDeleteAliasOfCollection () {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    this.$http.get(`/solr/admin/collections?action=DELETEALIAS&name=${this.selectedAlias}`).then(res => {
+      this.deletingAlias = false
+      this.deleteAliasDialogVisible = false
+      this.$notify.success(`Alias "${this.selectedAlias}" of collection ${this.selectedCollection} is deleted`)
+      this.loadAliases()
+    }, () => {
+      this.deletingAlias = false
+      this.deleteAliasDialogVisible = false
+      this.loadAliases()
+    })
+  }
+
+  private done () {
+    this.createCollectionDialogVisible = false
+    this.loadDetailedCollections()
+  }
+
+  @Watch('solrMode')
+  private onSolrModeChanged () {
+    this.loadDetailedCollections()
+  }
+
+  @Watch('aliases')
+  private onAliasesChanged () {
+    this.selectedAlias = undefined
+  }
+
   created () {
     this.loadDetailedCollections()
     this.loadAliases()
-  },
-  data () {
-    return {
-      deleteAliasDialogVisible: false,
-      createCollectionDialogVisible: false,
-      aliases: [],
-      selectedCollection: undefined,
-      selectedAlias: undefined,
-      deletingAlias: false
-    }
   }
 }
 </script>

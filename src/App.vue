@@ -41,36 +41,33 @@
   </el-container>
 </template>
 
-<script>
-import {mapState, mapActions} from 'vuex'
-export default {
-  name: 'App',
-  data () {
-    return {
-      isCollapse: localStorage.getItem('isCollapse') === 'true'
-    }
-  },
+<script lang="ts">
+import { Component, Vue, Watch } from 'vue-property-decorator'
+import { Action, State } from 'vuex-class'
+
+@Component
+export default class App extends Vue {
+  private isCollapse: boolean = localStorage.getItem('isCollapse') === 'true'
+
+  @State private solrMode!: string
+  @Action private loadCollections!: () => void
+
   created () {
     this.loadCollections()
-  },
-  watch: {
-    isCollapse () {
-      localStorage.setItem('isCollapse', this.isCollapse.toString())
+  }
+
+  @Watch('isCollapse')
+  onIsCollapseChanged () {
+    localStorage.setItem('isCollapse', this.isCollapse.toString())
+  }
+
+  get activeNav () {
+    const segments = this.$route.path.match(/^(\/[^/]+).*/)
+    const firstSegment = segments && segments[1]
+    if (firstSegment === '/management') {
+      return this.$route.path
     }
-  },
-  computed: {
-    ...mapState(['solrMode']),
-    activeNav () {
-      const segments = this.$route.path.match(/^(\/[^/]+).*/)
-      const firstSegment = segments[1]
-      if (firstSegment === '/management') {
-        return this.$route.path
-      }
-      return segments[1]
-    }
-  },
-  methods: {
-    ...mapActions(['loadCollections'])
+    return segments && segments[1]
   }
 }
 </script>

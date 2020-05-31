@@ -33,47 +33,63 @@
   </el-form>
 </template>
 
-<script>
-import {mapState, mapActions} from 'vuex'
-export default {
-  name: 'new-collection-form',
-  computed: {
-    ...mapState('management/collections/newCollection', ['configSets', 'loadingConfigSets', 'newCollectionFormData']),
-    numShardsRequired () {
-      return this.newCollectionFormData['router.name'] === 'compositeId'
-    }
-  },
-  methods: {
-    ...mapActions('management/collections/newCollection', ['loadConfigSets', 'doCreateCollection']),
-    submitForm () {
-      this.$refs['newCollectionForm'].validate((valid) => {
-        if (!valid) {
-          return
-        }
-        if (this.creatingCollection) return
-        this.creatingCollection = true
-        this.$http.get('/solr/admin/collections?action=CREATE', {
-          params: this.newCollectionFormData
-        }).then(() => {
-          this.creatingCollection = false
-          this.$emit('done')
-        }, () => {
-          this.creatingCollection = false
-        })
-      })
-    }
-  },
+<script lang="ts">
+import { Component, Vue } from 'vue-property-decorator'
+import { namespace } from 'vuex-class'
+import { ElForm } from 'element-ui/types/form'
+import { CollectionForm } from '@/service/solr/collections'
+
+const Store = namespace('management/collections')
+
+@Component
+export default class NewCollectionForm extends Vue {
+  private creatingCollection = false
+
+  @Store.State private configSets!: string[]
+  @Store.State private loadingConfigSets!: boolean
+  @Store.State private newCollectionFormData!: CollectionForm
+
+  @Store.Action private loadConfigSets!: () => void
+  @Store.Action private doCreateCollection!: () => void
+
   created () {
     this.loadConfigSets()
-  },
-  data () {
+  }
+
+  private get numShardsRequired (): boolean {
+    return this.newCollectionFormData && this.newCollectionFormData['router.name'] === 'compositeId'
+  }
+
+  private get validateRules () {
     return {
-      validateRules: {
-        name: [{ required: true, message: 'Collection name is required', trigger: 'change' }],
-        numShards: [{ required: this.numShardsRequired, type: 'number', message: 'numShards is required when router.name is compositeId.', trigger: 'change' }]
-      },
-      creatingCollection: false
+      name: [{
+        required: true,
+        message: 'Collection name is required',
+        trigger: 'change'
+      }],
+      numShards: [{
+        required: this.numShardsRequired,
+        type: 'number',
+        message: 'numShards is required when router.name is compositeId.',
+        trigger: 'change'
+      }]
     }
+  }
+
+  private submitForm () {
+    (this.$refs.newCollectionForm as ElForm).validate((valid) => {
+      if (!valid) {
+        return
+      }
+      if (this.creatingCollection) return
+      this.creatingCollection = true
+      this.$service.solr.collections.create(this.newCollectionFormData).then(() => {
+        this.creatingCollection = false
+        this.$emit('done')
+      }, () => {
+        this.creatingCollection = false
+      })
+    })
   }
 }
 </script>

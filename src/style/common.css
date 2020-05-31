@@ -25,3 +25,8 @@ a {
 *::-webkit-scrollbar-thumb {
 	background-color: #282A36;
 }
+
+.center {
+  margin: auto;
+  width: 50%;
+}

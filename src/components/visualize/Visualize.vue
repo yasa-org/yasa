@@ -19,27 +19,24 @@
   </div>
 </template>
 
-<script>
-import ImageArea from '../../assets/charts-icon/area.svg'
-import ImageLine from '../../assets/charts-icon/line.svg'
-import ImagePie from '../../assets/charts-icon/pie.svg'
-import ImageVerticalBar from '../../assets/charts-icon/vertical-bar.svg'
-export default {
-  name: 'new',
-  data () {
-    return {
-      charts: [
-        {title: 'Line', icon: ImageLine},
-        {title: 'Vertical Bar', icon: ImageVerticalBar},
-        {title: 'Area', icon: ImageArea},
-        {title: 'Pie', icon: ImagePie}
-      ]
-    }
-  },
-  methods: {
-    newChart (type) {
-      this.$router.push({path: '/visualize/chart', query: { type: type }})
-    }
+<script lang="ts">
+import ImageArea from '@assets/charts-icon/area.svg'
+import ImageLine from '@assets/charts-icon/line.svg'
+import ImagePie from '@assets/charts-icon/pie.svg'
+import ImageVerticalBar from '@assets/charts-icon/vertical-bar.svg'
+import { Component, Vue } from 'vue-property-decorator'
+
+@Component
+export default class Visualize extends Vue {
+  public charts = [
+    { title: 'Line', icon: ImageLine },
+    { title: 'Vertical Bar', icon: ImageVerticalBar },
+    { title: 'Area', icon: ImageArea },
+    { title: 'Pie', icon: ImagePie }
+  ]
+
+  newChart (type: string) {
+    this.$router.push({ path: '/visualize/chart', query: { type: type } })
   }
 }
 </script>

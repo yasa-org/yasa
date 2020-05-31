@@ -19,120 +19,150 @@
   </el-container>
 </template>
 
-<script>
-import ChartForm from './ChartForm'
-import {mapState, mapMutations, mapActions} from 'vuex'
+<script lang="ts">
+import { Component, Vue, Watch } from 'vue-property-decorator'
+import { State, namespace } from 'vuex-class'
+import { Field } from '@/model'
+import ChartForm from './ChartForm.vue'
+import ECharts from 'vue-echarts/components/ECharts.vue'
 
-export default {
-  name: 'yasa-chart',
-  components: {ChartForm},
-  data () {
-    return {
-      localQueryString: undefined
-    }
-  },
+const Store = namespace('visualize')
+
+@Component({
+  components: {
+    ChartForm
+  }
+})
+export default class YasaChart extends Vue {
+  private localQueryString = ''
+
+  @State private collections!: string[]
+
+  @Store.State private loadingFields!: boolean
+  @Store.State private fields!: Field[]
+  @Store.State private chartDataSource!: any
+  @Store.State private loadingChartData!: boolean
+  @Store.State private result!: any
+  @Store.State private formData!: any
+
+  @Store.Mutation private setCollection!: (collection: string) => void
+  @Store.Mutation private setFormData!: (formData: any) => void
+  @Store.Mutation private setQueryString!: (queryString: string) => void
+  @Store.Mutation private setResult!: (result: any) => void
+
+  @Store.Action private loadFields!: () => void
+  @Store.Action private loadChartData!: () => void
+  @Store.Action private reset!: () => void
+
   created () {
     this.selectCollection()
-  },
+  }
+
   mounted () {
     this.reset()
-  },
-  computed: {
-    ...mapState(['collections']),
-    ...mapState('visualize', ['loadingFields', 'fields', 'chartDataSource', 'loadingChartData', 'result', 'formData']),
-    collection: {
-      get () {
-        return this.$store.state.visualize.collection
+  }
+
+  private get collection () {
+    return this.$store.state.visualize.collection
+  }
+
+  private set collection (val) {
+    this.setCollection(val)
+  }
+
+  private get chartType () {
+    const type = this.formData.type
+    switch (type) {
+      case 'line':
+      case 'area':
+        return 'line'
+      case 'bar':
+        return 'bar'
+      default:
+        return 'line'
+    }
+  }
+
+  private areaStyle () {
+    const type = this.formData.type
+    return type === 'area' ? {} : undefined
+  }
+
+  private get chartOptions () {
+    return {
+      dataset: {
+        source: this.chartDataSource
       },
-      set (val) {
-        this.setCollection(val)
-      }
-    },
-    chartType () {
-      const type = this.formData.type
-      switch (type) {
-        case 'line':
-        case 'area':
-          return 'line'
-        case 'bar':
-          return 'bar'
-        default:
-          return 'line'
-      }
-    },
-    areaStyle () {
-      const type = this.formData.type
-      return type === 'area' ? {} : undefined
-    },
-    chartOptions () {
-      return {
-        dataset: {
-          source: this.chartDataSource
+      tooltip: {
+        trigger: 'axis',
+        axisPointer: {}
+      },
+      legend: {},
+      xAxis: {
+        type: 'category',
+        axisTick: {
+          alignWithLabel: true
         },
-        tooltip: {
-          trigger: 'axis',
-          axisPointer: {}
-        },
-        legend: {},
-        xAxis: {
-          type: 'category',
-          axisTick: {
-            alignWithLabel: true
-          },
-          axisLabel: {
-            rotate: 45
-          }
-        },
-        yAxis: {},
-        series: [
-          {name: this.formData.title || 'xAxis', type: this.chartType, dimensions: ['val', 'yAxis'], areaStyle: this.areaStyle, smooth: true}
-        ],
-        grid: {
-          left: 10,
-          right: 20,
-          bottom: 10,
-          top: 40,
-          containLabel: true
+        axisLabel: {
+          rotate: 45
         }
-      }
-    },
-    numHit () {
-      return ((this.result || {}).response || {}).numFound || 0
-    }
-  },
-  methods: {
-    ...mapMutations('visualize', ['setCollection', 'setFormData', 'setResult', 'setQueryString', 'reset']),
-    ...mapActions('visualize', ['loadFields', 'loadChartData']),
-    onSubmit (formData) {
-      this.setFormData(formData)
-      this.loadChartData()
-    },
-    onQuery () {
-      this.setQueryString(this.localQueryString)
-      this.loadChartData()
-    },
-    selectCollection () {
-      if (this.collections.length > 0) {
-        this.setCollection(this.collections[0])
+      },
+      yAxis: {},
+      series: [
+        { name: this.formData.title || 'xAxis', type: this.chartType, dimensions: ['val', 'yAxis'], areaStyle: this.areaStyle, smooth: true }
+      ],
+      grid: {
+        left: 10,
+        right: 20,
+        bottom: 10,
+        top: 40,
+        containLabel: true
       }
     }
-  },
-  watch: {
-    collections () {
-      this.selectCollection()
-    },
-    loadingChartData () {
-      if (this.loadingChartData) {
-        this.$refs.chart.showLoading()
-      } else {
-        this.$refs.chart.hideLoading()
-      }
-    },
-    collection () {
-      this.setFormData({})
-      this.setResult({})
-      this.loadFields()
+  }
+
+  private get numHit () {
+    return ((this.result || {}).response || {}).numFound || 0
+  }
+
+  private onSubmit (formData) {
+    this.setFormData(formData)
+    this.loadChartData()
+  }
+
+  private onQuery () {
+    this.setQueryString(this.localQueryString)
+    this.loadChartData()
+  }
+
+  private selectCollection () {
+    const lastCollection = localStorage.getItem('collection')
+    if (lastCollection && this.collections.includes(lastCollection)) {
+      this.setCollection(lastCollection)
+    } else if (this.collections.length > 0) {
+      this.setCollection(this.collections[0])
     }
+  }
+
+  @Watch('collections')
+  private onCollectionsChanged () {
+    this.selectCollection()
+  }
+
+  @Watch('loadingChartData')
+  private onLoadingChartDataChanged () {
+    if (this.loadingChartData) {
+      (this.$refs.chart as ECharts).showLoading()
+    } else {
+      (this.$refs.chart as ECharts).hideLoading()
+    }
+  }
+
+  @Watch('collection', { immediate: true })
+  private onCollectionChanged () {
+    this.setFormData({})
+    this.setResult({})
+    this.loadFields()
   }
 }
 </script>

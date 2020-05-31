@@ -62,81 +62,99 @@
   </el-container>
 </template>
 
-<script>
-import {mapState, mapMutations, mapActions} from 'vuex'
-export default {
-  name: 'discover',
-  data: function () {
-    return {
-      localQueryString: undefined
-    }
-  },
-  mounted: function () {
-    this.localQueryString = this.queryString === '*:*' ? undefined : this.queryString
+<script lang="ts">
+import { Component, Vue, Watch } from 'vue-property-decorator'
+import { State, namespace } from 'vuex-class'
+import { Field, Doc, Result } from '@/model'
+
+const Store = namespace('discover')
+
+@Component
+export default class Discover extends Vue {
+  private localQueryString = ''
+
+  @State
+  private collections!: string[]
+
+  @Store.State private fields!: Field[]
+  @Store.State private selectedFields!: Field[]
+  @Store.State private availableFields!: Field[]
+  @Store.State private queryString!: string
+  @Store.State private loadingMore!: boolean
+  @Store.State private loadingFields!: boolean
+  @Store.State private fieldsStats!: any[]
+  @Store.State private loadingFieldsStats!: boolean
+  @Store.State private numHit!: number
+  @Store.State private docs!: Doc[]
+
+  @Store.Mutation private setCollection!: (collection: string) => void
+  @Store.Mutation private setQueryString!: (queryString: string) => void
+  @Store.Mutation private setResult!: (result: Result) => void
+  @Store.Mutation private setDocs!: (docs: Doc[]) => void
+  @Store.Mutation private setAvailableFields!: (fields: Field[]) => void
+  @Store.Mutation private setSelectedFields!: (fields: Field[]) => void
+  @Store.Mutation private addSelectedField!: (field: Field) => void
+  @Store.Mutation private removeSelectedField!: (field: Field) => void
+
+  @Store.Action private loadMore!: () => void
+  @Store.Action private loadFieldsStats!: () => void
+  @Store.Action private loadFields!: () => void
+
+  mounted () {
+    this.localQueryString = this.queryString === '*:*' ? '' : this.queryString
     if (!this.collection) {
       this.selectCollection()
     }
-  },
-  computed: {
-    ...mapState(['collections']),
-    ...mapState('discover', [
-      'loadingFields', 'fields', 'queryString', 'docs',
-      'result', 'numHit', 'loadingMore', 'availableFields',
-      'selectedFields', 'fieldsStats', 'loadingFieldsStats']),
-    collection: {
-      get () {
-        return this.$store.state.discover.collection
-      },
-      set (val) {
-        this.setCollection(val)
-      }
-    }
-  },
-  methods: {
-    ...mapMutations(['setCollections']),
-    ...mapMutations('discover', [
-      'setCollection', 'setFields', 'setAvailableFields', 'setSelectedFields', 'setQueryString', 'setDocs', 'addDocs',
-      'setResult', 'addSelectedField', 'removeSelectedField'
-    ]),
-    ...mapActions('discover', ['loadMore', 'loadFields', 'loadFieldsStats']),
+  }
 
-    selectCollection () {
-      const lastCollection = localStorage.getItem('collection')
-      if (lastCollection && this.collections.includes(lastCollection)) {
-        this.setCollection(lastCollection)
-      } else if (this.collections.length > 0) {
-        this.setCollection(this.collections[0])
-      }
-    },
+  get collection (): string {
+    return this.$store.state.discover.collection
+  }
 
-    onQuery () {
-      if (this.loadingMore) return
-      this.setQueryString(this.localQueryString || '*:*')
-      this.setResult({})
-      this.setDocs([])
-      this.loadMore()
-      this.loadFieldsStats()
-    },
+  set collection (value: string) {
+    this.setCollection(value)
+  }
 
-    sourceFormatter (row) {
-      return this.fields.filter(f => row[f.name]).map(f => `${f.name}: ${row[f.name]}`).join(' ')
+  selectCollection () {
+    const lastCollection = localStorage.getItem('collection')
+    if (lastCollection && this.collections.includes(lastCollection)) {
+      this.setCollection(lastCollection)
+    } else if (this.collections.length > 0) {
+      this.setCollection(this.collections[0])
     }
-  },
-  watch: {
-    collections () {
-      this.selectCollection()
-    },
-    collection () {
-      this.setResult({})
-      this.setDocs([])
-      this.loadFields()
-      this.loadMore()
-    },
-    fields () {
-      this.setAvailableFields(Array(...this.fields))
-      this.setSelectedFields([])
-      this.loadFieldsStats()
-    }
+  }
+
+  onQuery () {
+    if (this.loadingMore) return
+    this.setQueryString(this.localQueryString || '*:*')
+    this.setResult(new Result())
+    this.setDocs([])
+    this.loadMore()
+    this.loadFieldsStats()
+  }
+
+  sourceFormatter (row: any) {
+    return this.fields.filter(f => row[f.name]).map(f => `${f.name}: ${row[f.name]}`).join(' ')
+  }
+
+  @Watch('collections')
+  onCollectionsChanged () {
+    this.selectCollection()
+  }
+
+  @Watch('collection', { immediate: true })
+  onCollectionChanged () {
+    this.setResult(new Result())
+    this.setDocs([])
+    this.loadFields()
+    this.loadMore()
+  }
+
+  @Watch('fields')
+  onFieldsChanged () {
+    this.setAvailableFields(Array(...this.fields))
+    this.setSelectedFields([])
+    this.loadFieldsStats()
   }
 }
 </script>

@@ -10,7 +10,7 @@
       </el-tree>
     </el-aside>
     <el-container>
-      <code-editor id="file-content-editor" :value="fileContent" :mode="mode" theme="ace/theme/dawn" v-loading="loadingFileContent" read-only show-gutter></code-editor>
+      <code-editor id="file-content-editor" :value="fileContent" :mode="mode" theme="ace/theme/dawn" v-loading="loadingFileContent" read-only="true" show-gutter="true"></code-editor>
     </el-container>
     <el-dialog title="Create Config Set" :visible.sync="createConfigSetDialogVisible">
       <el-form label-width="140px" v-model="newConfigSet">
@@ -42,121 +42,132 @@
   </el-container>
 </template>
 
-<script>
-import {mapState, mapMutations, mapActions} from 'vuex'
-import CodeEditor from '../dev-tools/code-editor/AceEditor'
+<script lang="ts">
+import { Component, Vue } from 'vue-property-decorator'
+import { namespace } from 'vuex-class'
+import { TreeNode } from '@/service/solr/admin/zookeeper'
+import CodeEditor from '@/components/dev-tools/code-editor/AceEditor.vue'
 import 'brace/mode/xml'
 import 'brace/mode/json'
 import 'brace/mode/text'
+import { ElUpload } from 'element-ui/types/upload'
 
-export default {
-  name: 'ConfigSets',
-  components: {CodeEditor},
-  computed: {
-    ...mapState('management/configSets', ['configSets', 'loadingConfigSets', 'fileContent'])
-  },
-  methods: {
-    ...mapMutations('management/configSets', ['setFileContent']),
-    ...mapActions('management/configSets', ['loadConfigSets']),
-    nodeClicked (data, node) {
-      if (node.isLeaf) {
-        this.loadingFileContent = true
-        const url = data.data.attr.href
-        this.$http.get(`/solr/${url}`).then(res => {
-          this.loadingFileContent = false
-          this.setFileContent(res.data.znode.data || '')
-          if (url.match(/.*\.json$/)) {
-            this.mode = 'ace/mode/json'
-          } else if (url.match(/.*\.xml$/) || url.match(/managed-schema$/)) {
-            this.mode = 'ace/mode/xml'
-          } else {
-            this.mode = 'ace/mode/text'
-          }
-        }, () => (this.loadingFileContent = false))
-      }
-    },
-    deleteConfigSet (data) {
-      const name = data.data.title
-      this.$confirm(`Do you want to delete config set: "${name}"`, 'Delete Config Set').then(() => {
-        const loading = this.$loading({
-          lock: true,
-          text: 'Deleting',
-          spinner: 'el-icon-loading',
-          background: 'rgba(0, 0, 0, 0.7)'
-        })
-        this.$http.get('/solr/admin/configs', {
-          params: {
-            action: 'DELETE',
-            name: name
-          }
-        }).then(() => {
-          loading.close()
-          this.loadConfigSets()
-        }, () => {
-          loading.close()
-        })
-      }, () => {})
-    },
-    upload (param) {
-      console.log(param)
-      const formData = new FormData()
-      formData.append('name', this.newConfigSet.name)
-      formData.append('file', param.file)
-      this.$http.post('/solr/admin/configs?action=CREATE', formData).then(() => {}, () => {})
-    },
-    createConfigSet () {
-      if (this.method === 'upload') {
-        this.$refs.uploader.submit()
-        return
-      }
-      if (this.creatingConfigSet) return
-      this.creatingConfigSet = true
+const Store = namespace('management/configSets')
+
+@Component({
+  components: {
+    CodeEditor
+  }
+})
+export default class ConfigSets extends Vue {
+  private treeProps = {
+    label: (data) => {
+      const title = data.data.title
+      return title === '/' ? title : title.replace(/^\//, '')
+    }
+  }
+
+  private loadingFileContent = false
+  private createConfigSetDialogVisible = false
+  private mode = 'ace/mode/text'
+  private newConfigSet = {
+    name: '',
+    baseConfigSet: ''
+  }
+
+  private creatingConfigSet = false
+  private method = 'base'
+
+  @Store.State private configSets!: TreeNode[]
+  @Store.State private loadingConfigSets!: boolean
+  @Store.State private fileContent!: string
+
+  @Store.Mutation private setFileContent!: (content: string) => void
+  @Store.Action private loadConfigSets!: () => void
+
+  private nodeClicked (data, node) {
+    if (node.isLeaf) {
+      this.loadingFileContent = true
+      const url = data.data.attr.href
+      this.$http.get(`/solr/${url}`).then(res => {
+        this.loadingFileContent = false
+        this.setFileContent(res.data.znode.data || '')
+        if (url.match(/.*\.json$/)) {
+          this.mode = 'ace/mode/json'
+        } else if (url.match(/.*\.xml$/) || url.match(/managed-schema$/)) {
+          this.mode = 'ace/mode/xml'
+        } else {
+          this.mode = 'ace/mode/text'
+        }
+      }, () => (this.loadingFileContent = false))
+    }
+  }
+
+  private deleteConfigSet (data) {
+    const name = data.data.title
+    this.$confirm(`Do you want to delete config set: "${name}"`, 'Delete Config Set').then(() => {
+      const loading = this.$loading({
+        lock: true,
+        text: 'Deleting',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      })
       this.$http.get('/solr/admin/configs', {
         params: {
-          action: 'CREATE',
-          name: this.newConfigSet.name,
-          baseConfigSet: this.newConfigSet.baseConfigSet
+          action: 'DELETE',
+          name: name
         }
       }).then(() => {
-        this.createConfigSetDialogVisible = false
-        this.creatingConfigSet = false
+        loading.close()
         this.loadConfigSets()
       }, () => {
-        this.creatingConfigSet = false
+        loading.close()
       })
+    }, () => ({}))
+  }
+
+  private upload (param) {
+    console.log(param)
+    const formData = new FormData()
+    formData.append('name', this.newConfigSet.name)
+    formData.append('file', param.file)
+    this.$http.post('/solr/admin/configs?action=CREATE', formData).then(() => ({}), () => ({}))
+  }
+
+  private createConfigSet () {
+    if (this.method === 'upload') {
+      (this.$refs.uploader as ElUpload).submit()
+      return
     }
-  },
+    if (this.creatingConfigSet) return
+    this.creatingConfigSet = true
+    this.$http.get('/solr/admin/configs', {
+      params: {
+        action: 'CREATE',
+        name: this.newConfigSet.name,
+        baseConfigSet: this.newConfigSet.baseConfigSet
+      }
+    }).then(() => {
+      this.createConfigSetDialogVisible = false
+      this.creatingConfigSet = false
+      this.loadConfigSets()
+    }, () => {
+      this.creatingConfigSet = false
+    })
+  }
+
   created () {
     this.loadConfigSets()
-  },
-  data () {
-    return {
-      treeProps: {
-        label: (data) => {
-          const title = data.data.title
-          return title === '/' ? title : title.replace(/^\//, '')
-        }
-      },
-      loadingFileContent: false,
-      createConfigSetDialogVisible: false,
-      mode: 'ace/mode/text',
-      newConfigSet: {
-        name: undefined,
-        baseConfigSet: undefined
-      },
-      creatingConfigSet: false,
-      method: 'base'
-    }
   }
 }
 </script>
 
 <style scoped>
-.el-aside, .el-tree {
-  height: 100vh;
-}
 #file-content-editor {
   width: 100%;
+  height: 100vh;
+}
+.el-aside, .el-tree {
   height: 100vh;
 }
 .custom-tree-node {
