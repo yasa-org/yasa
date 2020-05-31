@@ -15,7 +15,7 @@ image:https://img.shields.io/badge/License-MIT-yellow.svg[capition="License", li
 [cols="^,^,^", options="header"]
 |===
 |Dashboard |Discover |Visualize
-|image:https://user-images.githubusercontent.com/15965696/44301073-c3ec9c00-a343-11e8-8917-44d90657af9b.png[]
+|image:https://user-images.githubusercontent.com/15965696/83351249-deef9b00-a374-11ea-8c9e-1a46b55d8500.png[]
 |image:https://user-images.githubusercontent.com/15965696/44305860-90e2f080-a3b5-11e8-8d85-ee3a2f247919.png[]
 |image:https://user-images.githubusercontent.com/15965696/44301078-c8b15000-a343-11e8-98f9-135897212be8.png[]
 |===
