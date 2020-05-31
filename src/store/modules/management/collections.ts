@@ -1,6 +1,6 @@
 import { Action, Module, Mutation, VuexModule } from 'vuex-module-decorators'
 import service from '@/service'
-import { CollectionForm } from '@/service/solr/collections'
+import { CollectionDetail, CollectionForm } from '@/service/solr/collections'
 
 const params = {
   params: {
@@ -8,11 +8,13 @@ const params = {
   }
 }
 
+export type NamedCollectionDetail = CollectionDetail & { name: string }
+
 @Module({
   namespaced: true
 })
 export default class ManagementCollections extends VuexModule {
-  detailedCollections: any[] = []
+  detailedCollections: NamedCollectionDetail[] = []
   loadingDetailedCollections = false
   loadingConfigSets = false
   configSets: string[] = []
@@ -32,12 +34,12 @@ export default class ManagementCollections extends VuexModule {
   }
 
   @Mutation
-  public setConfigSets (configSets: any[]): void {
+  public setConfigSets (configSets: string[]): void {
     this.configSets = configSets
   }
 
   @Mutation
-  public setDetailedCollections (detailedCollections: any[]): void {
+  public setDetailedCollections (detailedCollections: NamedCollectionDetail[]): void {
     this.detailedCollections = detailedCollections
   }
 
@@ -54,7 +56,7 @@ export default class ManagementCollections extends VuexModule {
       service.solr.collections.clusters(params).then((res) => {
         const detailedCollectionsKeyedByName = res.data.cluster.collections
         const detailedCollections = Object.keys(detailedCollectionsKeyedByName).map(name => {
-          const detailedCollection = detailedCollectionsKeyedByName[name]
+          const detailedCollection = detailedCollectionsKeyedByName[name] as NamedCollectionDetail
           detailedCollection.name = name
           return detailedCollection
         })

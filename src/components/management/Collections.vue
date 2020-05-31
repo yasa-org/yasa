@@ -86,6 +86,7 @@
 import { Component, Vue, Watch } from 'vue-property-decorator'
 import { State, namespace } from 'vuex-class'
 import NewCollectionForm from './NewCollectionForm.vue'
+import { NamedCollectionDetail } from '@store/modules/management/collections'
 
 const Store = namespace('management/collections')
 
@@ -107,7 +108,7 @@ export default class Collections extends Vue {
   @Store.State private detailedCollections!: any
   @Store.State private loadingDetailedCollections!: boolean
 
-  @Store.Mutation private setDetailedCollections!: (detailedCollections: any[]) => void
+  @Store.Mutation private setDetailedCollections!: (detailedCollections: NamedCollectionDetail[]) => void
   @Store.Mutation private setLoadingDetailedCollections!: (loadingDetailedCollections: boolean) => void
 
   @Store.Action private loadDetailedCollections!: () => void
@@ -129,7 +130,11 @@ export default class Collections extends Vue {
   }
 
   private loadAliases () {
-    this.$http.get('/solr/admin/zookeeper?wt=json&detail=true&path=/aliases.json').then(res => {
+    this.$service.solr.admin.zookeeper.zookeeper({
+      wt: 'json',
+      detail: true,
+      path: '/aliases.json'
+    }).then(res => {
       this.aliases = JSON.parse(res.data.znode.data || '{}').collection || {}
     }, () => ({}))
   }
@@ -142,10 +147,9 @@ export default class Collections extends Vue {
         spinner: 'el-icon-loading',
         background: 'rgba(0, 0, 0, 0.7)'
       })
-      this.$http.get(`/solr/admin/collections?action=RELOAD&name=${row.name}`).then(() => {
-        loading.close()
+      this.$service.solr.collections.reload(row.name).then(() => {
         this.$notify.success(`Collection "${row.name}" has been reloaded`)
-      })
+      }).finally(() => loading.close())
     }).catch(() => ({}))
   }
 
@@ -213,7 +217,7 @@ export default class Collections extends Vue {
 
   @Watch('aliases')
   private onAliasesChanged () {
-    this.selectedAlias = undefined
+    this.selectedAlias = ''
   }
 
   created () {

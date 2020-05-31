@@ -23,8 +23,10 @@
 import { Component, Vue, Watch } from 'vue-property-decorator'
 import { State, namespace } from 'vuex-class'
 import { Field } from '@/model'
-import ChartForm from './ChartForm.vue'
+import { Bucket, SelectResult } from '@/service/solr/collections'
+import { ChartFormData } from '@store/modules/visualize/visualize'
 import ECharts from 'vue-echarts/components/ECharts.vue'
+import ChartForm from './ChartForm.vue'
 
 const Store = namespace('visualize')
 
@@ -40,15 +42,15 @@ export default class YasaChart extends Vue {
 
   @Store.State private loadingFields!: boolean
   @Store.State private fields!: Field[]
-  @Store.State private chartDataSource!: any
+  @Store.State private chartDataSource!: Bucket[][]
   @Store.State private loadingChartData!: boolean
-  @Store.State private result!: any
-  @Store.State private formData!: any
+  @Store.State private result!: SelectResult
+  @Store.State private formData!: ChartFormData
 
   @Store.Mutation private setCollection!: (collection: string) => void
-  @Store.Mutation private setFormData!: (formData: any) => void
+  @Store.Mutation private setFormData!: (formData: ChartFormData) => void
   @Store.Mutation private setQueryString!: (queryString: string) => void
-  @Store.Mutation private setResult!: (result: any) => void
+  @Store.Mutation private setResult!: (result: SelectResult) => void
 
   @Store.Action private loadFields!: () => void
   @Store.Action private loadChartData!: () => void
@@ -125,7 +127,7 @@ export default class YasaChart extends Vue {
     return ((this.result || {}).response || {}).numFound || 0
   }
 
-  private onSubmit (formData) {
+  private onSubmit (formData: ChartFormData) {
     this.setFormData(formData)
     this.loadChartData()
   }
@@ -160,8 +162,8 @@ export default class YasaChart extends Vue {
 
   @Watch('collection', { immediate: true })
   private onCollectionChanged () {
-    this.setFormData({})
-    this.setResult({})
+    this.setFormData(new ChartFormData())
+    this.setResult(new SelectResult())
     this.loadFields()
   }
 }

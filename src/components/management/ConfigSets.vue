@@ -45,12 +45,13 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import { namespace } from 'vuex-class'
-import { TreeNode } from '@/service/solr/admin/zookeeper'
+import { TreeNode, ZookeeperResponse } from '@/service/solr/admin/zookeeper'
 import CodeEditor from '@/components/dev-tools/code-editor/AceEditor.vue'
 import 'brace/mode/xml'
 import 'brace/mode/json'
 import 'brace/mode/text'
 import { ElUpload } from 'element-ui/types/upload'
+import { AxiosResponse } from 'axios'
 
 const Store = namespace('management/configSets')
 
@@ -89,7 +90,7 @@ export default class ConfigSets extends Vue {
     if (node.isLeaf) {
       this.loadingFileContent = true
       const url = data.data.attr.href
-      this.$http.get(`/solr/${url}`).then(res => {
+      this.$http.get(`/solr/${url}`).then((res: AxiosResponse<ZookeeperResponse>) => {
         this.loadingFileContent = false
         this.setFileContent(res.data.znode.data || '')
         if (url.match(/.*\.json$/)) {
@@ -126,8 +127,7 @@ export default class ConfigSets extends Vue {
     }, () => ({}))
   }
 
-  private upload (param) {
-    console.log(param)
+  private upload (param: { file: string }) {
     const formData = new FormData()
     formData.append('name', this.newConfigSet.name)
     formData.append('file', param.file)

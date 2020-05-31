@@ -65,7 +65,8 @@
 <script lang="ts">
 import { Component, Vue, Watch } from 'vue-property-decorator'
 import { State, namespace } from 'vuex-class'
-import { Field, Doc, Result } from '@/model'
+import { Field } from '@/model'
+import { SelectResult, Doc } from '@/service/solr/collections'
 
 const Store = namespace('discover')
 
@@ -89,7 +90,7 @@ export default class Discover extends Vue {
 
   @Store.Mutation private setCollection!: (collection: string) => void
   @Store.Mutation private setQueryString!: (queryString: string) => void
-  @Store.Mutation private setResult!: (result: Result) => void
+  @Store.Mutation private setResult!: (result: SelectResult) => void
   @Store.Mutation private setDocs!: (docs: Doc[]) => void
   @Store.Mutation private setAvailableFields!: (fields: Field[]) => void
   @Store.Mutation private setSelectedFields!: (fields: Field[]) => void
@@ -127,14 +128,14 @@ export default class Discover extends Vue {
   onQuery () {
     if (this.loadingMore) return
     this.setQueryString(this.localQueryString || '*:*')
-    this.setResult(new Result())
+    this.setResult(new SelectResult())
     this.setDocs([])
     this.loadMore()
     this.loadFieldsStats()
   }
 
-  sourceFormatter (row: any) {
-    return this.fields.filter(f => row[f.name]).map(f => `${f.name}: ${row[f.name]}`).join(' ')
+  sourceFormatter (row: Doc) {
+    return this.fields.filter(f => row[f.name as keyof Doc]).map(f => `${f.name}: ${row[f.name as keyof Doc]}`).join(' ')
   }
 
   @Watch('collections')
@@ -144,7 +145,7 @@ export default class Discover extends Vue {
 
   @Watch('collection', { immediate: true })
   onCollectionChanged () {
-    this.setResult(new Result())
+    this.setResult(new SelectResult())
     this.setDocs([])
     this.loadFields()
     this.loadMore()

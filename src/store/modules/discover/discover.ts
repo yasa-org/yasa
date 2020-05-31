@@ -1,5 +1,6 @@
 import { Action, Module, Mutation, VuexModule } from 'vuex-module-decorators'
-import { Doc, Field, Result } from '@/model'
+import { Doc, Facets, SelectResult } from '@/service/solr/collections'
+import { Field } from '@/model'
 import service from '@/service'
 
 @Module({
@@ -10,22 +11,14 @@ export default class Discover extends VuexModule {
   private fields: Field[] = []
   private loadingFields = false
   private loadingFieldsStats = false
-  private fieldsStats = {}
+  private fieldsStats: Facets = {}
   private availableFields: Field[] = []
   private selectedFields: Field[] = []
   private queryString = '*:*'
   private loadingMore = false
   private docs: Doc[] = []
   private numHit = 0
-  private result: Result = {
-    nextCursorMark: '',
-    numFound: 0,
-    response: {
-      numFound: 0,
-      start: 0,
-      docs: []
-    }
-  }
+  private result: SelectResult = new SelectResult();
 
   @Mutation
   public setCollection (collection: string): void {
@@ -49,7 +42,7 @@ export default class Discover extends VuexModule {
   }
 
   @Mutation
-  public setFieldsStats (fieldsStats: any) {
+  public setFieldsStats (fieldsStats: Facets) {
     this.fieldsStats = fieldsStats
   }
 
@@ -79,12 +72,12 @@ export default class Discover extends VuexModule {
   }
 
   @Mutation
-  public addDocs (docs: Array<any>) {
+  public addDocs (docs: Doc[]) {
     this.docs.push(...docs)
   }
 
   @Mutation
-  public setResult (result: Result) {
+  public setResult (result: SelectResult) {
     this.result = result
     this.numHit = this.result.response.numFound || 0
   }
@@ -106,12 +99,12 @@ export default class Discover extends VuexModule {
   @Action({ rawError: true })
   public loadMore () {
     this.context.commit('setLoadingMore', true)
-    service.solr.collections.docs(this.collection, {
+    service.solr.collections.select(this.collection, {
       q: this.queryString,
       sort: 'id desc',
       rows: 50,
       cursorMark: this.result.nextCursorMark || '*'
-    }).then((res: any) => {
+    }).then(res => {
       this.context.commit('setResult', res.data)
       this.context.commit('addDocs', res.data.response.docs)
       this.context.commit('setLoadingMore', false)
@@ -122,7 +115,7 @@ export default class Discover extends VuexModule {
   public loadFields () {
     if (!this.collection || this.loadingFields) return
     this.context.commit('setLoadingFields', true)
-    service.solr.collections.fields(this.collection).then((res: any) => {
+    service.solr.collections.fields(this.collection).then(res => {
       this.context.commit(
         'setFields',
         res.data.split(',')
@@ -146,12 +139,12 @@ export default class Discover extends VuexModule {
     })
     this.context.commit('setFieldsStats', [])
     this.context.commit('setLoadingFieldsStats', true)
-    service.solr.collections.docs(this.collection, {
+    service.solr.collections.select(this.collection, {
       q: this.queryString,
       rows: 0,
       wt: 'json',
       'json.facet': JSON.stringify(jsonFacets)
-    }).then((res: any) => {
+    }).then(res => {
       this.context.commit('setLoadingFieldsStats', false)
       this.context.commit('setFieldsStats', res.data.facets)
     }, () => this.context.commit('setLoadingFieldsStats', false))

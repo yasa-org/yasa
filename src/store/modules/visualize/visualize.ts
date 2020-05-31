@@ -1,19 +1,33 @@
 import { VuexModule, Module, Mutation, Action } from 'vuex-module-decorators'
+import { Bucket, Buckets, SelectResult } from '@/service/solr/collections'
 import { Field } from '@/model'
 import service from '@/service'
 
-export type ChartFormData = {
-  xField: string;
-  charts: [{
+export class ChartFormData {
+  title = '';
+  type = '';
+  xField = '';
+  charts: Array<{
     type: string;
     title: string;
     yField: string;
     yFieldAggregation: string;
-  }];
+  }> = [];
+}
+
+type JsonFacet = {
+  type: string;
+  field: string;
+  sort: string;
+  facet?: {
+    yAxis: string;
+  };
 }
 
 const aggregationJsonFacet = (formData: ChartFormData) => {
-  const result = {} as any
+  const result: {
+    [key: string]: JsonFacet;
+  } = {}
   formData.charts.forEach(c => {
     const agg = c.yFieldAggregation.toLowerCase()
     switch (agg) {
@@ -60,10 +74,12 @@ export default class Visualize extends VuexModule {
   private fields: Field[] = []
   private loadingFields = false
   private queryString = ''
-  private chartDataSource: any[] = []
+  private chartDataSource: Bucket[][] = []
   private loadingChartData = false
-  private result = {} as any
+  private result: SelectResult = new SelectResult()
   private formData: ChartFormData = {
+    title: '',
+    type: '',
     xField: '',
     charts: [{
       type: 'line',
@@ -89,7 +105,7 @@ export default class Visualize extends VuexModule {
   }
 
   @Mutation
-  public setFormData (formData: any): void {
+  public setFormData (formData: ChartFormData): void {
     this.formData = formData
   }
 
@@ -99,12 +115,12 @@ export default class Visualize extends VuexModule {
   }
 
   @Mutation
-  public setResult (result: any): void {
+  public setResult (result: SelectResult): void {
     this.result = result
   }
 
   @Mutation
-  public setChartDataSource (chartDataSource: any[]): void {
+  public setChartDataSource (chartDataSource: Bucket[][]): void {
     this.chartDataSource = chartDataSource
   }
 
@@ -126,7 +142,7 @@ export default class Visualize extends VuexModule {
     })
     this.context.commit('setChartDataSource', [{}])
     this.context.commit('setQueryString', '')
-    this.context.commit('setResult', {})
+    this.context.commit('setResult', new SelectResult())
   }
 
   @Action
@@ -140,10 +156,10 @@ export default class Visualize extends VuexModule {
       rows: 0,
       'json.facet': JSON.stringify(aggregationJsonFacet(this.formData))
     }).then(res => {
-      const dataSource = this.formData.charts.map(c => {
-        const dataSource = res.data.facets[c.title].buckets.reverse()
+      const dataSource: Bucket[][] = this.formData.charts.map(c => {
+        const dataSource: Bucket[] = (res.data.facets[c.title] as Buckets).buckets.reverse()
         if (c.yFieldAggregation.toLowerCase() === 'count') {
-          dataSource.forEach((it: any) => (it.yAxis = it.count))
+          dataSource.forEach(it => (it.yAxis = it.count))
         }
         return dataSource
       })

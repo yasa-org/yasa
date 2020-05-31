@@ -32,6 +32,7 @@ export class ZNode {
   path = '';
   prop: Prop = new Prop();
   tree: TreeNode[] = [];
+  data = '';
 }
 
 export interface ZookeeperResponse {

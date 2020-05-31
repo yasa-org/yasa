@@ -1,15 +1,16 @@
 import service from '@/service'
 import { Action, Module, Mutation, VuexModule } from 'vuex-module-decorators'
+import { TreeNode } from '@/service/solr/admin/zookeeper'
 
 @Module({
   namespaced: true
 })
 export default class Tree extends VuexModule {
-  private configSets: any[] = []
+  private configSets: TreeNode[] = []
   private loadingConfigSets = false
   private fileContent = ''
 
-  @Mutation public setConfigSets (configSets: any[]): void {
+  @Mutation public setConfigSets (configSets: TreeNode[]): void {
     this.configSets = configSets
   }
 

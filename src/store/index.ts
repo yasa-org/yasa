@@ -35,7 +35,7 @@ const store = new Vuex.Store({
       infoService.system().then(res => {
         context.commit('setSolrMode', res.data.mode)
         if (res.data.mode === 'solrcloud') {
-          return collectionService.collections(params).then((res) => {
+          return collectionService.collections(params).then(res => {
             context.commit('setCollections', res.data.collections)
           })
         } else {
