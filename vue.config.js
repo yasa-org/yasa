@@ -1,7 +1,7 @@
 const path = require('path')
 
 module.exports = {
-  publicPath: './',
+  publicPath: '.',
   devServer: {
     proxy: {
       '/': {
@@ -10,19 +10,23 @@ module.exports = {
       }
     }
   },
-  configureWebpack: config => {
-    config.plugins.forEach((item, i) => {
-      if (item.tsconfig) {
-        config.plugins.splice(i, 1)
+  configureWebpack: {
+    resolve: {
+      alias: {
+        '@': path.join(__dirname, 'src'),
+        '@store': path.join(__dirname, 'src/store'),
+        '@assets': path.join(__dirname, 'src/assets'),
+        '@service': path.join(__dirname, 'src/service'),
+        '@components': path.join(__dirname, 'src/components')
       }
-    })
-    return {
-      resolve: {
-        alias: {
-          '@': path.join(__dirname, 'src'),
-          '@store': path.join(__dirname, 'src/store'),
-          '@assets': path.join(__dirname, 'src/assets')
-        }
+    },
+    performance: {
+      hints: false
+    },
+    optimization: {
+      splitChunks: {
+        minSize: 10000,
+        maxSize: 250000
       }
     }
   }

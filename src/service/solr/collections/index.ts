@@ -1,6 +1,6 @@
 import http from '@/http'
 import { AxiosResponse } from 'axios'
-import { Header } from '@/service/solr/model'
+import { GenericResult, Header } from '@service/solr/model'
 
 export type CollectionForm = {
   name: string;
@@ -62,6 +62,7 @@ export class Replicas {
 }
 
 export class Shards {
+  name = '';
   range = '';
   state = '';
   replicas: Replicas = {};
@@ -119,15 +120,11 @@ class CollectionsService {
     return http.get('/solr/admin/collections?action=LIST', { params })
   }
 
-  public cores (params: object = {}): Promise<AxiosResponse<any>> {
-    return http.get('/solr/admin/cores', { params })
-  }
-
   public clusters (params: object = {}): Promise<AxiosResponse<ClusterResult>> {
     return http.get('/solr/admin/collections?action=CLUSTERSTATUS', { params })
   }
 
-  public create (params: CollectionForm): Promise<AxiosResponse<any>> {
+  public create (params: CollectionForm): Promise<AxiosResponse<GenericResult>> {
     return http.get('/solr/admin/collections?action=CREATE', { params })
   }
 

@@ -7,7 +7,6 @@ import { Component, Vue, Prop, Watch } from 'vue-property-decorator'
 import * as ace from 'brace'
 import 'brace/mode/json'
 import 'brace/theme/github'
-import './mode/yasa'
 
 @Component
 export default class CodeEditor extends Vue {

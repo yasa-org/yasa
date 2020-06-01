@@ -43,14 +43,15 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
 import { namespace } from 'vuex-class'
-import { TreeNode, ZookeeperResponse } from '@/service/solr/admin/zookeeper'
-import CodeEditor from '@/components/dev-tools/code-editor/AceEditor.vue'
+import { Component, Vue } from 'vue-property-decorator'
+import CodeEditor from '@components/dev-tools/code-editor/AceEditor.vue'
+import { ZkTreeNode, ZookeeperResponse } from '@service/solr/admin/zookeeper'
 import 'brace/mode/xml'
 import 'brace/mode/json'
 import 'brace/mode/text'
 import { ElUpload } from 'element-ui/types/upload'
+import { TreeNode } from 'element-ui/types/tree'
 import { AxiosResponse } from 'axios'
 
 const Store = namespace('management/configSets')
@@ -62,7 +63,7 @@ const Store = namespace('management/configSets')
 })
 export default class ConfigSets extends Vue {
   private treeProps = {
-    label: (data) => {
+    label: (data: ZkTreeNode) => {
       const title = data.data.title
       return title === '/' ? title : title.replace(/^\//, '')
     }
@@ -79,14 +80,14 @@ export default class ConfigSets extends Vue {
   private creatingConfigSet = false
   private method = 'base'
 
-  @Store.State private configSets!: TreeNode[]
+  @Store.State private configSets!: ZkTreeNode[]
   @Store.State private loadingConfigSets!: boolean
   @Store.State private fileContent!: string
 
   @Store.Mutation private setFileContent!: (content: string) => void
   @Store.Action private loadConfigSets!: () => void
 
-  private nodeClicked (data, node) {
+  private nodeClicked (data: ZkTreeNode, node: TreeNode<string, ZkTreeNode>) {
     if (node.isLeaf) {
       this.loadingFileContent = true
       const url = data.data.attr.href
@@ -104,7 +105,7 @@ export default class ConfigSets extends Vue {
     }
   }
 
-  private deleteConfigSet (data) {
+  private deleteConfigSet (data: ZkTreeNode) {
     const name = data.data.title
     this.$confirm(`Do you want to delete config set: "${name}"`, 'Delete Config Set').then(() => {
       const loading = this.$loading({

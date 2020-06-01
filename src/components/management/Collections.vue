@@ -83,10 +83,12 @@
 </template>
 
 <script lang="ts">
+import { NamedCollectionDetail } from '@store/modules/management/collections'
+import { MessageBoxInputData } from 'element-ui/types/message-box'
 import { Component, Vue, Watch } from 'vue-property-decorator'
+import { Shards } from '@service/solr/collections'
 import { State, namespace } from 'vuex-class'
 import NewCollectionForm from './NewCollectionForm.vue'
-import { NamedCollectionDetail } from '@store/modules/management/collections'
 
 const Store = namespace('management/collections')
 
@@ -98,14 +100,14 @@ const Store = namespace('management/collections')
 export default class Collections extends Vue {
   private deleteAliasDialogVisible = false
   private createCollectionDialogVisible = false
-  private aliases = []
+  private aliases: { [alias: string]: string } = {}
   private selectedCollection = ''
   private selectedAlias = ''
   private deletingAlias = false
 
   @State private solrMode!: string
 
-  @Store.State private detailedCollections!: any
+  @Store.State private detailedCollections!: NamedCollectionDetail[]
   @Store.State private loadingDetailedCollections!: boolean
 
   @Store.Mutation private setDetailedCollections!: (detailedCollections: NamedCollectionDetail[]) => void
@@ -117,11 +119,11 @@ export default class Collections extends Vue {
     return Object.keys(this.aliases).filter(k => this.aliases[k] === this.selectedCollection)
   }
 
-  private shardCountFormatter (row) {
+  private shardCountFormatter (row: NamedCollectionDetail) {
     return Object.keys(row.shards).length
   }
 
-  private shardsFormatter (shards) {
+  private shardsFormatter (shards: { [name: string]: Shards }) {
     return Object.keys(shards).map(name => {
       const shard = shards[name]
       shard.name = name
@@ -139,7 +141,7 @@ export default class Collections extends Vue {
     }, () => ({}))
   }
 
-  private reloadCollection (row) {
+  private reloadCollection (row: NamedCollectionDetail) {
     this.$confirm(`Do you want to reload collection "${row.name}"`, 'Reload Collection').then(() => {
       const loading = this.$loading({
         lock: true,
@@ -153,7 +155,7 @@ export default class Collections extends Vue {
     }).catch(() => ({}))
   }
 
-  private deleteCollection (row) {
+  private deleteCollection (row: NamedCollectionDetail) {
     this.$confirm(`Do you want to delete collection "${row.name}"`, 'Delete Collection').then(() => {
       const loading = this.$loading({
         lock: true,
@@ -169,8 +171,9 @@ export default class Collections extends Vue {
     }).catch(() => this.loadDetailedCollections())
   }
 
-  private createAliasForCollection (row) {
-    this.$prompt('Alias Name', 'Create Alias').then(({ value }) => {
+  private createAliasForCollection (row: NamedCollectionDetail) {
+    this.$prompt('Alias Name', 'Create Alias').then((msgBoxData) => {
+      const value = (msgBoxData as MessageBoxInputData).value
       const loading = this.$loading({
         lock: true,
         text: 'Creating',
@@ -186,7 +189,7 @@ export default class Collections extends Vue {
     }).catch(() => ({}))
   }
 
-  private deleteAliasOfCollection (row) {
+  private deleteAliasOfCollection (row: NamedCollectionDetail) {
     this.deleteAliasDialogVisible = true
     this.selectedCollection = row.name
   }

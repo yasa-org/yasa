@@ -66,7 +66,7 @@
 import { Component, Vue, Watch } from 'vue-property-decorator'
 import { State, namespace } from 'vuex-class'
 import { Field } from '@/model'
-import { SelectResult, Doc } from '@/service/solr/collections'
+import { SelectResult, Doc, Facets } from '@service/solr/collections'
 
 const Store = namespace('discover')
 
@@ -83,7 +83,7 @@ export default class Discover extends Vue {
   @Store.State private queryString!: string
   @Store.State private loadingMore!: boolean
   @Store.State private loadingFields!: boolean
-  @Store.State private fieldsStats!: any[]
+  @Store.State private fieldsStats!: Facets
   @Store.State private loadingFieldsStats!: boolean
   @Store.State private numHit!: number
   @Store.State private docs!: Doc[]

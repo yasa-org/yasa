@@ -1,5 +1,5 @@
 import { VuexModule, Module, Mutation, Action } from 'vuex-module-decorators'
-import { Bucket, Buckets, SelectResult } from '@/service/solr/collections'
+import { Bucket, Buckets, SelectResult } from '@service/solr/collections'
 import { Field } from '@/model'
 import service from '@/service'
 

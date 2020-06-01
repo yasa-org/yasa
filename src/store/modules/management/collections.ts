@@ -1,6 +1,6 @@
 import { Action, Module, Mutation, VuexModule } from 'vuex-module-decorators'
 import service from '@/service'
-import { CollectionDetail, CollectionForm } from '@/service/solr/collections'
+import { CollectionDetail, CollectionForm } from '@service/solr/collections'
 
 const params = {
   params: {

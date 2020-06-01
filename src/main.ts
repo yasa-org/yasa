@@ -7,7 +7,7 @@ import i18n from '@/i18n'
 import ElementUI from 'element-ui'
 import locale from 'element-ui/lib/locale/lang/en'
 import TreeView from 'vue-json-tree-view'
-import 'element-ui/lib/theme-chalk/index.css'
+import '@/style/element-variables.scss'
 import '@/style/style.less'
 
 import ECharts from 'vue-echarts/components/ECharts.vue'

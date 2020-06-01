@@ -2,7 +2,7 @@
   <div id="root">
     <el-row>
       <el-col :span="12">
-        <code-editor ref="codeEditor" id="code-editor" v-model="content" :value="content" mode="ace/mode/yasa" theme="ace/theme/dawn" show-gutter></code-editor>
+        <code-editor ref="codeEditor" id="code-editor" v-model="content" :value="content" theme="ace/theme/dawn" show-gutter></code-editor>
       </el-col>
       <el-col :span="12">
         <tree-view id="result" :data="result" :options="treeOptions" v-loading="loading"></tree-view>
@@ -14,8 +14,9 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import CodeEditor from './code-editor/AceEditor.vue'
+import { GenericResult } from '@service/solr/model'
+import { namespace } from 'vuex-class'
 import 'brace/theme/dawn'
-import { Mutation, namespace } from 'vuex-class'
 
 const Store = namespace('devtools')
 
@@ -72,13 +73,13 @@ export default class DevTools extends Vue {
       editor.focus()
     }
 
-  @Mutation private setContent!: (content: string) => void
-  @Mutation private setResult!: (result: any) => void
-  @Mutation private setLoading!: (loading: boolean) => void
+  @Store.Mutation private setContent!: (content: string) => void
+  @Store.Mutation private setResult!: (result: GenericResult) => void
+  @Store.Mutation private setLoading!: (loading: boolean) => void
 
   @Store.Action private doGet!: ({ url, data }: { url: string; data: object }) => void
 
-  @Store.State private result!: any
+  @Store.State private result!: GenericResult
   @Store.State private loading!: boolean
 
   get content () {

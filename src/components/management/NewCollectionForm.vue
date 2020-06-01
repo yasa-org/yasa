@@ -37,7 +37,7 @@
 import { Component, Vue } from 'vue-property-decorator'
 import { namespace } from 'vuex-class'
 import { ElForm } from 'element-ui/types/form'
-import { CollectionForm } from '@/service/solr/collections'
+import { CollectionForm } from '@service/solr/collections'
 
 const Store = namespace('management/collections')
 

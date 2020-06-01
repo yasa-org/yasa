@@ -10,9 +10,11 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
-import { namespace } from 'vuex-class'
 import CodeEditor from '../dev-tools/code-editor/AceEditor.vue'
+import { ZkTreeNode } from '@service/solr/admin/zookeeper'
+import { Component, Vue } from 'vue-property-decorator'
+import { TreeNode } from 'element-ui/types/tree'
+import { namespace } from 'vuex-class'
 import 'brace/mode/xml'
 import 'brace/mode/json'
 import 'brace/mode/text'
@@ -26,7 +28,7 @@ const Store = namespace('management/tree')
 })
 export default class Tree extends Vue {
   private treeProps = {
-    label: (data: any) => {
+    label: (data: ZkTreeNode) => {
       const title = data.data.title
       return title === '/' ? title : title.replace(/^\//, '')
     }
@@ -35,7 +37,7 @@ export default class Tree extends Vue {
   private loadingFileContent = false
   private mode = 'ace/mode/text'
 
-  @Store.State private configSets!: object[]
+  @Store.State private configSets!: ZkTreeNode[]
   @Store.State private loadingConfigSets!: boolean
   @Store.State private fileContent!: string
 
@@ -43,7 +45,7 @@ export default class Tree extends Vue {
 
   @Store.Action private loadConfigSets!: () => void
 
-  public nodeClicked (data, node) {
+  public nodeClicked (data: ZkTreeNode, node: TreeNode<string, ZkTreeNode>) {
     if (node.isLeaf) {
       this.loadingFileContent = true
       const url = data.data.attr.href

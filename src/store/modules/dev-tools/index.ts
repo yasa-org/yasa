@@ -1,22 +1,24 @@
 import http from '@/http'
 import { Module, Action, Mutation, VuexModule } from 'vuex-module-decorators'
+import { GenericResult } from '@service/solr/model'
+import { AxiosResponse } from 'axios'
 
 @Module({
   namespaced: true
 })
 export default class DevTolls extends VuexModule {
   private content: string = localStorage.getItem('content') || ''
-  private result = {}
+  private result: GenericResult = new GenericResult()
   private loading = false
 
   @Mutation
   public setContent (content: string): void {
-    localStorage.setItem('content', content)
     this.content = content
+    localStorage.setItem('content', content)
   }
 
   @Mutation
-  public setResult (result: any): void {
+  public setResult (result: GenericResult): void {
     this.result = result
   }
 
@@ -29,7 +31,7 @@ export default class DevTolls extends VuexModule {
   public doGet ({ url, data }: { url: string; data: object }) {
     const context = this.context
     context.commit('setLoading', true)
-    http.get(url, { params: data }).then(res => {
+    http.get(url, { params: data }).then((res: AxiosResponse<GenericResult>) => {
       context.commit('setResult', res.data)
       context.commit('setLoading', false)
     }, () => {

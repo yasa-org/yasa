@@ -23,6 +23,12 @@
       ],
       "@assets/*": [
         "src/assets/*"
+      ],
+      "@service/*": [
+        "src/service/*"
+      ],
+      "@components/*": [
+        "src/components/*"
       ]
     },
     "lib": [

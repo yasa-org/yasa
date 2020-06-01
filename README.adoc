@@ -43,41 +43,7 @@ Here is a Nginx configuration sample:
 .nginx.conf
 [source,nginx,subs="verbatim,attributes"]
 ----
-worker_processes auto;
-
-events {
-  worker_connections 1024;
-}
-
-http {
-  sendfile            on;
-  tcp_nopush          on;
-  tcp_nodelay         on;
-  keepalive_timeout   65;
-  types_hash_max_size 2048;
-
-  include             /usr/local/nginx/conf/mime.types;
-  default_type        application/octet-stream;
-
-  upstream solr {
-    server 127.0.0.1:8983; # replace 127.0.0.1:8983 with your Solr host and port
-  }
-
-  server {
-    server_name 127.0.0.1;
-    listen 7389;
-    root <{project-name}_HOME>; # replace <{project-name}_HOME> with your actual directory path
-
-    location /solr/ {
-      location /solr/static/ {
-        rewrite /solr/static/(.*) /static/$1;
-      }
-      location /solr/ {
-        proxy_pass http://solr/solr/;
-      }
-    }
-  }
-}
+include::docker/nginx.conf[]
 ----
 
 === Integrated Mode
@@ -102,7 +68,7 @@ git clone https://github.com/{org-name}/{project-name}
 npm i
 
 # serve with hot reload at localhost:8080
-npm run dev
+npm run serve
 ----
 
 == Todo

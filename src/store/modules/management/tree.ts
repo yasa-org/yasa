@@ -1,16 +1,16 @@
 import service from '@/service'
 import { Action, Module, Mutation, VuexModule } from 'vuex-module-decorators'
-import { TreeNode } from '@/service/solr/admin/zookeeper'
+import { ZkTreeNode } from '@service/solr/admin/zookeeper'
 
 @Module({
   namespaced: true
 })
 export default class Tree extends VuexModule {
-  private configSets: TreeNode[] = []
+  private configSets: ZkTreeNode[] = []
   private loadingConfigSets = false
   private fileContent = ''
 
-  @Mutation public setConfigSets (configSets: TreeNode[]): void {
+  @Mutation public setConfigSets (configSets: ZkTreeNode[]): void {
     this.configSets = configSets
   }
 

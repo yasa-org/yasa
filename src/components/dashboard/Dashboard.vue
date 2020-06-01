@@ -74,8 +74,8 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-import { SystemResponse } from '@/service/solr/admin/info'
-import Gauge from '@/components/dashboard/Gauge.vue'
+import { SystemResponse } from '@service/solr/admin/info'
+import Gauge from '@components/dashboard/Gauge.vue'
 
 @Component({
   components: { Gauge }

@@ -15,13 +15,17 @@ export class Prop {
   dataLength = 0;
 }
 
-export class TreeNode {
+export class ZkTreeNode {
   data: {
     title: string;
-    attr: object;
+    attr: {
+      href: string;
+    };
   } = {
     title: '',
-    attr: {}
+    attr: {
+      href: ''
+    }
   };
 
   ephemeral = true;
@@ -31,13 +35,13 @@ export class TreeNode {
 export class ZNode {
   path = '';
   prop: Prop = new Prop();
-  tree: TreeNode[] = [];
+  tree: ZkTreeNode[] = [];
   data = '';
 }
 
 export interface ZookeeperResponse {
   znode: ZNode;
-  tree: TreeNode[];
+  tree: ZkTreeNode[];
 }
 
 class ZookeeperService {

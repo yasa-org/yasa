@@ -23,9 +23,8 @@
 import { Component, Vue, Watch } from 'vue-property-decorator'
 import { State, namespace } from 'vuex-class'
 import { Field } from '@/model'
-import { Bucket, SelectResult } from '@/service/solr/collections'
+import { Bucket, SelectResult } from '@service/solr/collections'
 import { ChartFormData } from '@store/modules/visualize/visualize'
-import ECharts from 'vue-echarts/components/ECharts.vue'
 import ChartForm from './ChartForm.vue'
 
 const Store = namespace('visualize')
@@ -153,6 +152,10 @@ export default class YasaChart extends Vue {
 
   @Watch('loadingChartData')
   private onLoadingChartDataChanged () {
+    type ECharts = Vue & {
+      showLoading: () => void;
+      hideLoading: () => void;
+    }
     if (this.loadingChartData) {
       (this.$refs.chart as ECharts).showLoading()
     } else {

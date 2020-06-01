@@ -1,6 +1,6 @@
 import http from '@/http'
 import { AxiosResponse } from 'axios'
-import { Header } from '@/service/solr/model'
+import { Header } from '@service/solr/model'
 
 export class ConfigSetsResponse {
   responseHeader = new Header();

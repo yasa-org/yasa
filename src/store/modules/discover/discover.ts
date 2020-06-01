@@ -1,5 +1,5 @@
 import { Action, Module, Mutation, VuexModule } from 'vuex-module-decorators'
-import { Doc, Facets, SelectResult } from '@/service/solr/collections'
+import { Doc, Facets, SelectResult } from '@service/solr/collections'
 import { Field } from '@/model'
 import service from '@/service'
 
@@ -129,7 +129,13 @@ export default class Discover extends VuexModule {
   @Action({ rawError: true })
   public loadFieldsStats () {
     if (this.fields.length === 0 || this.loadingFieldsStats) return
-    const jsonFacets = {} as any
+    const jsonFacets: {
+      [name: string]: {
+        type: string;
+        field: string;
+        limit: number;
+      };
+    } = {}
     this.fields.forEach(field => {
       jsonFacets[field.name] = {
         type: 'terms',
@@ -137,6 +143,7 @@ export default class Discover extends VuexModule {
         limit: 5
       }
     })
+    console.info({ jsonFacets })
     this.context.commit('setFieldsStats', [])
     this.context.commit('setLoadingFieldsStats', true)
     service.solr.collections.select(this.collection, {
