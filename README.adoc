@@ -1,11 +1,12 @@
 :org-name: yasa-org
 :project-name: YASA
+:project-name-lower: yasa
 
 = {project-name} - Yet Another Solr Admin
 
-image:https://api.codacy.com/project/badge/Grade/06babe7d11d94e6e86c613a537475903[caption="Code Quality", link=https://www.codacy.com/gh/{org-name}/{project-name}?utm_source=github.com&amp;utm_medium=referral&amp;utm_content={org-name}/{project-name}&amp;utm_campaign=Badge_Grade]
-image:https://github.com/{org-name}/{project-name}/workflows/Build/badge.svg?branch=master[capition="Build Status", link=https://github.com/{org-name}/{project-name}/actions?query=branch%3Amaster]
-image:https://img.shields.io/github/release/{org-name}/{project-name}.svg[capition="Release Version", link=https://github.com/{org-name}/{project-name}/releases]
+image:https://api.codacy.com/project/badge/Grade/06babe7d11d94e6e86c613a537475903[caption="Code Quality", link=https://www.codacy.com/gh/{org-name}/{project-name-lower}?utm_source=github.com&amp;utm_medium=referral&amp;utm_content={org-name}/{project-name-lower}&amp;utm_campaign=Badge_Grade]
+image:https://github.com/{org-name}/{project-name-lower}/workflows/Build/badge.svg?branch=master[capition="Build Status", link=https://github.com/{org-name}/{project-name-lower}/actions?query=branch%3Amaster]
+image:https://img.shields.io/github/release/{org-name}/{project-name-lower}.svg[capition="Release Version", link=https://github.com/{org-name}/{project-name-lower}/releases]
 image:https://img.shields.io/badge/SolrCloud-6.1.0+-D9411E.svg[capition="Solr Version", link=http://lucene.apache.org/solr/]
 image:https://img.shields.io/badge/Vuejs-2.5.2-4fc08d.svg[capition="Vuejs Version", link=https://vuejs.org]
 image:https://img.shields.io/badge/License-MIT-yellow.svg[capition="License", link=https://opensource.org/licenses/MIT]
@@ -34,8 +35,8 @@ image:https://img.shields.io/badge/License-MIT-yellow.svg[capition="License", li
 
 You can install **{project-name}** in the standalone mode without affecting the official Solr Admin. Here is how:
 
-- Download link:https://github.com/{org-name}/{project-name}/releases[the latest release] of {project-name}.
-- Extract files from `{project-name}-vX.Y.tgz` (where `X.Y` is the version number) to a directory, say `{project-name}_HOME`.
+- Download link:https://github.com/{org-name}/{project-name-lower}/releases[the latest release] of {project-name-lower}.
+- Extract files from `{project-name-lower}-vX.Y.tgz` (where `X.Y` is the version number) to a directory, say `{project-name}_HOME`.
 - Configure your Nginx server and proxy `/solr/**` to your actual Solr Admin address, for example, `http://127.0.0.1:8983/solr`.
 
 Here is link:docker/nginx.conf[an Nginx configuration sample].
@@ -44,8 +45,8 @@ Here is link:docker/nginx.conf[an Nginx configuration sample].
 
 You can also replace the official admin interface with **{project-name}**:
 
-- Download link:https://github.com/{org-name}/{project-name}/releases[the latest release] of {project-name}
-- Extract files from `{project-name}-vX.Y.tgz` (where `X.Y` is the version number) to a directory, say `{project-name}_HOME`
+- Download link:https://github.com/{org-name}/{project-name-lower}/releases[the latest release] of {project-name}
+- Extract files from `{project-name-lower}-vX.Y.tgz` (where `X.Y` is the version number) to a directory, say `{project-name}_HOME`
 - (Optional but recommended) Backup the Solr webapp folder (`solr-x-y-z/server/solr-webapp/webapp`, where `x-y-z` is the version number)
 - Copy everything under `${{project-name}_HOME}/dist/` folder to `solr-x-y-z/server/solr-webapp/webapp`
 
@@ -56,7 +57,7 @@ If you are interested in `{project-name}` and want to contribute, you can run `{
 [source,bash,subs="verbatim,attributes"]
 ----
 # pull source code
-git clone https://github.com/{org-name}/{project-name}
+git clone https://github.com/{org-name}/{project-name-lower}
 
 # install dependencies
 npm i
