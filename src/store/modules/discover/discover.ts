@@ -143,7 +143,6 @@ export default class Discover extends VuexModule {
         limit: 5
       }
     })
-    console.info({ jsonFacets })
     this.context.commit('setFieldsStats', [])
     this.context.commit('setLoadingFieldsStats', true)
     service.solr.collections.select(this.collection, {
