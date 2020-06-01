@@ -7,38 +7,54 @@
           <b>System</b>
         </template>
         <el-row align="center">
-          <el-col :lg="6" :sm="12" class="center">
+          <el-col :lg="4" :sm="6" :xs="12" class="center">
+            <gauge
+              name="CPU"
+              :data="[{ name: 'CPU Load', value: system.systemCpuLoad}]"/>
+          </el-col>
+          <el-col :lg="4" :sm="6" :xs="12" class="center">
+            <gauge
+              name="CPU AVG"
+              :data="[{ name: 'avg(CPU Load)', value: system.systemLoadAverage}]"/>
+          </el-col>
+          <el-col :lg="4" :sm="6" :xs="12" class="center">
             <gauge
               name="Physical Memory"
               :data="[{ name: 'Physical Memory', value: physicalMemoryPercentage}]"
               :tooltip="`${system.totalPhysicalMemorySize - system.freePhysicalMemorySize} / ${system.totalPhysicalMemorySize}`"/>
           </el-col>
-          <el-col :lg="6" :sm="12" class="center">
+          <el-col :lg="4" :sm="6" :xs="12" class="center">
             <gauge
               name="Swap Memory"
               :data="[{ name: 'Swap Space', value: swapSpacePercentage}]"
               :tooltip="`${system.totalSwapSpaceSize - system.freeSwapSpaceSize} / ${system.totalSwapSpaceSize}`"/>
           </el-col>
-          <el-col :lg="6" :sm="12" class="center">
+          <el-col :lg="4" :sm="6" :xs="12" class="center">
             <gauge
               name="JVM"
               :data="[{ name: 'JVM Memory', value: jvmMemoryPercentage }]"
               :tooltip="`${jvm.memory.raw.used} / ${jvm.memory.raw.max}`"/>
           </el-col>
-          <el-col :lg="6" :sm="12" class="center">
+          <el-col :lg="4" :sm="6" :xs="12" class="center">
             <gauge
               name="File Descriptor Count"
               :data="[{ name: 'File', value: fileDescriptorPercentage }]"
               :tooltip="`${system.openFileDescriptorCount} / ${system.maxFileDescriptorCount}`"/>
           </el-col>
         </el-row>
+        <el-form label-width="140px" label-position="left">
+          <el-form-item label="Architecture">{{ system.arch }}</el-form-item>
+          <el-form-item label="Processors">{{ system.availableProcessors }}</el-form-item>
+          <el-form-item label="Name">{{ system.uname }}</el-form-item>
+          <el-form-item label="Start">{{ system.uptime }}</el-form-item>
+        </el-form>
       </el-collapse-item>
       <el-collapse-item name="instance" v-loading="loadingSystemInfo">
         <template slot="title">
           <i class="el-icon-yasa-instance"></i>
           <b>Instance</b>
         </template>
-        <el-form label-width="120px" label-position="left">
+        <el-form label-width="140px" label-position="left">
           <el-form-item label="Mode">{{ response.mode }}</el-form-item>
           <el-form-item label="Start">{{ startTime }}</el-form-item>
         </el-form>
@@ -48,7 +64,7 @@
           <i class="el-icon-yasa-version"></i>
           <b>Versions</b>
         </template>
-        <el-form label-width="120px" label-position="left">
+        <el-form label-width="140px" label-position="left">
           <el-form-item label="Solr Spec">{{ response.lucene['solr-spec-version'] }}</el-form-item>
           <el-form-item label="Solr Impl">{{ response.lucene['solr-impl-version'] }}</el-form-item>
           <el-form-item label="Lucene Spec">{{ response.lucene['lucene-spec-version'] }}</el-form-item>
@@ -60,7 +76,7 @@
           <i class="el-icon-yasa-java"></i>
           <b>JVM</b>
         </template>
-        <el-form label-width="120px" label-position="left">
+        <el-form label-width="140px" label-position="left">
           <el-form-item label="Runtime">{{ jvm.name }} {{ jvm.version }}</el-form-item>
           <el-form-item label="Processors">{{ jvm.processors }}</el-form-item>
           <el-form-item label="Arguments">

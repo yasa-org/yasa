@@ -1,6 +1,6 @@
 <template>
   <el-container id="chart-root">
-    <chart style="height: 300px; overflow: hidden" class="chart" ref="chart" :options="options" auto-resize/>
+    <chart style="height: 200px; overflow: hidden" class="chart" ref="chart" :options="options" auto-resize/>
   </el-container>
 </template>
 
@@ -39,7 +39,8 @@ export default class Gauge extends Vue {
         textStyle: {
           fontSize: 10,
           fontFamily: defaults.fonts
-        }
+        },
+        position: 'inside'
       },
       series: [
         {
@@ -49,8 +50,19 @@ export default class Gauge extends Vue {
           title: {
             offsetCenter: [0, '70%'],
             fontSize: 10,
-            fontWeight: 'bold',
+            color: 'red',
             fontFamily: defaults.fonts
+          },
+          axisLine: {
+            lineStyle: {
+              width: 16
+            }
+          },
+          splitLine: {
+            length: 16
+          },
+          pointer: {
+            width: 4
           },
           detail: {
             formatter: '{value}%',
