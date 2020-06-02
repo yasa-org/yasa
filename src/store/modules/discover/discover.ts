@@ -18,7 +18,7 @@ export default class Discover extends VuexModule {
   private loadingMore = false
   private docs: Doc[] = []
   private numHit = 0
-  private result: SelectResult = new SelectResult();
+  private result: SelectResult = {} as SelectResult;
 
   @Mutation
   public setCollection (collection: string): void {
@@ -79,7 +79,7 @@ export default class Discover extends VuexModule {
   @Mutation
   public setResult (result: SelectResult) {
     this.result = result
-    this.numHit = this.result.response.numFound || 0
+    this.numHit = ((this.result && this.result).response || {}).numFound || 0
   }
 
   @Mutation

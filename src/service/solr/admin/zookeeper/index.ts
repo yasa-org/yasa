@@ -1,42 +1,37 @@
 import http from '@/http'
 import { AxiosResponse } from 'axios'
 
-export class Prop {
-  version = 0;
-  aversion = 0;
-  children_count = 0;
-  ctime = '';
-  cversion = 0;
-  czxid = 0;
-  ephemeralOwner = 0;
-  mtime = '';
-  mzxid = 0;
-  pzxid = 0;
-  dataLength = 0;
+export interface Prop {
+  version: number;
+  aversion: number;
+  children_count: number;
+  ctime: string;
+  cversion: number;
+  czxid: number;
+  ephemeralOwner: number;
+  mtime: string;
+  mzxid: number;
+  pzxid: number;
+  dataLength: number;
 }
 
-export class ZkTreeNode {
+export interface ZkTreeNode {
   data: {
     title: string;
     attr: {
       href: string;
     };
-  } = {
-    title: '',
-    attr: {
-      href: ''
-    }
   };
 
-  ephemeral = true;
-  version = 0;
+  ephemeral: boolean;
+  version: number;
 }
 
-export class ZNode {
-  path = '';
-  prop: Prop = new Prop();
-  tree: ZkTreeNode[] = [];
-  data = '';
+export interface ZNode {
+  path: string;
+  prop: Prop;
+  tree: ZkTreeNode[];
+  data: string;
 }
 
 export interface ZookeeperResponse {

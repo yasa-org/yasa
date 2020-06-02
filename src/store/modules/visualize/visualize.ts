@@ -76,7 +76,7 @@ export default class Visualize extends VuexModule {
   private queryString = ''
   private chartDataSource: Bucket[][] = []
   private loadingChartData = false
-  private result: SelectResult = new SelectResult()
+  private result: SelectResult = {} as SelectResult
   private formData: ChartFormData = {
     title: '',
     type: '',
@@ -142,7 +142,7 @@ export default class Visualize extends VuexModule {
     })
     this.context.commit('setChartDataSource', [{}])
     this.context.commit('setQueryString', '')
-    this.context.commit('setResult', new SelectResult())
+    this.context.commit('setResult', {} as SelectResult)
   }
 
   @Action

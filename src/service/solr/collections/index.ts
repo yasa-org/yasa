@@ -2,7 +2,7 @@ import http from '@/http'
 import { AxiosResponse } from 'axios'
 import { GenericResult, Header } from '@service/solr/model'
 
-export type CollectionForm = {
+export interface CollectionForm {
   name: string;
   'router.name': string;
   numShards: number;
@@ -12,95 +12,90 @@ export type CollectionForm = {
   'collection.configName': string;
 }
 
-export class Doc {
-
+export interface Doc {
+  [key: string]: object;
 }
 
-export class Response {
-  numFound = 0;
-  start = 0;
-  docs: Doc[] = [];
+export interface Response {
+  numFound: number;
+  start: number;
+  docs: Doc[];
 }
 
-export class Bucket {
-  val = '';
-  count = 0;
-  yAxis = 0;
+export interface Bucket {
+  val: string;
+  count: number;
+  yAxis: number;
 }
 
-export class Buckets {
-  buckets: Array<Bucket> = []
+export interface Buckets {
+  buckets: Array<Bucket>;
 }
 
-export class Facets {
+export interface Facets {
   [key: string]: number | Buckets;
 }
 
-export class SelectResult {
-  nextCursorMark = '';
-  numFound = 0;
-  response: Response = new Response();
-  facets: Facets = new Facets();
+export interface SelectResult {
+  nextCursorMark: string;
+  numFound: number;
+  response: Response;
+  facets: Facets;
 }
 
-export class CollectionsResult {
-  header: Header = new Header();
-  collections: string[] = [];
+export interface CollectionsResult {
+  header: Header;
+  collections: string[];
 }
 
-export class CoreNode {
-  core = '';
-  base_url = '';
-  node_name = '';
-  state = '';
-  type = '';
-  force_set_state = '';
+export interface CoreNode {
+  core: string;
+  base_url: string;
+  node_name: string;
+  state: string;
+  type: string;
+  force_set_state: string;
 }
 
-export class Replicas {
-  [name: string]: CoreNode
+export interface Replicas {
+  [name: string]: CoreNode;
 }
 
-export class Shards {
-  name = '';
-  range = '';
-  state = '';
-  replicas: Replicas = {};
+export interface Shards {
+  name: string;
+  range: string;
+  state: string;
+  replicas: Replicas;
 }
 
-export class CollectionDetail {
-  pullReplicas = 0;
-  replicationFactor = 2;
+export interface CollectionDetail {
+  pullReplicas: number;
+  replicationFactor: number;
   shards: {
     [name: string]: Shards;
-  } = {};
-
-  router: {
-    name: string;
-  } = {
-    name: 'compositeId'
   };
 
-  maxShardsPerNode = -1;
-  autoAddReplicas = false;
-  nrtReplicas = 0;
-  tlogReplicas = 0;
-  znodeVersion = 0;
-  configName = '';
+  router: {
+    name: 'compositeId' | 'implicit';
+  };
+
+  maxShardsPerNode: number;
+  autoAddReplicas: boolean;
+  nrtReplicas: number;
+  tlogReplicas: number;
+  znodeVersion: number;
+  configName: string;
 }
 
 /* eslint-disable @typescript-eslint/camelcase */
-export class ClusterResult {
-  responseHeader = new Header();
+export interface ClusterResult {
+  responseHeader: Header;
   cluster: {
     collections: {
       [name: string]: CollectionDetail;
     };
     live_nodes: string[];
-  } = {
-    collections: {},
-    live_nodes: []
-  }
+  };
 }
 
 class CollectionsService {

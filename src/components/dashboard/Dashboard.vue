@@ -99,7 +99,10 @@ import Gauge from '@components/dashboard/Gauge.vue'
 export default class Dashboard extends Vue {
   private loadingSystemInfo = false
   private activeNames = ['instance', 'versions', 'jvm', 'system']
-  private response: SystemResponse = new SystemResponse()
+  private response: SystemResponse = {
+    lucene: {
+    }
+  } as SystemResponse
 
   created () {
     this.loadingSystemInfo = true
@@ -110,11 +113,19 @@ export default class Dashboard extends Vue {
   }
 
   private get system () {
-    return this.response.system
+    return this.response.system || {}
   }
 
   private get jvm () {
-    return this.response.jvm
+    return this.response.jvm || {
+      memory: {
+        raw: {
+        }
+      },
+      jmx: {
+        upTimeMS: 0
+      }
+    }
   }
 
   private get startTime () {
@@ -132,25 +143,25 @@ export default class Dashboard extends Vue {
   }
 
   private get physicalMemoryPercentage () {
-    const free = this.system.freePhysicalMemorySize
+    const free = this.system.freePhysicalMemorySize || 0
     const total = this.system.totalPhysicalMemorySize || 1
     return Math.round((total - free) / total * 10000) / 100
   }
 
   private get swapSpacePercentage () {
-    const free = this.system.freeSwapSpaceSize
+    const free = this.system.freeSwapSpaceSize || 0
     const total = this.system.totalSwapSpaceSize || 1
     return Math.round((total - free) / total * 10000) / 100
   }
 
   private get fileDescriptorPercentage () {
-    const used = this.system.openFileDescriptorCount
+    const used = this.system.openFileDescriptorCount || 0
     const total = this.system.maxFileDescriptorCount || 1
     return Math.round(used / total * 10000) / 100
   }
 
   private get jvmMemoryPercentage () {
-    const used = this.jvm.memory.raw.used
+    const used = this.jvm.memory.raw.used || 0
     const total = this.jvm.memory.raw.total || 1
     return Math.round(used / total * 10000) / 100
   }

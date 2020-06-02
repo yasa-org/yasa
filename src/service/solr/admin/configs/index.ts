@@ -2,9 +2,9 @@ import http from '@/http'
 import { AxiosResponse } from 'axios'
 import { Header } from '@service/solr/model'
 
-export class ConfigSetsResponse {
-  responseHeader = new Header();
-  configSets: string[] = [];
+export interface ConfigSetsResponse {
+  responseHeader: Header;
+  configSets: string[];
 }
 
 class ConfigsService {

@@ -1,8 +1,8 @@
-export class Header {
-  status = 0
-  QTime = 0
+export interface Header {
+  status: number;
+  QTime: number;
 }
 
-export class GenericResult {
-  responseHeader: Header = new Header()
+export interface GenericResult {
+  responseHeader: Header;
 }

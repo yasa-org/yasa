@@ -166,7 +166,7 @@ export default class YasaChart extends Vue {
   @Watch('collection', { immediate: true })
   private onCollectionChanged () {
     this.setFormData(new ChartFormData())
-    this.setResult(new SelectResult())
+    this.setResult({} as SelectResult)
     this.loadFields()
   }
 }

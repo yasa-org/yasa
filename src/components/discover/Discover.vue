@@ -128,7 +128,7 @@ export default class Discover extends Vue {
   onQuery () {
     if (this.loadingMore) return
     this.setQueryString(this.localQueryString || '*:*')
-    this.setResult(new SelectResult())
+    this.setResult({} as SelectResult)
     this.setDocs([])
     this.loadMore()
     this.loadFieldsStats()
@@ -145,7 +145,7 @@ export default class Discover extends Vue {
 
   @Watch('collection', { immediate: true })
   onCollectionChanged () {
-    this.setResult(new SelectResult())
+    this.setResult({} as SelectResult)
     this.setDocs([])
     this.loadFields()
     this.loadMore()

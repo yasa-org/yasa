@@ -6,9 +6,9 @@ import { AxiosResponse } from 'axios'
 @Module({
   namespaced: true
 })
-export default class DevTolls extends VuexModule {
+export default class DevTools extends VuexModule {
   private content: string = localStorage.getItem('content') || ''
-  private result: GenericResult = new GenericResult()
+  private result: GenericResult = {} as GenericResult
   private loading = false
 
   @Mutation

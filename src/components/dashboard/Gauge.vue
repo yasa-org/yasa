@@ -50,7 +50,6 @@ export default class Gauge extends Vue {
           title: {
             offsetCenter: [0, '70%'],
             fontSize: 10,
-            color: 'red',
             fontFamily: defaults.fonts
           },
           axisLine: {
