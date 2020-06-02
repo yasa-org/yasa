@@ -87,7 +87,6 @@ export interface CollectionDetail {
   configName: string;
 }
 
-/* eslint-disable @typescript-eslint/camelcase */
 export interface ClusterResult {
   responseHeader: Header;
   cluster: {
