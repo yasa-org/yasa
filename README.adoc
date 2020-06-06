@@ -4,7 +4,6 @@
 
 = {project-name} - Yet Another Solr Admin
 
-image:https://api.codacy.com/project/badge/Grade/06babe7d11d94e6e86c613a537475903[caption="Code Quality", link=https://www.codacy.com/gh/{org-name}/{project-name-lower}?utm_source=github.com&amp;utm_medium=referral&amp;utm_content={org-name}/{project-name-lower}&amp;utm_campaign=Badge_Grade]
 image:https://github.com/{org-name}/{project-name-lower}/workflows/Build/badge.svg?branch=master[capition="Build Status", link=https://github.com/{org-name}/{project-name-lower}/actions?query=branch%3Amaster]
 image:https://img.shields.io/github/release/{org-name}/{project-name-lower}.svg[capition="Release Version", link=https://github.com/{org-name}/{project-name-lower}/releases]
 image:https://img.shields.io/badge/SolrCloud-6.1.0+-D9411E.svg[capition="Solr Version", link=http://lucene.apache.org/solr/]
