@@ -9,6 +9,7 @@ const messages = {
       collapse: 'Collapse',
       expand: 'Expand',
       discover: 'Discover',
+      logging: 'Logging',
       visualize: 'Visualize',
       devTools: 'Dev Tools',
       dashboard: 'Dashboard',

@@ -3,13 +3,16 @@
     <el-aside width="inherit">
       <el-menu id="nav" :default-active="activeNav" :collapse="isCollapse" background-color="#282a36" text-color="#fff" active-text-color="#ffd04b" router>
         <el-menu-item index="" @click="isCollapse=!isCollapse">
-          <i class="el-icon-fa-bars"></i><span slot="title">{{ isCollapse ? $t('menu.expand') : $t('menu.collapse') }}</span>
+          <i class="el-icon-yasa-bars"></i><span slot="title">{{ isCollapse ? $t('menu.expand') : $t('menu.collapse') }}</span>
         </el-menu-item>
         <el-menu-item index="/dashboard">
           <i class="el-icon-yasa-dashboard"></i><span slot="title">{{ $t('menu.dashboard') }}</span>
         </el-menu-item>
         <el-menu-item index="/discover">
           <i class="el-icon-yasa-discovery"></i><span slot="title">{{ $t('menu.discover') }}</span>
+        </el-menu-item>
+        <el-menu-item index="/logging">
+          <i class="el-icon-yasa-logging"></i><span slot="title">{{ $t('menu.logging') }}</span>
         </el-menu-item>
         <el-menu-item index="/visualize">
           <i class="el-icon-yasa-chart"></i><span slot="title">{{ $t('menu.visualize') }}</span>
@@ -72,13 +75,13 @@ export default class App extends Vue {
 }
 </script>
 
-<style>
-@import "style/common.css";
+<style lang="scss">
+@import "style/common.scss";
 @import "style/normalize.css";
-@import "style/iconfont/iconfont.css";
+@import "//at.alicdn.com/t/font_767061_vesz5bry78.css";
 
 #app {
-  font-family: Monaco, Menlo, Consolas, monospace, "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+  font-family: $default-fonts;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

@@ -8,13 +8,6 @@ services:
     networks:
       - yasa
     user: 'root:root'
-    volumes:
-      - ../dist/index.html:/opt/solr/server/solr-webapp/webapp/index.html
-      - ../dist/mode-yasa.js:/opt/solr/server/solr-webapp/webapp/mode-yasa.js
-      - ../dist/fonts:/opt/solr/server/solr-webapp/webapp/fonts
-      - ../dist/css:/opt/solr/server/solr-webapp/webapp/css
-      - ../dist/img:/opt/solr/server/solr-webapp/webapp/img
-      - ../dist/js:/opt/solr/server/solr-webapp/webapp/js
     entrypoint: ['sh', '-c', 'solr start -force -c -e techproducts && tail -f /dev/null']
 
   yasa:

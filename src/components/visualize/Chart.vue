@@ -41,7 +41,7 @@ export default class YasaChart extends Vue {
 
   @Store.State private loadingFields!: boolean
   @Store.State private fields!: Field[]
-  @Store.State private chartDataSource!: Bucket[][]
+  @Store.State private chartDataSource!: { [title: string]: Bucket[] }
   @Store.State private loadingChartData!: boolean
   @Store.State private result!: SelectResult
   @Store.State private formData!: ChartFormData
@@ -91,9 +91,6 @@ export default class YasaChart extends Vue {
 
   private get chartOptions () {
     return {
-      dataset: {
-        source: this.chartDataSource
-      },
       tooltip: {
         trigger: 'axis',
         axisPointer: {}
@@ -109,13 +106,21 @@ export default class YasaChart extends Vue {
         }
       },
       yAxis: {},
-      series: [
-        { name: this.formData.title || 'xAxis', type: this.chartType, dimensions: ['val', 'yAxis'], areaStyle: this.areaStyle, smooth: true }
-      ],
+      series: this.formData.charts.map(chart => ({
+        name: chart.title,
+        type: chart.type,
+        data: (this.chartDataSource[chart.title] || []).map(bucket => ({
+          name: bucket.val,
+          value: bucket.count
+        })),
+        dimensions: ['val', 'yAxis'],
+        areaStyle: this.areaStyle,
+        smooth: true
+      })),
       grid: {
         left: 10,
         right: 20,
-        bottom: 10,
+        bottom: 20,
         top: 40,
         containLabel: true
       }

@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Dashboard from '@components/dashboard/Dashboard.vue'
 import Discover from '@components/discover/Discover.vue'
+import Logging from '@components/logging/Logging.vue'
 import VisualizeChart from '@components/visualize/Chart.vue'
 import DevTools from '@components/dev-tools/DevTools.vue'
 import Collections from '@components/management/Collections.vue'
@@ -17,6 +18,7 @@ export default new Router({
     { path: '/dashboard', component: Dashboard },
 
     { path: '/discover', component: Discover },
+    { path: '/logging', component: Logging },
 
     { path: '/visualize', component: VisualizeChart },
     { path: '/visualize/chart', component: VisualizeChart },

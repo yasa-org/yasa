@@ -8,9 +8,9 @@
         <el-button slot="append" icon="el-icon-search" @click="onQuery" :loading="loadingMore">{{ $t('discover.numHit', [numHit]) }}</el-button>
       </el-input>
     </el-header>
-    <el-container>
+    <el-container id="container">
       <el-aside width="200px" v-loading="loadingFields">
-        <header v-if="selectedFields.length > 0">Selected Fields</header>
+        <header v-if="selectedFields.length > 0">{{ $t('discover.selectedFields') }}</header>
         <el-collapse v-if="selectedFields.length > 0">
           <el-collapse-item v-for="f in selectedFields" :key="f.name">
             <template slot="title">
@@ -25,7 +25,7 @@
             </div>
           </el-collapse-item>
         </el-collapse>
-        <header v-if="availableFields.length > 0">Available Fields</header>
+        <header v-if="availableFields.length > 0">{{ $t('discover.availableFields') }}</header>
         <el-collapse v-if="availableFields.length > 0">
           <el-collapse-item v-for="f in availableFields" :key="f.name">
             <template slot="title">
@@ -160,56 +160,60 @@ export default class Discover extends Vue {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 #root {
   height: 100vh;
-}
-.el-header {
-  padding: 0 0 0 0;
-}
-.el-aside {
-  border-right: 1px solid lightgray;
-  overflow-x: hidden;
-}
-.el-main {
-  padding: 0;
-}
-.el-select {
-  width: 198px;
-}
-.el-col {
-  height: 100%;
-}
-.el-button.operate-field-button {
-  max-width: calc(100% - 30px);
-}
-.el-button span {
-  max-width: 40px;
-  clear: both;
-  display: inline-block;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-.operate-field-button {
-  margin-left: 8px;
-}
-#load-more {
-  width: 100%;
-}
-header {
-  padding: 8px;
-}
-.field-stats {
-  padding: 8px;
-  border-top: lightgrey 1px dashed;
-}
-.field-stats .value {
-  max-width: 100%;
-  clear: both;
-  display: inline-block;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+  header {
+    padding: 8px;
+  }
+  .el-header {
+    padding: 0 0 0 0;
+  }
+  .el-aside {
+    border-right: 1px solid lightgray;
+    overflow-x: hidden;
+    overflow-y: scroll;
+  }
+  #container {
+    height: calc(100% - 28px);
+  }
+  .el-main {
+    padding: 0;
+  }
+  .el-select {
+    width: 198px;
+  }
+  .el-col {
+    height: 100%;
+  }
+  .el-button.operate-field-button {
+    max-width: calc(100% - 30px);
+  }
+  .el-button span {
+    max-width: 40px;
+    clear: both;
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  .operate-field-button {
+    margin-left: 8px;
+  }
+  #load-more {
+    width: 100%;
+  }
+  .field-stats {
+    padding: 8px;
+    border-top: lightgrey 1px dashed;
+  }
+  .field-stats .value {
+    max-width: 100%;
+    clear: both;
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
 }
 </style>

@@ -1,6 +1,6 @@
 import http from '@/http'
 import { AxiosResponse } from 'axios'
-import { GenericResult, Header } from '@service/solr/model'
+import { GenericResult, Header, WT } from '@service/solr/model'
 
 export interface CollectionForm {
   name: string;
@@ -98,7 +98,7 @@ export interface ClusterResult {
 }
 
 class CollectionsService {
-  public fields (collection: string, wt = 'csv'): Promise<AxiosResponse<string>> {
+  public fields (collection: string, wt: WT = 'csv'): Promise<AxiosResponse<string>> {
     return http.get(`/solr/${collection}/schema/fields?wt=${wt}`)
   }
 

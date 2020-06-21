@@ -1,6 +1,6 @@
 import http from '@/http'
 import { AxiosResponse } from 'axios'
-import { Header } from '@service/solr/model'
+import { Header, WT } from '@service/solr/model'
 
 export interface ConfigSetsResponse {
   responseHeader: Header;
@@ -8,7 +8,7 @@ export interface ConfigSetsResponse {
 }
 
 class ConfigsService {
-  public configs (wt = 'json', params: object = {}): Promise<AxiosResponse<ConfigSetsResponse>> {
+  public configs (wt: WT = 'json', params: object = {}): Promise<AxiosResponse<ConfigSetsResponse>> {
     return http.get(`/solr/admin/configs?wt=${wt}&action=LIST`, { params })
   }
 }

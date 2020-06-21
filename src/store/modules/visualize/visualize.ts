@@ -74,7 +74,7 @@ export default class Visualize extends VuexModule {
   private fields: Field[] = []
   private loadingFields = false
   private queryString = ''
-  private chartDataSource: Bucket[][] = []
+  private chartDataSource: { [title: string]: Bucket[] } = {}
   private loadingChartData = false
   private result: SelectResult = {} as SelectResult
   private formData: ChartFormData = {
@@ -120,7 +120,7 @@ export default class Visualize extends VuexModule {
   }
 
   @Mutation
-  public setChartDataSource (chartDataSource: Bucket[][]): void {
+  public setChartDataSource (chartDataSource: { [title: string]: Bucket[] }): void {
     this.chartDataSource = chartDataSource
   }
 
@@ -132,6 +132,8 @@ export default class Visualize extends VuexModule {
   @Action
   public reset (): void {
     this.context.commit('setFormData', {
+      title: '',
+      type: 'line',
       xField: '',
       charts: [{
         type: 'line',
@@ -139,8 +141,8 @@ export default class Visualize extends VuexModule {
         yField: '',
         yFieldAggregation: ''
       }]
-    })
-    this.context.commit('setChartDataSource', [{}])
+    } as ChartFormData)
+    this.context.commit('setChartDataSource', {})
     this.context.commit('setQueryString', '')
     this.context.commit('setResult', {} as SelectResult)
   }
@@ -156,12 +158,13 @@ export default class Visualize extends VuexModule {
       rows: 0,
       'json.facet': JSON.stringify(aggregationJsonFacet(this.formData))
     }).then(res => {
-      const dataSource: Bucket[][] = this.formData.charts.map(c => {
-        const dataSource: Bucket[] = (res.data.facets[c.title] as Buckets).buckets.reverse()
+      const dataSource: { [title: string]: Bucket[] } = {}
+      this.formData.charts.forEach(c => {
+        const buckets: Bucket[] = (res.data.facets[c.title] as Buckets).buckets.reverse()
         if (c.yFieldAggregation.toLowerCase() === 'count') {
-          dataSource.forEach(it => (it.yAxis = it.count))
+          buckets.forEach(it => (it.yAxis = it.count))
         }
-        return dataSource
+        dataSource[c.title] = buckets
       })
 
       this.context.commit('setChartDataSource', dataSource)

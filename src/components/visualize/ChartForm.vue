@@ -3,7 +3,7 @@
     <el-card shadow="never" id="buckets">
       <div slot="header" style="line-height: 28px">
         {{ $t('visualize.title') }}
-        <el-button style="float: right" icon="el-icon-fa-play" type="primary" @click="submit"></el-button>
+        <el-button style="float: right" icon="el-icon-yasa-play" type="primary" @click="submit"></el-button>
       </div>
       <el-form ref="form" :rules="validateRules" :model="formData">
         <el-form-item prop="xField" label="X-Axis Field">
@@ -72,7 +72,7 @@ export default class ChartForm extends Vue {
 
   @Store.State private formData!: ChartFormData
 
-  @Store.Mutation private reset!: () => void
+  @Store.Action private reset!: () => void
 
   private validateRules: object = {}
 

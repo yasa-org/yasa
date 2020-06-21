@@ -8,7 +8,7 @@ import ElementUI from 'element-ui'
 import locale from 'element-ui/lib/locale/lang/en'
 import TreeView from 'vue-json-tree-view'
 import '@/style/element-variables.scss'
-import '@/style/style.less'
+import '@/style/style.scss'
 
 import ECharts from 'vue-echarts/components/ECharts.vue'
 import 'echarts/lib/chart/bar'
