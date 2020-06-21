@@ -1,4 +1,4 @@
-const path = require('path')
+const path = require('path');
 
 module.exports = {
   publicPath: '.',
@@ -6,9 +6,9 @@ module.exports = {
     proxy: {
       '/': {
         target: 'http://127.0.0.1:8983',
-        secure: false
-      }
-    }
+        secure: false,
+      },
+    },
   },
   configureWebpack: {
     resolve: {
@@ -17,17 +17,17 @@ module.exports = {
         '@store': path.join(__dirname, 'src/store'),
         '@assets': path.join(__dirname, 'src/assets'),
         '@service': path.join(__dirname, 'src/service'),
-        '@components': path.join(__dirname, 'src/components')
-      }
+        '@components': path.join(__dirname, 'src/components'),
+      },
     },
     performance: {
-      hints: false
+      hints: false,
     },
     optimization: {
       splitChunks: {
         minSize: 10000,
-        maxSize: 250000
-      }
-    }
-  }
-}
+        maxSize: 250000,
+      },
+    },
+  },
+};

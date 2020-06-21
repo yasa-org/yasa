@@ -1,46 +1,46 @@
 <template>
   <el-container id="chart-root">
-    <chart style="height: 200px; overflow: hidden" class="chart" ref="chart" :options="options" auto-resize/>
+    <chart style="height: 200px; overflow: hidden;" class="chart" ref="chart" :options="options" auto-resize />
   </el-container>
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator'
-import defaults from '@/defaults'
+import { Component, Vue, Prop } from 'vue-property-decorator';
+import defaults from '@/defaults';
 
 type Data = {
   value: number;
   name: string;
-}
+};
 
 @Component
 export default class Gauge extends Vue {
   @Prop({
-    required: true
+    required: true,
   })
-  private name!: string
+  private name!: string;
 
   @Prop({
     required: true,
-    type: Array
+    type: Array,
   })
-  private data!: Data[]
+  private data!: Data[];
 
   @Prop({
     required: false,
-    default: '{a}: {c}%'
+    default: '{a}: {c}%',
   })
-  private tooltip!: string
+  private tooltip!: string;
 
-  private get options () {
+  private get options() {
     return {
       tooltip: {
         formatter: this.tooltip,
         textStyle: {
           fontSize: 10,
-          fontFamily: defaults.fonts
+          fontFamily: defaults.fonts,
         },
-        position: 'inside'
+        position: 'inside',
       },
       series: [
         {
@@ -50,27 +50,27 @@ export default class Gauge extends Vue {
           title: {
             offsetCenter: [0, '70%'],
             fontSize: 10,
-            fontFamily: defaults.fonts
+            fontFamily: defaults.fonts,
           },
           axisLine: {
             lineStyle: {
-              width: 16
-            }
+              width: 16,
+            },
           },
           splitLine: {
-            length: 16
+            length: 16,
           },
           pointer: {
-            width: 4
+            width: 4,
           },
           detail: {
             formatter: '{value}%',
             fontSize: 10,
-            fontFamily: defaults.fonts
-          }
-        }
-      ]
-    }
+            fontFamily: defaults.fonts,
+          },
+        },
+      ],
+    };
   }
 }
 </script>

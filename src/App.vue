@@ -1,9 +1,18 @@
 <template>
   <el-container id="app">
     <el-aside width="inherit">
-      <el-menu id="nav" :default-active="activeNav" :collapse="isCollapse" background-color="#282a36" text-color="#fff" active-text-color="#ffd04b" router>
-        <el-menu-item index="" @click="isCollapse=!isCollapse">
-          <i class="el-icon-yasa-bars"></i><span slot="title">{{ isCollapse ? $t('menu.expand') : $t('menu.collapse') }}</span>
+      <el-menu
+        id="nav"
+        :default-active="activeNav"
+        :collapse="isCollapse"
+        background-color="#282a36"
+        text-color="#fff"
+        active-text-color="#ffd04b"
+        router
+      >
+        <el-menu-item index="" @click="isCollapse = !isCollapse">
+          <i class="el-icon-yasa-bars"></i
+          ><span slot="title">{{ isCollapse ? $t('menu.expand') : $t('menu.collapse') }}</span>
         </el-menu-item>
         <el-menu-item index="/dashboard">
           <i class="el-icon-yasa-dashboard"></i><span slot="title">{{ $t('menu.dashboard') }}</span>
@@ -20,7 +29,7 @@
         <el-menu-item index="/dev-tools">
           <i class="el-icon-yasa-code"></i><span slot="title">{{ $t('menu.devTools') }}</span>
         </el-menu-item>
-        <el-submenu index="/management" v-if="solrMode==='solrcloud'">
+        <el-submenu index="/management" v-if="solrMode === 'solrcloud'">
           <template slot="title">
             <i class="el-icon-yasa-manage"></i><span slot="title">{{ $t('menu.management') }}</span>
           </template>
@@ -38,47 +47,47 @@
     </el-aside>
     <el-container>
       <el-main id="content">
-        <router-view/>
+        <router-view />
       </el-main>
     </el-container>
   </el-container>
 </template>
 
 <script lang="ts">
-import { Component, Vue, Watch } from 'vue-property-decorator'
-import { Action, State } from 'vuex-class'
+import { Component, Vue, Watch } from 'vue-property-decorator';
+import { Action, State } from 'vuex-class';
 
 @Component
 export default class App extends Vue {
-  private isCollapse: boolean = localStorage.getItem('isCollapse') === 'true'
+  private isCollapse: boolean = localStorage.getItem('isCollapse') === 'true';
 
-  @State private solrMode!: string
-  @Action private loadCollections!: () => void
+  @State private solrMode!: string;
+  @Action private loadCollections!: () => void;
 
-  created () {
-    this.loadCollections()
+  created() {
+    this.loadCollections();
   }
 
   @Watch('isCollapse')
-  onIsCollapseChanged () {
-    localStorage.setItem('isCollapse', this.isCollapse.toString())
+  onIsCollapseChanged() {
+    localStorage.setItem('isCollapse', this.isCollapse.toString());
   }
 
-  get activeNav () {
-    const segments = this.$route.path.match(/^(\/[^/]+).*/)
-    const firstSegment = segments && segments[1]
+  get activeNav() {
+    const segments = this.$route.path.match(/^(\/[^/]+).*/);
+    const firstSegment = segments && segments[1];
     if (firstSegment === '/management') {
-      return this.$route.path
+      return this.$route.path;
     }
-    return segments && segments[1]
+    return segments && segments[1];
   }
 }
 </script>
 
 <style lang="scss">
-@import "style/common.scss";
-@import "style/normalize.css";
-@import "//at.alicdn.com/t/font_767061_vesz5bry78.css";
+@import 'style/common.scss';
+@import 'style/normalize.css';
+@import '//at.alicdn.com/t/font_767061_vesz5bry78.css';
 
 #app {
   font-family: $default-fonts;

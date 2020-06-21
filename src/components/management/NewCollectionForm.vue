@@ -19,10 +19,19 @@
       <el-input-number v-model="newCollectionFormData.maxShardsPerNode" :min="1"></el-input-number>
     </el-form-item>
     <el-form-item label="Create Node Set" prop="createNodeSet">
-      <el-input v-model="newCollectionFormData.createNodeSet" placeholder="comma-separated list of node_names" clearable></el-input>
+      <el-input
+        v-model="newCollectionFormData.createNodeSet"
+        placeholder="comma-separated list of node_names"
+        clearable
+      ></el-input>
     </el-form-item>
     <el-form-item label="Config Name" prop="configName">
-      <el-select v-model="newCollectionFormData['collection.configName']" :value="newCollectionFormData['collection.configName']" :loading="loadingConfigSets" filterable>
+      <el-select
+        v-model="newCollectionFormData['collection.configName']"
+        :value="newCollectionFormData['collection.configName']"
+        :loading="loadingConfigSets"
+        filterable
+      >
         <el-option v-for="configSet in configSets" :key="configSet" :value="configSet" :label="configSet"></el-option>
       </el-select>
     </el-form-item>
@@ -34,66 +43,71 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
-import { namespace } from 'vuex-class'
-import { ElForm } from 'element-ui/types/form'
-import { CollectionForm } from '@service/solr/collections'
+import { Component, Vue } from 'vue-property-decorator';
+import { namespace } from 'vuex-class';
+import { ElForm } from 'element-ui/types/form';
+import { CollectionForm } from '@service/solr/collections';
 
-const Store = namespace('management/collections')
+const Store = namespace('management/collections');
 
 @Component
 export default class NewCollectionForm extends Vue {
-  private creatingCollection = false
+  private creatingCollection = false;
 
-  @Store.State private configSets!: string[]
-  @Store.State private loadingConfigSets!: boolean
-  @Store.State private newCollectionFormData!: CollectionForm
+  @Store.State private configSets!: string[];
+  @Store.State private loadingConfigSets!: boolean;
+  @Store.State private newCollectionFormData!: CollectionForm;
 
-  @Store.Action private loadConfigSets!: () => void
-  @Store.Action private doCreateCollection!: () => void
+  @Store.Action private loadConfigSets!: () => void;
+  @Store.Action private doCreateCollection!: () => void;
 
-  created () {
-    this.loadConfigSets()
+  created() {
+    this.loadConfigSets();
   }
 
-  private get numShardsRequired (): boolean {
-    return this.newCollectionFormData && this.newCollectionFormData['router.name'] === 'compositeId'
+  private get numShardsRequired(): boolean {
+    return this.newCollectionFormData && this.newCollectionFormData['router.name'] === 'compositeId';
   }
 
-  private get validateRules () {
+  private get validateRules() {
     return {
-      name: [{
-        required: true,
-        message: 'Collection name is required',
-        trigger: 'change'
-      }],
-      numShards: [{
-        required: this.numShardsRequired,
-        type: 'number',
-        message: 'numShards is required when router.name is compositeId.',
-        trigger: 'change'
-      }]
-    }
+      name: [
+        {
+          required: true,
+          message: 'Collection name is required',
+          trigger: 'change',
+        },
+      ],
+      numShards: [
+        {
+          required: this.numShardsRequired,
+          type: 'number',
+          message: 'numShards is required when router.name is compositeId.',
+          trigger: 'change',
+        },
+      ],
+    };
   }
 
-  private submitForm () {
+  private submitForm() {
     (this.$refs.newCollectionForm as ElForm).validate((valid) => {
       if (!valid) {
-        return
+        return;
       }
-      if (this.creatingCollection) return
-      this.creatingCollection = true
-      this.$service.solr.collections.create(this.newCollectionFormData).then(() => {
-        this.creatingCollection = false
-        this.$emit('done')
-      }, () => {
-        this.creatingCollection = false
-      })
-    })
+      if (this.creatingCollection) return;
+      this.creatingCollection = true;
+      this.$service.solr.collections.create(this.newCollectionFormData).then(
+        () => {
+          this.creatingCollection = false;
+          this.$emit('done');
+        },
+        () => {
+          this.creatingCollection = false;
+        },
+      );
+    });
   }
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

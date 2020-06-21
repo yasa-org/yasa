@@ -1,6 +1,25 @@
-import http from '@/http'
-import { AxiosResponse } from 'axios'
-import { GenericResult, Header, WT } from '@service/solr/model'
+/*!
+ *
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
+import http from '@/http';
+import { GenericResult, Header, WT } from '@service/solr/model';
+import { AxiosResponse } from 'axios';
 
 export interface CollectionForm {
   name: string;
@@ -29,7 +48,7 @@ export interface Bucket {
 }
 
 export interface Buckets {
-  buckets: Array<Bucket>;
+  buckets: Bucket[];
 }
 
 export interface Facets {
@@ -98,37 +117,37 @@ export interface ClusterResult {
 }
 
 class CollectionsService {
-  public fields (collection: string, wt: WT = 'csv'): Promise<AxiosResponse<string>> {
-    return http.get(`/solr/${collection}/schema/fields?wt=${wt}`)
+  public fields(collection: string, wt: WT = 'csv'): Promise<AxiosResponse<string>> {
+    return http.get(`/solr/${collection}/schema/fields?wt=${wt}`);
   }
 
-  public select (collection: string, params: object): Promise<AxiosResponse<SelectResult>> {
-    return http.get(`/solr/${collection}/select`, { params })
+  public select(collection: string, params: object): Promise<AxiosResponse<SelectResult>> {
+    return http.get(`/solr/${collection}/select`, { params });
   }
 
-  public query (collection: string, params: object): Promise<AxiosResponse<SelectResult>> {
-    return http.get(`/solr/${collection}/query`, { params })
+  public query(collection: string, params: object): Promise<AxiosResponse<SelectResult>> {
+    return http.get(`/solr/${collection}/query`, { params });
   }
 
-  public collections (params: object = {}): Promise<AxiosResponse<CollectionsResult>> {
-    return http.get('/solr/admin/collections?action=LIST', { params })
+  public collections(params: object = {}): Promise<AxiosResponse<CollectionsResult>> {
+    return http.get('/solr/admin/collections?action=LIST', { params });
   }
 
-  public clusters (params: object = {}): Promise<AxiosResponse<ClusterResult>> {
-    return http.get('/solr/admin/collections?action=CLUSTERSTATUS', { params })
+  public clusters(params: object = {}): Promise<AxiosResponse<ClusterResult>> {
+    return http.get('/solr/admin/collections?action=CLUSTERSTATUS', { params });
   }
 
-  public create (params: CollectionForm): Promise<AxiosResponse<GenericResult>> {
-    return http.get('/solr/admin/collections?action=CREATE', { params })
+  public create(params: CollectionForm): Promise<AxiosResponse<GenericResult>> {
+    return http.get('/solr/admin/collections?action=CREATE', { params });
   }
 
-  public reload (collection: string): Promise<AxiosResponse<void>> {
+  public reload(collection: string): Promise<AxiosResponse<void>> {
     return http.get('/solr/admin/collections?action=RELOAD', {
       params: {
-        name: collection
-      }
-    })
+        name: collection,
+      },
+    });
   }
 }
 
-export default new CollectionsService()
+export default new CollectionsService();

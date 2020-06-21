@@ -17,23 +17,14 @@
  *
  */
 
-import Vue from 'vue';
-import Vuex from 'vuex';
-
-import collections from './collections';
-import configSets from './config-sets';
-import tree from './tree';
-
-Vue.use(Vuex);
-
-export default {
-  actions: {},
-  modules: {
-    collections,
-    configSets,
-    tree,
-  },
-  mutations: {},
-  namespaced: true,
-  state: {},
-};
+export class ChartFormData {
+  public title = '';
+  public type = '';
+  public xField = '';
+  public charts: Array<{
+    type: string;
+    title: string;
+    yField: string;
+    yFieldAggregation: string;
+  }> = [];
+}

@@ -1,5 +1,5 @@
-import { AxiosStatic } from 'axios'
-import Service from '@/service'
+import { AxiosStatic } from 'axios';
+import Service from '@/service';
 
 declare module 'vue/types/vue' {
   interface Vue {
