@@ -18,9 +18,11 @@
  */
 
 import admin from './admin';
+import logging from './logging';
 import collections from './collections';
 
 export default {
   admin,
   collections,
+  logging,
 };

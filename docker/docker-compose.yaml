@@ -2,7 +2,7 @@ version: '2'
 
 services:
   solr:
-    image: solr:8.3
+    image: solr:8.5
     ports:
       - 8983:8983
     networks:
