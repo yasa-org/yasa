@@ -30,10 +30,9 @@ image:https://img.shields.io/badge/License-MIT-yellow.svg[capition="License", li
 
 [cols="^,^", options="header"]
 |===
-|Config Set |Loggings  | 
+|Config Set |Loggings
 |image:https://user-images.githubusercontent.com/15965696/85683362-bd799900-b6ff-11ea-85f5-a77df20822a1.png[]
 |image:https://user-images.githubusercontent.com/15965696/85683334-b6eb2180-b6ff-11ea-9bc1-e1cf8cae5921.png[]
-|
 |===
 
 == Installation
