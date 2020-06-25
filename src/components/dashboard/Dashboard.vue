@@ -47,8 +47,8 @@
         <el-form label-width="140px" label-position="left">
           <el-form-item label="Architecture">{{ system.arch }}</el-form-item>
           <el-form-item label="Processors">{{ system.availableProcessors }}</el-form-item>
-          <el-form-item label="Name">{{ system.uname }}</el-form-item>
-          <el-form-item label="Start">{{ system.uptime }}</el-form-item>
+          <el-form-item label="Name" v-if="system.uname">{{ system.uname }}</el-form-item>
+          <el-form-item label="Start" v-if="system.uptime">{{ system.uptime }}</el-form-item>
         </el-form>
       </el-collapse-item>
       <el-collapse-item name="instance" v-loading="loadingSystemInfo">
@@ -107,13 +107,11 @@ export default class Dashboard extends Vue {
 
   created() {
     this.loadingSystemInfo = true;
-    this.$service.solr.admin.info.system().then(
-      (res) => {
-        this.loadingSystemInfo = false;
-        this.response = res.data;
-      },
-      () => (this.loadingSystemInfo = false),
-    );
+    this.$service.solr.admin.info
+      .system()
+      .then((res) => (this.response = res.data))
+      .catch((err) => this.$notify.error(err))
+      .finally(() => (this.loadingSystemInfo = false));
   }
 
   private get system() {

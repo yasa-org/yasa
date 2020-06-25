@@ -42,6 +42,9 @@
           <el-menu-item index="/management/collections">
             <i class="el-icon-yasa-collections"></i><span slot="title">Collections</span>
           </el-menu-item>
+          <el-menu-item index="/management/zk-status">
+            <i class="el-icon-yasa-zookeeper"></i><span slot="title">ZK Status</span>
+          </el-menu-item>
         </el-submenu>
       </el-menu>
     </el-aside>
@@ -87,7 +90,7 @@ export default class App extends Vue {
 <style lang="scss">
 @import 'style/common.scss';
 @import 'style/normalize.css';
-@import '//at.alicdn.com/t/font_767061_vesz5bry78.css';
+@import '//at.alicdn.com/t/font_767061_yqlmn672s0h.css';
 
 #app {
   font-family: $default-fonts;

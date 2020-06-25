@@ -19,6 +19,7 @@
 
 import http from '@/http';
 import { AxiosResponse } from 'axios';
+import { Header } from '@service/solr/model';
 
 export interface Prop {
   version: number;
@@ -63,9 +64,36 @@ export interface ZookeeperResponse {
   tree: ZkTreeNode[];
 }
 
+export interface ZKStatusResponse {
+  responseHeader: Header;
+  zkStatus: {
+    mode: string;
+    ensembleSize: number;
+    zkHost: string;
+    status: string;
+    details: {
+      zk_version: string;
+      zk_znode_count: number;
+      host: string;
+      clientPort: number;
+      secureClientPort: number;
+      ok: boolean;
+      zk_approximate_data_size: number;
+    }[];
+  };
+}
+
 class ZookeeperService {
   public zookeeper(params: object = {}): Promise<AxiosResponse<ZookeeperResponse>> {
     return http.get('/solr/admin/zookeeper', { params });
+  }
+
+  public status(wt = 'json'): Promise<AxiosResponse<ZKStatusResponse>> {
+    return http.get('/solr/admin/zookeeper/status', {
+      params: {
+        wt,
+      },
+    });
   }
 }
 

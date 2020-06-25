@@ -1,7 +1,7 @@
 <template>
   <div id="root">
     <div id="operations" align="right">
-      <el-button icon="el-icon-refresh" type="primary" @click="refresh">Refresh</el-button>
+      <el-button icon="el-icon-refresh" type="primary" @click="refresh"></el-button>
     </div>
     <el-table id="logs-table" :data="loggingResponse.history.docs" :row-class-name="rowClassName" height="100%">
       <el-table-column width="200" prop="time" label="Time" show-overflow-tooltip></el-table-column>
