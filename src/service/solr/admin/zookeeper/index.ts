@@ -35,12 +35,17 @@ export interface Prop {
 }
 
 export interface ZkTreeNode {
-  data: {
+  data?: {
     title: string;
     attr: {
       href: string;
     };
   };
+  text?: string;
+  a_attr?: {
+    href: string;
+  };
+  children: [];
 
   ephemeral: boolean;
   version: number;

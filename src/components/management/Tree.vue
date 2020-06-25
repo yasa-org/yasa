@@ -37,7 +37,7 @@ const Store = namespace('management/tree');
 export default class Tree extends Vue {
   private treeProps = {
     label: (data: ZkTreeNode) => {
-      const title = data.data.title;
+      const title = data.data?.title || data?.text || '-';
       return title === '/' ? title : title.replace(/^\//, '');
     },
   };
@@ -56,7 +56,7 @@ export default class Tree extends Vue {
   public nodeClicked(data: ZkTreeNode, node: TreeNode<string, ZkTreeNode>) {
     if (node.isLeaf) {
       this.loadingFileContent = true;
-      const url = data.data.attr.href;
+      const url = data.data?.attr?.href || data?.a_attr?.href || '';
       this.$http.get(`/solr/${url}`).then(
         (res) => {
           this.loadingFileContent = false;

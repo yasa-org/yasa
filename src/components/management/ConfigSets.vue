@@ -82,7 +82,7 @@ const Store = namespace('management/configSets');
 export default class ConfigSets extends Vue {
   private treeProps = {
     label: (data: ZkTreeNode) => {
-      const title = data.data.title;
+      const title = data.data?.title || data?.text || '-';
       return title === '/' ? title : title.replace(/^\//, '');
     },
   };
@@ -108,7 +108,7 @@ export default class ConfigSets extends Vue {
   private nodeClicked(data: ZkTreeNode, node: TreeNode<string, ZkTreeNode>) {
     if (node.isLeaf) {
       this.loadingFileContent = true;
-      const url = data.data.attr.href;
+      const url = data.data?.attr.href || data.a_attr?.href || '-';
       this.$http.get(`/solr/${url}`).then(
         (res: AxiosResponse<ZookeeperResponse>) => {
           this.loadingFileContent = false;
@@ -127,7 +127,7 @@ export default class ConfigSets extends Vue {
   }
 
   private deleteConfigSet(data: ZkTreeNode) {
-    const name = data.data.title;
+    const name = data.data?.title || data?.text || '-';
     this.$confirm(`Do you want to delete config set: "${name}"`, 'Delete Config Set').then(
       () => {
         const loading = this.$loading({
