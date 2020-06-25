@@ -15,17 +15,25 @@ image:https://img.shields.io/badge/License-MIT-yellow.svg[capition="License", li
 [cols="^,^,^", options="header"]
 |===
 |Dashboard |Discover |Visualize
-|image:https://user-images.githubusercontent.com/15965696/83351249-deef9b00-a374-11ea-8c9e-1a46b55d8500.png[]
-|image:https://user-images.githubusercontent.com/15965696/44305860-90e2f080-a3b5-11e8-8d85-ee3a2f247919.png[]
-|image:https://user-images.githubusercontent.com/15965696/44301078-c8b15000-a343-11e8-98f9-135897212be8.png[]
+|image:https://user-images.githubusercontent.com/15965696/85683368-be122f80-b6ff-11ea-83a6-f583575918f8.png[]
+|image:https://user-images.githubusercontent.com/15965696/85683364-bd799900-b6ff-11ea-99a0-db358448517e.png[]
+|image:https://user-images.githubusercontent.com/15965696/85683360-bce10280-b6ff-11ea-8b76-2c71be8b31e0.png[]
 |===
 
 [cols="^,^,^", options="header"]
 |===
-|Dev Tools |Zookeeper Tree Management |Collection Management
-|image:https://user-images.githubusercontent.com/15965696/44301074-c5b65f80-a343-11e8-85de-f5bc859ed221.png[]
-|image:https://user-images.githubusercontent.com/15965696/44301077-c8b15000-a343-11e8-8ed8-16f786ca8671.png[]
-|image:https://user-images.githubusercontent.com/15965696/44301076-c818b980-a343-11e8-906c-d72f7637f380.png[]
+|Dev Tools |Collection Management |Zookeeper Tree Management
+|image:https://user-images.githubusercontent.com/15965696/85683358-bc486c00-b6ff-11ea-9d94-8ad292cbcef7.png[]
+|image:https://user-images.githubusercontent.com/15965696/85683371-beaac600-b6ff-11ea-8aba-0f6e10edd71c.png[]
+|image:https://user-images.githubusercontent.com/15965696/85683356-bc486c00-b6ff-11ea-80b5-12fc4fd49123.png[]
+|===
+
+[cols="^,^", options="header"]
+|===
+|Config Set |Loggings  | 
+|image:https://user-images.githubusercontent.com/15965696/85683362-bd799900-b6ff-11ea-85f5-a77df20822a1.png[]
+|image:https://user-images.githubusercontent.com/15965696/85683334-b6eb2180-b6ff-11ea-9bc1-e1cf8cae5921.png[]
+|
 |===
 
 == Installation
