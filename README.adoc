@@ -8,7 +8,7 @@ image:https://github.com/{org-name}/{project-name-lower}/workflows/Build/badge.s
 image:https://img.shields.io/github/release/{org-name}/{project-name-lower}.svg[capition="Release Version", link=https://github.com/{org-name}/{project-name-lower}/releases]
 image:https://img.shields.io/badge/SolrCloud-6.1.0+-D9411E.svg[capition="Solr Version", link=http://lucene.apache.org/solr/]
 image:https://img.shields.io/badge/Vuejs-2.5.2-4fc08d.svg[capition="Vuejs Version", link=https://vuejs.org]
-image:https://img.shields.io/badge/License-MIT-yellow.svg[capition="License", link=https://opensource.org/licenses/MIT]
+image:https://img.shields.io/badge/Apache-2.0-ee1b3e.svg[capition="License", link=http://www.apache.org/licenses/LICENSE-2.0]
 
 == Features
 
