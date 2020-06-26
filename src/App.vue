@@ -33,16 +33,21 @@
           <template slot="title">
             <i class="el-icon-yasa-manage"></i><span slot="title">{{ $t('menu.management') }}</span>
           </template>
-          <el-menu-item index="/management/tree">
-            <i class="el-icon-yasa-tree"></i><span slot="title">Tree</span>
-          </el-menu-item>
           <el-menu-item index="/management/config-sets">
             <i class="el-icon-yasa-config"></i><span slot="title">Config Set</span>
           </el-menu-item>
           <el-menu-item index="/management/collections">
             <i class="el-icon-yasa-collections"></i><span slot="title">Collections</span>
           </el-menu-item>
-          <el-menu-item index="/management/zk-status">
+        </el-submenu>
+        <el-submenu index="/cloud" v-if="solrMode === 'solrcloud'">
+          <template slot="title">
+            <i class="el-icon-yasa-cloud"></i><span slot="title">{{ $t('menu.cloud') }}</span>
+          </template>
+          <el-menu-item index="/cloud/tree">
+            <i class="el-icon-yasa-tree"></i><span slot="title">Tree</span>
+          </el-menu-item>
+          <el-menu-item index="/cloud/zk-status">
             <i class="el-icon-yasa-zookeeper"></i><span slot="title">ZK Status</span>
           </el-menu-item>
         </el-submenu>
@@ -79,10 +84,10 @@ export default class App extends Vue {
   get activeNav() {
     const segments = this.$route.path.match(/^(\/[^/]+).*/);
     const firstSegment = segments && segments[1];
-    if (firstSegment === '/management') {
+    if (firstSegment && ['/management', '/cloud'].includes(firstSegment)) {
       return this.$route.path;
     }
-    return segments && segments[1];
+    return firstSegment;
   }
 }
 </script>
@@ -90,7 +95,7 @@ export default class App extends Vue {
 <style lang="scss">
 @import 'style/common.scss';
 @import 'style/normalize.css';
-@import '//at.alicdn.com/t/font_767061_yqlmn672s0h.css';
+@import '//at.alicdn.com/t/font_767061_xbgzclhfj7n.css';
 
 #app {
   font-family: $default-fonts;

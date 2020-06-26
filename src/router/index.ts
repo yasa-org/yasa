@@ -25,11 +25,18 @@ import Collections from '@components/management/Collections.vue';
 import ConfigSet from '@components/management/ConfigSets.vue';
 import Tree from '@components/management/Tree.vue';
 import VisualizeChart from '@components/visualize/Chart.vue';
-import ZookeeperStatus from '@components/management/ZookeeperStatus.vue';
+import ZookeeperStatus from '@components/cloud/ZookeeperStatus.vue';
 import Vue from 'vue';
 import Router from 'vue-router';
+import { RawLocation, Route } from 'vue-router/types/router';
 
 Vue.use(Router);
+
+const originalPush: (location: RawLocation) => Promise<Route> = Router.prototype.push;
+
+Router.prototype.push = function push(location: RawLocation) {
+  return originalPush.call(this, location).catch((err) => err);
+};
 
 export default new Router({
   routes: [
@@ -47,7 +54,8 @@ export default new Router({
 
     { path: '/management/config-sets', component: ConfigSet },
     { path: '/management/collections', component: Collections },
-    { path: '/management/tree', component: Tree },
-    { path: '/management/zk-status', component: ZookeeperStatus },
+
+    { path: '/cloud/tree', component: Tree },
+    { path: '/cloud/zk-status', component: ZookeeperStatus },
   ],
 });

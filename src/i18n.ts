@@ -39,6 +39,7 @@ const messages = {
       selectedFields: 'Selected Fields',
     },
     menu: {
+      cloud: 'Cloud',
       collapse: 'Collapse',
       dashboard: 'Dashboard',
       devTools: 'Dev Tools',
