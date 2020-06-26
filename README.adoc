@@ -65,6 +65,8 @@ If you are interested in `{project-name}` and want to contribute, you can run `{
 # pull source code
 git clone https://github.com/{org-name}/{project-name-lower}
 
+cd {project-name-lower}
+
 # install dependencies
 npm i
 
