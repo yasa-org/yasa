@@ -25,10 +25,16 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 10
+      - name: Setup Java
+        uses: actions/setup-java@v1
+        with:
+          java-version: 9
       - name: Install
-        run: npm i
+        run: cd ui && npm i
       - name: Lint
-        run: npm run lint
+        run: cd ui && npm run lint
       - name: Build
-        run: npm run build
+        run: cd ui && npm run build
+      - name: Build Plugin
+        run: ./mvnw -B clean package
 

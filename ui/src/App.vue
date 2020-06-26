@@ -93,7 +93,7 @@ export default class App extends Vue {
 </script>
 
 <style lang="scss">
-@import 'style/common.scss';
+@import 'style/common';
 @import 'style/normalize.css';
 @import '//at.alicdn.com/t/font_767061_xbgzclhfj7n.css';
 

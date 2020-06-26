@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation=" http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>io.github.kezhenxu94</groupId>
+  <artifactId>yasa</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+
+  <modules>
+    <module>solr-plugin</module>
+  </modules>
+
+  <name>yasa</name>
+
+  <packaging>pom</packaging>
+
+  <url>https://github.com/yasa-org/yasa</url>
+
+  <properties>
+    <compiler.version>9</compiler.version>
+    
+    <maven.compiler.source>9</maven.compiler.source>
+    <maven.compiler.target>9</maven.compiler.target>
+
+    <lombok.version>1.18.10</lombok.version>
+    <solr-core-version>8.3.0</solr-core-version>
+    <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
+    <frontend-maven-plugin.version>1.10.0</frontend-maven-plugin.version>
+    <maven-resources-plugin.version>3.1.0</maven-resources-plugin.version>
+
+    <project.build.sourceEncoding>utf-8</project.build.sourceEncoding>
+
+    <!--suppress UnresolvedMavenProperty-->
+    <ui.directory>${maven.multiModuleProjectDirectory}/ui</ui.directory>
+  </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.apache.solr</groupId>
+        <artifactId>solr-core</artifactId>
+        <version>${solr-core-version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.projectlombok</groupId>
+        <artifactId>lombok</artifactId>
+        <version>${lombok.version}</version>
+        <scope>provided</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>${maven-compiler-plugin.version}</version>
+        <configuration>
+          <source>${compiler.version}</source>
+          <target>${compiler.version}</target>
+          <encoding>${project.build.sourceEncoding}</encoding>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>
