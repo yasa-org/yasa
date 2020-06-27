@@ -92,11 +92,6 @@ npm i
 npm run serve
 ----
 
-== Todo
-
-- More visualization charts
-- Documentations
-
 == Contribution
 
 Find this project useful? Any contribution is highly appreciated. You can open issues or pull requests to help make this project better.
