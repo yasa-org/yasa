@@ -1,2 +1,18 @@
 [
+  {
+    "name": "yasa",
+    "description": "Yet Another Solr Admin",
+    "versions": [
+      {
+        "version": "0.5.1",
+        "date": "2020-06-26",
+        "artifacts": [
+          {
+            "url": "https://github.com/yasa-org/yasa/releases/download/v0.5.1/yasa-solr-plugin-0.5.1.jar",
+            "sig": "IacTnr889Phi+9fbQ7DCeqNLv5Q0gI9EnbEoAsqDNHzQkVr+PJjrZzFfgnXp39F+yz0/PWeAkaklwChyof2Hug=="
+          }
+        ]
+      }
+    ]
+  }
 ]
