@@ -56,6 +56,15 @@
             </configuration>
           </execution>
           <execution>
+            <id>lint codes</id>
+            <goals>
+              <goal>npm</goal>
+            </goals>
+            <configuration>
+              <arguments>run lint</arguments>
+            </configuration>
+          </execution>
+          <execution>
             <id>build distributed package</id>
             <goals>
               <goal>npm</goal>
