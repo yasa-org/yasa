@@ -8,10 +8,11 @@
 
   <groupId>io.github.kezhenxu94</groupId>
   <artifactId>yasa</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
+  <version>0.5.1</version>
 
   <modules>
-    <module>solr-plugin</module>
+    <module>yasa-ui</module>
+    <module>yasa-solr-plugin</module>
   </modules>
 
   <name>yasa</name>
@@ -22,7 +23,7 @@
 
   <properties>
     <compiler.version>9</compiler.version>
-    
+
     <maven.compiler.source>9</maven.compiler.source>
     <maven.compiler.target>9</maven.compiler.target>
 
@@ -35,7 +36,7 @@
     <project.build.sourceEncoding>utf-8</project.build.sourceEncoding>
 
     <!--suppress UnresolvedMavenProperty-->
-    <ui.directory>${maven.multiModuleProjectDirectory}/ui</ui.directory>
+    <ui.directory>${maven.multiModuleProjectDirectory}/yasa-ui</ui.directory>
   </properties>
 
   <dependencyManagement>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <parent>
+    <artifactId>yasa</artifactId>
+    <groupId>io.github.kezhenxu94</groupId>
+    <version>0.5.1</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+
+  <artifactId>yasa-solr-plugin</artifactId>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.apache.solr</groupId>
+      <artifactId>solr-core</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>io.github.kezhenxu94</groupId>
+      <artifactId>yasa-ui</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>${maven-resources-plugin.version}</version>
+        <configuration>
+          <encoding>${project.build.sourceEncoding}</encoding>
+          <outputDirectory>${project.build.directory}</outputDirectory>
+          <resources>
+            <resource>
+              <targetPath>${basedir}/target/classes</targetPath>
+              <directory>${ui.directory}/dist</directory>
+            </resource>
+            <resource>
+              <targetPath>${basedir}/target/classes</targetPath>
+              <directory>src/main/resources</directory>
+            </resource>
+          </resources>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>

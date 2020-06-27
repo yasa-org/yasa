@@ -18,23 +18,21 @@
 package io.github.kezhenxu94;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.HashMap;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.IOUtils;
+import org.apache.http.entity.ContentType;
 import org.apache.solr.api.Command;
 import org.apache.solr.api.EndPoint;
 import org.apache.solr.client.solrj.SolrRequest.METHOD;
 import org.apache.solr.common.params.CommonParams;
 import org.apache.solr.common.params.ModifiableSolrParams;
-import org.apache.solr.common.params.SolrParams;
 import org.apache.solr.core.CoreContainer;
 import org.apache.solr.core.SolrCore;
 import org.apache.solr.handler.ReplicationHandler;
-import org.apache.solr.request.LocalSolrQueryRequest;
 import org.apache.solr.request.SolrQueryRequest;
-import org.apache.solr.request.SolrRequestHandler;
 import org.apache.solr.response.SolrQueryResponse;
 import org.apache.solr.security.PermissionNameProvider;
 
@@ -61,22 +59,13 @@ public class YasaHandler {
       filepath = "/index.html";
     }
 
-    // HACK: If this is not a request for static content, but a request to a Solr endpoint, try to forward to the
-    // right place. A proper UI impl should never make Solr API calls to this endpoint.
-    // This is a security vulnerability, NEVER USE THE FOLLOWING IN PRODUCTION.
-    if (forwardIfNeeded(req, rsp, filepath))
-      return;
+    final ModifiableSolrParams newParams = new ModifiableSolrParams(req.getOriginalParams());
+    newParams.set(CommonParams.WT, ReplicationHandler.FILE_STREAM);
+    req.setParams(newParams);
 
-    ModifiableSolrParams newparams = new ModifiableSolrParams(req.getOriginalParams());
-    newparams.set(CommonParams.WT, ReplicationHandler.FILE_STREAM);
-    req.setParams(newparams);
-
-    InputStream in = getClass().getResourceAsStream(filepath);
-    byte[] data = IOUtils.toByteArray(in);
-
-    String contentType = getContentType(filepath);
-
-    SolrCore.RawWriter writer = new SolrCore.RawWriter() {
+    final String contentType = contentType(filepath);
+    final byte[] data = IOUtils.toByteArray(getClass().getResourceAsStream(filepath));
+    final SolrCore.RawWriter writer = new SolrCore.RawWriter() {
 
       @Override
       public void write(OutputStream os) throws IOException {
@@ -92,64 +81,21 @@ public class YasaHandler {
     rsp.add(ReplicationHandler.FILE_STREAM, writer);
   }
 
-  String getContentType(String filepath) {
-    Map<String, String> types = Map.of(
-      "jpg", "image/jpg",
-      "png", "image/png",
-      "gif", "image/gif",
-      "svg", "image/svg+xml",
-      "htm", "text/html",
-      "html", "text/html",
-      "js", "text/javascript",
-      "css", "text/css",
-      "json", "application/json",
-      "xml", "application/xml"
-    );
+  private String contentType(final String filepath) {
+    final Map<String, String> types = new HashMap<>();
+    types.put("jpg", ContentType.IMAGE_JPEG.getMimeType());
+    types.put("jpeg", ContentType.IMAGE_JPEG.getMimeType());
+    types.put("png", ContentType.IMAGE_PNG.getMimeType());
+    types.put("gif", ContentType.IMAGE_GIF.getMimeType());
+    types.put("svg", ContentType.IMAGE_SVG.getMimeType());
+    types.put("htm", ContentType.TEXT_HTML.getMimeType());
+    types.put("html", ContentType.TEXT_HTML.getMimeType());
+    types.put("json", ContentType.APPLICATION_JSON.getMimeType());
+    types.put("xml", ContentType.APPLICATION_XML.getMimeType());
+    types.put("js", "text/javascript");
+    types.put("css", "text/css");
+
     final String extension = filepath.split("\\.")[filepath.split("\\.").length - 1];
     return types.getOrDefault(extension, "text/plain");
   }
-
-  private boolean forwardIfNeeded(SolrQueryRequest req, SolrQueryResponse rsp, String filepath) {
-    String[] whitelist = {
-      "css",
-      "favicon.ico",
-      "img",
-      "index.html",
-      "js",
-      "libs",
-      "manifest.json",
-      "partials",
-      "webapp",
-      "WEB-INF"
-    };
-    boolean needsForwarding = true;
-    for (String w : whitelist) {
-      if (filepath.startsWith("/" + w)) {
-        needsForwarding = false;
-        break;
-      }
-    }
-    if (needsForwarding) {
-      forward(req, filepath, req.getParams(), rsp);
-      return true;
-    }
-    return false;
-  }
-
-  private void forward(SolrQueryRequest req, String path, SolrParams params, SolrQueryResponse rsp) {
-    LocalSolrQueryRequest r = new LocalSolrQueryRequest(req.getCore(), params);
-    SolrRequestHandler rh = coreContainer.getRequestHandler(path);
-    if (rh == null) {
-      path = path.startsWith("/") ? path.substring(1) : path;
-      String first = path.split("/")[0];
-      if (coreContainer.getCore(first) != null) {
-        String handlerPath = path.substring(first.length());
-        rh = coreContainer.getCore(first).getRequestHandler(handlerPath);
-      }
-    }
-    if (rh != null) {
-      rh.handleRequest(r, rsp);
-    }
-  }
-
 }

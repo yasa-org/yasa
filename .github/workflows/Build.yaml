@@ -38,11 +38,9 @@ jobs:
         with:
           java-version: 9
       - name: Install
-        run: cd ui && npm i
+        run: cd yasa-ui && npm i
       - name: Lint
-        run: cd ui && npm run lint
-      - name: Build
-        run: cd ui && npm run build
+        run: cd yasa-ui && npm run lint
       - name: Build Plugin
         run: ./mvnw -B clean package
 

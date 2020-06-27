@@ -8,7 +8,7 @@ services:
     networks:
       - yasa
     user: 'root:root'
-    entrypoint: ['sh', '-c', 'solr start -force -c -e techproducts && tail -f /dev/null']
+    entrypoint: ['sh', '-c', 'solr start -force -c -e techproducts -Denable.packages=true && tail -f /dev/null']
 
   yasa:
     image: nginx:1.17

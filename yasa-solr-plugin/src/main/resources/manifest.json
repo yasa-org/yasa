@@ -1,0 +1,26 @@
+{
+  "version-constraint": "8 - 9",
+  "plugins": [
+    {
+      "name": "yasa",
+      "setup-command": {
+        "path": "/api/cluster/plugin",
+        "method": "POST",
+        "payload": {
+          "add": {
+            "name": "yasa",
+            "class": "yasa:io.github.kezhenxu94.YasaHandler",
+            "version": "${package-version}"
+          }
+        }
+      },
+      "uninstall-command": {
+        "path": "/api/cluster/plugin",
+        "method": "POST",
+        "payload": {
+          "remove": "yasa"
+        }
+      }
+    }
+  ]
+}

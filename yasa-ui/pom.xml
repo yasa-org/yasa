@@ -5,23 +5,12 @@
   <parent>
     <artifactId>yasa</artifactId>
     <groupId>io.github.kezhenxu94</groupId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>0.5.1</version>
   </parent>
+
   <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>solr-plugin</artifactId>
-
-  <dependencies>
-    <dependency>
-      <groupId>org.apache.solr</groupId>
-      <artifactId>solr-core</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>org.projectlombok</groupId>
-      <artifactId>lombok</artifactId>
-    </dependency>
-  </dependencies>
+  <artifactId>yasa-ui</artifactId>
 
   <build>
     <plugins>
@@ -30,7 +19,6 @@
         <artifactId>frontend-maven-plugin</artifactId>
         <version>${frontend-maven-plugin.version}</version>
         <configuration>
-          <workingDirectory>${ui.directory}</workingDirectory>
           <nodeVersion>v10.16.3</nodeVersion>
         </configuration>
         <executions>
@@ -59,25 +47,6 @@
             </configuration>
           </execution>
         </executions>
-      </plugin>
-
-      <plugin>
-        <artifactId>maven-resources-plugin</artifactId>
-        <version>${maven-resources-plugin.version}</version>
-        <configuration>
-          <encoding>${project.build.sourceEncoding}</encoding>
-          <outputDirectory>${project.build.directory}</outputDirectory>
-          <resources>
-            <resource>
-              <targetPath>${basedir}/target/classes</targetPath>
-              <directory>${ui.directory}/dist</directory>
-            </resource>
-            <resource>
-              <targetPath>${basedir}/target/classes</targetPath>
-              <directory>src/main/resources</directory>
-            </resource>
-          </resources>
-        </configuration>
       </plugin>
     </plugins>
   </build>
