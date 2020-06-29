@@ -43,14 +43,14 @@ You can install **{project-name}** as a Solr Plugin:
 
 [source,bash,subs="verbatim,attributes"]
 ----
-solr package add-repo yasa "https://raw.githubusercontent.com/yasa-org/yasa/master/repo/"
+bin/solr package add-repo yasa "https://raw.githubusercontent.com/yasa-org/yasa/master/repo/"
 
-solr package install yasa
+bin/solr package install yasa
 
 # Should be unnecessary in the future
 curl "http://localhost:8983/solr/admin/collections?action=CREATE&name=whatever&numShards=1"
-solr package undeploy yasa -y -collections whatever
-solr package deploy yasa -y -collections whatever
+bin/solr package undeploy yasa -y -collections whatever
+bin/solr package deploy yasa -y -collections whatever
 ----
 
 Then navigate your browser to http://localhost:8983/v2/plugin/yasa/index.html
