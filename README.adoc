@@ -53,7 +53,7 @@ bin/solr package undeploy yasa -y -collections whatever
 bin/solr package deploy yasa -y -collections whatever
 ----
 
-Then navigate your browser to http://localhost:8983/v2/plugin/yasa
+Then navigate your browser to http://localhost:8983/v2/plugin/yasa/index.html
 
 === Standalone Mode
 
