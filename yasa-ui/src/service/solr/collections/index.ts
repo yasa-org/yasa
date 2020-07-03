@@ -27,8 +27,9 @@ export interface CollectionForm {
   numShards: number;
   replicationFactor: number;
   maxShardsPerNode: number;
-  createNodeSet: string;
+  createNodeSet?: string;
   'collection.configName': string;
+  autoAddReplicas: boolean;
 }
 
 export interface Doc {
