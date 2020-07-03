@@ -59,7 +59,6 @@ export default class NewCollectionForm extends Vue {
   @Store.State private newCollectionFormData!: CollectionForm;
 
   @Store.Action private loadConfigSets!: () => void;
-  @Store.Action private doCreateCollection!: () => void;
 
   created() {
     this.loadConfigSets();

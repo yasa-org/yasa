@@ -39,12 +39,13 @@ export default class ManagementCollections extends VuexModule {
   public configSets: string[] = [];
   public newCollectionFormData: CollectionForm = {
     'collection.configName': '',
-    createNodeSet: '',
+    createNodeSet: undefined,
     maxShardsPerNode: 1,
     name: '',
     numShards: 0,
     replicationFactor: 1,
     'router.name': 'compositeId',
+    autoAddReplicas: false,
   };
 
   @Mutation
