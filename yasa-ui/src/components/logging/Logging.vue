@@ -8,7 +8,11 @@
       <el-table-column width="80" prop="level" label="Level" show-overflow-tooltip></el-table-column>
       <el-table-column width="100" prop="core" label="Core" show-overflow-tooltip></el-table-column>
       <el-table-column width="300" prop="logger" label="Logger" show-overflow-tooltip></el-table-column>
-      <el-table-column prop="message" label="Message"></el-table-column>
+      <el-table-column label="Message">
+        <template slot-scope="props">
+          <span v-for="(line, index) in props.row.message.split('\n')" :key="index"> {{ line }} <br /> </span>
+        </template>
+      </el-table-column>
     </el-table>
   </div>
 </template>
