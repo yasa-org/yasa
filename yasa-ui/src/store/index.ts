@@ -45,6 +45,7 @@ const store = new Vuex.Store({
         .system()
         .then((modeRes) => {
           context.commit('setSolrMode', modeRes.data.mode);
+          context.commit('setNode', modeRes.data.node);
           if (modeRes.data.mode === 'solrcloud') {
             return service.solr.collections.collections(params).then((res) => {
               context.commit('setCollections', res.data.collections);
@@ -74,11 +75,15 @@ const store = new Vuex.Store({
     setSolrMode(state, solrMode) {
       state.solrMode = solrMode;
     },
+    setNode(state, node) {
+      state.node = node;
+    },
   },
   state: {
     collections: [],
     loadingCollections: false,
     solrMode: undefined,
+    node: undefined,
   },
 });
 export default store;
