@@ -11,8 +11,11 @@
         router
       >
         <el-menu-item index="" @click="isCollapse = !isCollapse">
-          <i class="el-icon-yasa-bars"></i
-          ><span slot="title">{{ isCollapse ? $t('menu.expand') : $t('menu.collapse') }}</span>
+          <i class="el-icon-yasa-bars"></i>
+          <span slot="title">{{ isCollapse ? $t('menu.expand') : $t('menu.collapse') }}</span>
+        </el-menu-item>
+        <el-menu-item index="/legacy-ui" @click="back2LegacyUI()">
+          <i class="el-icon-yasa-back"></i><span slot="title">{{ $t('menu.back2LegacyUI') }}</span>
         </el-menu-item>
         <el-menu-item index="/dashboard">
           <i class="el-icon-yasa-dashboard"></i><span slot="title">{{ $t('menu.dashboard') }}</span>
@@ -34,10 +37,10 @@
             <i class="el-icon-yasa-manage"></i><span slot="title">{{ $t('menu.management') }}</span>
           </template>
           <el-menu-item index="/management/config-sets">
-            <i class="el-icon-yasa-config"></i><span slot="title">Config Set</span>
+            <i class="el-icon-yasa-config"></i><span slot="title">{{ $t('menu.configSet') }}</span>
           </el-menu-item>
           <el-menu-item index="/management/collections">
-            <i class="el-icon-yasa-collections"></i><span slot="title">Collections</span>
+            <i class="el-icon-yasa-collections"></i><span slot="title">{{ $t('menu.collections') }}</span>
           </el-menu-item>
         </el-submenu>
         <el-submenu index="/cloud" v-if="solrMode === 'solrcloud'">
@@ -45,10 +48,10 @@
             <i class="el-icon-yasa-cloud"></i><span slot="title">{{ $t('menu.cloud') }}</span>
           </template>
           <el-menu-item index="/cloud/tree">
-            <i class="el-icon-yasa-tree"></i><span slot="title">Tree</span>
+            <i class="el-icon-yasa-tree"></i><span slot="title">{{ $t('menu.tree') }}</span>
           </el-menu-item>
           <el-menu-item index="/cloud/zk-status">
-            <i class="el-icon-yasa-zookeeper"></i><span slot="title">ZK Status</span>
+            <i class="el-icon-yasa-zookeeper"></i><span slot="title">{{ $t('menu.zkStatus') }}</span>
           </el-menu-item>
         </el-submenu>
       </el-menu>
@@ -69,11 +72,19 @@ import { Action, State } from 'vuex-class';
 export default class App extends Vue {
   private isCollapse: boolean = localStorage.getItem('isCollapse') === 'true';
 
+  @State private node!: string;
   @State private solrMode!: string;
   @Action private loadCollections!: () => void;
 
   created() {
     this.loadCollections();
+  }
+
+  private back2LegacyUI() {
+    const segments = /.+:(\d+).*/.exec(this.node);
+    const port = segments && segments.length > 1 ? segments[1] : '80';
+    const host = window.location.host.includes(':') ? window.location.host.replace(/:.*/, '') : window.location.host;
+    window.location.href = `http://${host}:${port}`;
   }
 
   @Watch('isCollapse')
@@ -95,7 +106,7 @@ export default class App extends Vue {
 <style lang="scss">
 @import 'style/common';
 @import 'style/normalize.css';
-@import '//at.alicdn.com/t/font_767061_xbgzclhfj7n.css';
+@import '//at.alicdn.com/t/font_767061_jt8rtyzo5h.css';
 
 #app {
   font-family: $default-fonts;
@@ -103,7 +114,7 @@ export default class App extends Vue {
   -moz-osx-font-smoothing: grayscale;
 }
 #nav:not(.el-menu--collapse) {
-  width: 200px;
+  width: 220px;
 }
 #nav {
   height: 100vh;
