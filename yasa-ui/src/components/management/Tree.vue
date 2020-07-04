@@ -6,26 +6,22 @@
     <el-container>
       <code-editor
         id="file-content-editor"
+        v-model="fileContent"
         :value="fileContent"
-        :mode="mode"
-        theme="ace/theme/dawn"
+        :language="mode"
         v-loading="loadingFileContent"
         read-only="true"
-        show-gutter="true"
       ></code-editor>
     </el-container>
   </el-container>
 </template>
 
 <script lang="ts">
-import CodeEditor from '../dev-tools/code-editor/AceEditor.vue';
+import CodeEditor from '../dev-tools/code-editor/CodeEditor.vue';
 import { ZkTreeNode } from '@service/solr/admin/zookeeper';
 import { Component, Vue } from 'vue-property-decorator';
 import { TreeNode } from 'element-ui/types/tree';
 import { namespace } from 'vuex-class';
-import 'brace/mode/xml';
-import 'brace/mode/json';
-import 'brace/mode/text';
 
 const Store = namespace('management/tree');
 
@@ -62,11 +58,13 @@ export default class Tree extends Vue {
           this.loadingFileContent = false;
           this.setFileContent(res.data.znode.data || '');
           if (url.match(/.*\.json$/)) {
-            this.mode = 'ace/mode/json';
+            this.mode = 'json';
           } else if (url.match(/.*\.xml$/) || url.match(/managed-schema$/)) {
-            this.mode = 'ace/mode/xml';
+            this.mode = 'xml';
+          } else if (url.match(/.*\.js$/)) {
+            this.mode = 'javascript';
           } else {
-            this.mode = 'ace/mode/text';
+            this.mode = 'text';
           }
         },
         () => (this.loadingFileContent = false),
@@ -88,5 +86,6 @@ export default class Tree extends Vue {
 #file-content-editor {
   width: 100%;
   height: 100vh;
+  border-left: lightgray 1px solid;
 }
 </style>

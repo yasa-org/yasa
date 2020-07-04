@@ -17,6 +17,7 @@
  *
  */
 
+import CodeEditor from '@components/dev-tools/code-editor/CodeEditor.vue';
 import Dashboard from '@components/dashboard/Dashboard.vue';
 import DevTools from '@components/dev-tools/DevTools.vue';
 import Discover from '@components/discover/Discover.vue';
@@ -41,6 +42,8 @@ Router.prototype.push = function push(location: RawLocation) {
 export default new Router({
   routes: [
     { path: '/', redirect: '/dashboard' },
+
+    { path: '/test', component: CodeEditor },
 
     { path: '/dashboard', component: Dashboard },
 

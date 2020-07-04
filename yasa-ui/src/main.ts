@@ -27,7 +27,6 @@ import '@/style/style.scss';
 import ElementUI from 'element-ui';
 import locale from 'element-ui/lib/locale/lang/en';
 import Vue from 'vue';
-import TreeView from 'vue-json-tree-view';
 
 import service from '@/service';
 import 'echarts/lib/chart/bar';
@@ -41,7 +40,6 @@ import 'echarts/lib/component/tooltip';
 import ECharts from 'vue-echarts/components/ECharts.vue';
 
 Vue.use(ElementUI, { locale, size: 'mini' });
-Vue.use(TreeView);
 
 Vue.use({
   install(VueType: typeof Vue) {
