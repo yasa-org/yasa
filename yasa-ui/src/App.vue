@@ -54,6 +54,30 @@
             <i class="el-icon-yasa-zookeeper"></i><span slot="title">{{ $t('menu.zkStatus') }}</span>
           </el-menu-item>
         </el-submenu>
+        <el-submenu index="/help">
+          <template slot="title">
+            <i class="el-icon-yasa-help"></i><span slot="title">{{ $t('menu.help') }}</span>
+          </template>
+          <el-menu-item index="/help/doc" @click="openUrl('http://lucene.apache.org/solr/')">
+            <i class="el-icon-yasa-doc"></i>
+            <span slot="title">{{ $t('menu.doc') }}</span>
+          </el-menu-item>
+          <el-menu-item index="/help/issue-tracker" @click="openUrl('http://issues.apache.org/jira/browse/SOLR')">
+            <i class="el-icon-yasa-bug"></i>
+            <span slot="title">{{ $t('menu.issue-tracker') }}</span>
+          </el-menu-item>
+          <el-menu-item index="/help/community-forum" @click="openUrl('http://wiki.apache.org/solr/UsingMailingLists')">
+            <i class="el-icon-yasa-email"></i>
+            <span slot="title">{{ $t('menu.community-forum') }}</span>
+          </el-menu-item>
+          <el-menu-item
+            index="/help/syntax"
+            @click="openUrl('https://lucene.apache.org/solr/guide/query-syntax-and-parsing.html')"
+          >
+            <i class="el-icon-yasa-code"></i>
+            <span slot="title">{{ $t('menu.solr-query-syntax') }}</span>
+          </el-menu-item>
+        </el-submenu>
       </el-menu>
     </el-aside>
     <el-container>
@@ -78,6 +102,10 @@ export default class App extends Vue {
 
   created() {
     this.loadCollections();
+  }
+
+  private openUrl(url: string) {
+    window.open(url, '_blank');
   }
 
   private back2LegacyUI() {
@@ -106,7 +134,7 @@ export default class App extends Vue {
 <style lang="scss">
 @import 'style/common';
 @import 'style/normalize.css';
-@import '//at.alicdn.com/t/font_767061_jt8rtyzo5h.css';
+@import '//at.alicdn.com/t/font_767061_pfvdbgcc81c.css';
 
 #app {
   font-family: $default-fonts;
@@ -114,7 +142,7 @@ export default class App extends Vue {
   -moz-osx-font-smoothing: grayscale;
 }
 #nav:not(.el-menu--collapse) {
-  width: 220px;
+  width: 240px;
 }
 #nav {
   height: 100vh;
