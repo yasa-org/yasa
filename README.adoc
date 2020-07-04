@@ -4,6 +4,8 @@
 
 = {project-name} - Yet Another Solr Admin
 
+image:https://api.codacy.com/project/badge/Grade/e80021d5316e40fb8e0d175f366e6e1f[link="https://app.codacy.com/gh/yasa-org/yasa?utm_source=github.com&utm_medium=referral&utm_content=yasa-org/yasa&utm_campaign=Badge_Grade_Dashboard"]
+
 image:https://github.com/{org-name}/{project-name-lower}/workflows/Build/badge.svg?branch=master[capition="Build Status", link=https://github.com/{org-name}/{project-name-lower}/actions?query=branch%3Amaster]
 image:https://img.shields.io/github/release/{org-name}/{project-name-lower}.svg[capition="Release Version", link=https://github.com/{org-name}/{project-name-lower}/releases]
 image:https://img.shields.io/badge/SolrCloud-6.1.0+-D9411E.svg[capition="Solr Version", link=http://lucene.apache.org/solr/]
