@@ -4,10 +4,11 @@
 
 <script lang="ts">
 import * as monaco from 'monaco-editor';
-import { editor, IPosition } from 'monaco-editor';
+import { editor, IPosition, languages } from 'monaco-editor';
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 import { CommandProps } from '@components/dev-tools/code-editor/CodeEditor';
 import IStandaloneCodeEditor = editor.IStandaloneCodeEditor;
+import IMonarchLanguage = languages.IMonarchLanguage;
 
 @Component
 export default class CodeEditor extends Vue {
@@ -24,6 +25,19 @@ export default class CodeEditor extends Vue {
     required: false,
   })
   private language?: string;
+
+  constructor() {
+    super();
+
+    monaco.languages.register({ id: 'yasa' });
+
+    monaco.languages.setMonarchTokensProvider('yasa', {
+      ignoreCase: true,
+      tokenizer: {
+        root: [[/^(GET|PUT|POST|HEAD|DELETE)\s+/, 'keyword']],
+      },
+    } as IMonarchLanguage);
+  }
 
   @Watch('value')
   onValueChanged(value: string, originalValue: string) {

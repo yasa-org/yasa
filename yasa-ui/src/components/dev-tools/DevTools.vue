@@ -2,7 +2,13 @@
   <div id="root">
     <el-row>
       <el-col :span="10">
-        <code-editor class="code-editor" v-model="content" :value="content" :commands="commands"></code-editor>
+        <code-editor
+          class="code-editor"
+          v-model="content"
+          :value="content"
+          :commands="commands"
+          language="yasa"
+        ></code-editor>
       </el-col>
       <el-col :span="14">
         <code-editor
