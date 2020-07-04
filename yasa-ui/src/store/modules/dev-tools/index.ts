@@ -50,14 +50,16 @@ export default class DevTools extends VuexModule {
   public doGet({ url, data }: { url: string; data: object }) {
     const context = this.context;
     context.commit('setLoading', true);
-    http.get(url, { params: data }).then(
-      (res: AxiosResponse<GenericResult>) => {
+    http
+      .get(url, { params: data })
+      .then((res: AxiosResponse<GenericResult>) => {
         context.commit('setResult', res.data);
+      })
+      .catch((err) => {
+        context.commit('setResult', err);
+      })
+      .finally(() => {
         context.commit('setLoading', false);
-      },
-      () => {
-        context.commit('setLoading', false);
-      },
-    );
+      });
   }
 }

@@ -17,4 +17,8 @@
  *
  */
 
-declare module 'vue-json-tree-view';
+import { editor } from 'monaco-editor';
+import IEditor = editor.IEditor;
+
+export type Handler = (editor: IEditor) => void;
+export type CommandProps = { keybinding: number; handler: Handler }[];

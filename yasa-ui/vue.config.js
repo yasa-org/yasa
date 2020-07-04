@@ -1,3 +1,4 @@
+const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 const path = require('path');
 
 module.exports = {
@@ -29,5 +30,12 @@ module.exports = {
         maxSize: 250000,
       },
     },
+  },
+  chainWebpack: (config) => {
+    config.plugin('monaco-editor').use(MonacoWebpackPlugin, [
+      {
+        languages: ['json', 'javascript', 'html', 'xml'],
+      },
+    ]);
   },
 };

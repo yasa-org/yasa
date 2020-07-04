@@ -23,11 +23,9 @@
       <code-editor
         id="file-content-editor"
         :value="fileContent"
-        :mode="mode"
-        theme="ace/theme/dawn"
+        :language="language"
         v-loading="loadingFileContent"
         read-only="true"
-        show-gutter="true"
       ></code-editor>
     </el-container>
     <el-dialog title="Create Config Set" :visible.sync="createConfigSetDialogVisible">
@@ -63,11 +61,8 @@
 <script lang="ts">
 import { namespace } from 'vuex-class';
 import { Component, Vue } from 'vue-property-decorator';
-import CodeEditor from '@components/dev-tools/code-editor/AceEditor.vue';
+import CodeEditor from '@components/dev-tools/code-editor/CodeEditor.vue';
 import { ZkTreeNode, ZookeeperResponse } from '@service/solr/admin/zookeeper';
-import 'brace/mode/xml';
-import 'brace/mode/json';
-import 'brace/mode/text';
 import { ElUpload } from 'element-ui/types/upload';
 import { TreeNode } from 'element-ui/types/tree';
 import { AxiosResponse } from 'axios';
@@ -89,7 +84,7 @@ export default class ConfigSets extends Vue {
 
   private loadingFileContent = false;
   private createConfigSetDialogVisible = false;
-  private mode = 'ace/mode/text';
+  private language = 'text';
   private newConfigSet = {
     name: '',
     baseConfigSet: '',
@@ -114,11 +109,13 @@ export default class ConfigSets extends Vue {
           this.loadingFileContent = false;
           this.setFileContent(res.data.znode.data || '');
           if (url.match(/.*\.json$/)) {
-            this.mode = 'ace/mode/json';
+            this.language = 'json';
           } else if (url.match(/.*\.xml$/) || url.match(/managed-schema$/)) {
-            this.mode = 'ace/mode/xml';
+            this.language = 'xml';
+          } else if (url.match(/.*\.js$/)) {
+            this.language = 'javascript';
           } else {
-            this.mode = 'ace/mode/text';
+            this.language = 'text';
           }
         },
         () => (this.loadingFileContent = false),
@@ -204,6 +201,7 @@ export default class ConfigSets extends Vue {
 #file-content-editor {
   width: 100%;
   height: 100vh;
+  border-left: lightgray 1px solid;
 }
 .el-aside,
 .el-tree {
