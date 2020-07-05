@@ -110,7 +110,7 @@ export default class Dashboard extends Vue {
     this.$service.solr.admin.info
       .system()
       .then((res) => (this.response = res.data))
-      .catch((err) => this.$notify.error(err))
+      .catch((err) => this.$notify.error(err.message))
       .finally(() => (this.loadingSystemInfo = false));
   }
 

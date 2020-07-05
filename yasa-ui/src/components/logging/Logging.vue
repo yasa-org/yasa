@@ -58,9 +58,7 @@ export default class Discover extends Vue {
       .then((response) => {
         this.loggingResponse = response.data;
       })
-      .catch((err) => {
-        this.$notify.error(err);
-      });
+      .catch((err) => this.$notify.error(err.message));
   }
 
   created() {
