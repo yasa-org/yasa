@@ -135,11 +135,6 @@ export default class App extends Vue {
 @import 'style/common';
 @import '//at.alicdn.com/t/font_767061_pfvdbgcc81c.css';
 
-#app {
-  font-family: $default-fonts;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
 #nav:not(.el-menu--collapse) {
   width: 240px;
 }

@@ -100,7 +100,7 @@ export default class DevTools extends Vue {
   }
 
   get displayResult() {
-    return JSON.stringify(this.result, null, '\t');
+    return JSON.stringify(this.result, null, 2);
   }
 }
 </script>
