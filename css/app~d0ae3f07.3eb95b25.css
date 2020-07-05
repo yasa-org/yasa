@@ -1,0 +1,37 @@
+@import url(//at.alicdn.com/t/font_767061_pfvdbgcc81c.css);
+/*!
+ *
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */body{height:100vh;overflow:hidden}*{padding:0;margin:0}a{text-decoration:none;color:#000}::-webkit-scrollbar-track{-webkit-box-shadow:inset 0 0 2px rgba(0,0,0,.3)}::-webkit-scrollbar{width:2px;height:2px}::-webkit-scrollbar-thumb{background-color:#282a36}.center{margin:auto;width:50%}*{font-family:JetBrains Mono,Menlo,Consolas,Monaco,monospace,Helvetica Neue,Helvetica,PingFang SC,Hiragino Sans GB,Microsoft YaHei,微软雅黑,Arial,sans-serif;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}#nav:not(.el-menu--collapse){width:240px}#content,#nav{height:100vh}#content{padding:0}.el-collapse-item__content{padding-bottom:0!important}#editor[data-v-0787bc3c]{width:100%;height:100%}#chart-root[data-v-072bec27]{width:100%;height:100%;overflow:auto;padding:0}#dashboard-root[data-v-ed4853cc]{padding:24px}i[data-v-ed4853cc]{margin-right:8px}.arg[data-v-ed4853cc]{font-family:Menlo,Monaco,Consolas monospace;font-size:9pt;word-break:break-all}#root[data-v-207da06c]{height:100vh;overflow:hidden}.el-col[data-v-207da06c],.el-row[data-v-207da06c]{height:100%}.code-editor[data-v-207da06c]{height:100%;border-left:1px solid #d3d3d3}#root[data-v-03aac870]{height:100vh}#root header[data-v-03aac870]{padding:8px}#root .el-header[data-v-03aac870]{padding:0 0 0 0}#root .el-aside[data-v-03aac870]{border-right:1px solid #d3d3d3;overflow-x:hidden;overflow-y:scroll}#root #container[data-v-03aac870]{height:calc(100% - 28px)}#root .el-main[data-v-03aac870]{padding:0}#root .el-select[data-v-03aac870]{width:198px}#root .el-col[data-v-03aac870]{height:100%}#root .el-button.operate-field-button[data-v-03aac870]{max-width:calc(100% - 30px)}#root .el-button span[data-v-03aac870]{max-width:40px;clear:both;display:inline-block;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}#root .operate-field-button[data-v-03aac870]{margin-left:8px}#root #load-more[data-v-03aac870]{width:100%}#root .field-stats[data-v-03aac870]{padding:8px;border-top:1px dashed #d3d3d3}#root .field-stats .value[data-v-03aac870]{max-width:100%;clear:both;display:inline-block;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}#root[data-v-12dc7a29]{height:calc(100% - 52px);padding-top:12px}#operations[data-v-12dc7a29]{margin-right:12px}[data-v-12dc7a29] .el-table .yellow{background:#ffd930;color:#000}[data-v-12dc7a29] .el-table .fatal,[data-v-12dc7a29] .el-table .red{background:red;color:#000}#logs-table[data-v-12dc7a29]{margin-top:12px;border-top:1px dashed #282a36}#collections-root[data-v-d6867900]{height:calc(100% - 52px);padding-top:12px}#operations[data-v-d6867900]{margin-right:12px}.el-select[data-v-d6867900]{width:100%}#collections[data-v-d6867900]{margin-top:12px;border-top:1px dashed #282a36}#file-content-editor[data-v-d1cffd76]{width:100%;height:100vh;border-left:1px solid #d3d3d3}.el-aside[data-v-d1cffd76],.el-tree[data-v-d1cffd76]{height:100vh}.custom-tree-node[data-v-d1cffd76]{-webkit-box-flex:1;-ms-flex:1;flex:1;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-align:center;-ms-flex-align:center;align-items:center;-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between;font-size:14px;padding-right:8px}.el-aside[data-v-1b42847c],.el-tree[data-v-1b42847c]{height:100vh}#file-content-editor[data-v-1b42847c]{width:100%;height:100vh;border-left:1px solid #d3d3d3}#buckets[data-v-604b3db5]{margin-top:12px}.el-input[data-v-604b3db5],.el-select[data-v-604b3db5]{width:100%}#chart-root[data-v-a897711e]{height:100%;overflow:auto;padding:0}.el-container[data-v-a897711e],.el-header[data-v-a897711e],.el-main[data-v-a897711e]{height:100%;padding:0}.el-header[data-v-a897711e]{padding:0 8px}.el-aside[data-v-a897711e]{padding:8px;border-right:1px solid #d3d3d3}.el-select[data-v-a897711e]{width:290px}.chart[data-v-a897711e]{width:100%;height:100%}#root[data-v-458d01cc]{height:calc(100% - 52px);padding-top:12px}#operations[data-v-458d01cc]{margin-right:12px}#status-table[data-v-458d01cc]{margin-top:12px;border-top:1px dashed #282a36}
+/*!
+ *
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */[class*=" el-icon-fa"],[class^=el-icon-fa]{font-family:FontAwesome,sans-serif!important}[class*=" el-icon-fa"],[class*=" el-icon-yasa"],[class^=el-icon-fa],[class^=el-icon-yasa]{display:inline-block;font-style:normal!important;font-variant:normal!important;font-weight:400!important;font-size:inherit;text-rendering:auto;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}[class*=" el-icon-yasa"],[class^=el-icon-yasa]{font-family:iconfont,sans-serif!important}
