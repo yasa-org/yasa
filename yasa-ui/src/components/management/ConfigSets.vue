@@ -179,16 +179,16 @@ export default class ConfigSets extends Vue {
           baseConfigSet: this.newConfigSet.baseConfigSet,
         },
       })
-      .then(
-        () => {
-          this.createConfigSetDialogVisible = false;
-          this.creatingConfigSet = false;
-          this.loadConfigSets();
-        },
-        () => {
-          this.creatingConfigSet = false;
-        },
-      );
+      .then(() => {
+        this.createConfigSetDialogVisible = false;
+        this.loadConfigSets();
+      })
+      .catch((err) => {
+        this.$notify.error(`${err?.response?.statusText}: ${err?.response?.data?.exception?.msg}`);
+      })
+      .finally(() => {
+        this.creatingConfigSet = false;
+      });
   }
 
   created() {
