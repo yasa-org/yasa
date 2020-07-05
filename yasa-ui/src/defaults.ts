@@ -19,9 +19,10 @@
 
 export default {
   fonts: [
-    'Monaco',
+    'JetBrains Mono',
     'Menlo',
     'Consolas',
+    'Monaco',
     'monospace',
     'Helvetica Neue',
     'Helvetica',
