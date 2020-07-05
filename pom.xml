@@ -25,7 +25,7 @@
 
   <groupId>io.github.kezhenxu94</groupId>
   <artifactId>yasa</artifactId>
-  <version>0.5.1</version>
+  <version>0.5.2</version>
 
   <modules>
     <module>yasa-ui</module>

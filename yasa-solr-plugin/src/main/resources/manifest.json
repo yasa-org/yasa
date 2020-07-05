@@ -3,24 +3,27 @@
   "plugins": [
     {
       "name": "yasa",
+      "type": "cluster",
       "setup-command": {
         "path": "/api/cluster/plugin",
         "method": "POST",
-        "payload": {
-          "add": {
-            "name": "yasa",
-            "class": "yasa:io.github.kezhenxu94.YasaHandler",
-            "version": "${package-version}"
-          }
-        }
+        "payload": { "add": {"name":"${package-name}:${plugin-name}", 
+                "class": "yasa:io.github.kezhenxu94.YasaHandler", "version": "${package-version}", "path-prefix": "${YASA-PATH-PREFIX}"}}
+      },
+      "verify-command": {
+        "path": "/api/cluster/zk/data/clusterprops.json",
+        "method": "GET",
+        "condition": "$['plugin'].['${package-name}:${plugin-name}'].['version']",
+        "expected": "${package-version}"
       },
       "uninstall-command": {
         "path": "/api/cluster/plugin",
         "method": "POST",
-        "payload": {
-          "remove": "yasa"
-        }
+        "payload": {"remove": "${package-name}:${plugin-name}"}
       }
     }
-  ]
+  ],
+  "parameter-defaults": {
+    "YASA-PATH-PREFIX": "yasa"
+  }
 }
