@@ -12,7 +12,8 @@
                 <el-collapse>
                   <el-collapse-item v-for="(replica, name) in shards.row.replicas" :key="name" :name="name">
                     <template slot="title">
-                      <i class="el-icon-yasa-replica"> Replica: {{ name }}</i>
+                      <i class="el-icon-yasa-replica"></i>
+                      <span style="margin-left: 6px;">Replica: {{ name }}</span>
                     </template>
                     <el-form label-width="120px" label-suffix=":">
                       <el-form-item label="Core">
