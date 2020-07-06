@@ -18,15 +18,21 @@
 package io.github.kezhenxu94;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.entity.ContentType;
+import org.apache.lucene.analysis.util.ResourceLoader;
+import org.apache.lucene.analysis.util.ResourceLoaderAware;
 import org.apache.solr.api.Command;
 import org.apache.solr.api.EndPoint;
 import org.apache.solr.client.solrj.SolrRequest.METHOD;
+import org.apache.solr.common.SolrException;
+import org.apache.solr.common.SolrException.ErrorCode;
 import org.apache.solr.common.params.CommonParams;
 import org.apache.solr.common.params.ModifiableSolrParams;
 import org.apache.solr.core.CoreContainer;
@@ -36,35 +42,50 @@ import org.apache.solr.request.SolrQueryRequest;
 import org.apache.solr.response.SolrQueryResponse;
 import org.apache.solr.security.PermissionNameProvider;
 
-import static io.github.kezhenxu94.YasaHandler.PLUGIN_PATH;
-
 @EndPoint(
   method = METHOD.GET,
-  path = PLUGIN_PATH + "/*",
+  path = "$path-prefix/*",
   permission = PermissionNameProvider.Name.CONFIG_READ_PERM
 )
 @RequiredArgsConstructor
-@SuppressWarnings("unused")
-public class YasaHandler {
-  public static final String PLUGIN_PATH = "/plugin/yasa";
-
+public class YasaHandler implements ResourceLoaderAware {
+  @SuppressWarnings("unused")
   private final CoreContainer coreContainer;
+
+  private ResourceLoader loader = null;
+
+  @Override
+  public void inform(ResourceLoader loader) {
+    this.loader = loader;
+  }
 
   @Command
   public void call(SolrQueryRequest req, SolrQueryResponse rsp) throws IOException {
-    final String path = req.getHttpSolrCall().getPath();
+    String path = req.getHttpSolrCall().getPath();
+    String filepath = resolveFilePath(path);
 
-    String filepath = path.substring(path.indexOf(PLUGIN_PATH) + PLUGIN_PATH.length());
-    if ("".equalsIgnoreCase(filepath) || "/".equalsIgnoreCase(filepath)) {
-      filepath = "/index.html";
+    final InputStream inputStream = loader.openResource(filepath);
+    if (inputStream == null) {
+      throw new SolrException(ErrorCode.NOT_FOUND, "File not found: " + filepath);
     }
 
+    final byte[] data;
+    final String contentType;
+
+    if ("".equals(filepath)) {
+      String indexPath = path.endsWith("/") ? path + "index.html" : path + "/index.html";
+      indexPath = indexPath.replaceAll("____v2", "v2");
+      data = ("<meta http-equiv=\"Refresh\" content=\"0; url='" + indexPath + "'\" />").getBytes(
+        StandardCharsets.UTF_8);
+      contentType = ContentType.TEXT_HTML.getMimeType();
+    } else {
+      data = IOUtils.toByteArray(inputStream);
+      contentType = contentType(filepath);
+    }
     final ModifiableSolrParams newParams = new ModifiableSolrParams(req.getOriginalParams());
     newParams.set(CommonParams.WT, ReplicationHandler.FILE_STREAM);
     req.setParams(newParams);
 
-    final String contentType = contentType(filepath);
-    final byte[] data = IOUtils.toByteArray(getClass().getResourceAsStream(filepath));
     final SolrCore.RawWriter writer = new SolrCore.RawWriter() {
 
       @Override
@@ -97,5 +118,19 @@ public class YasaHandler {
 
     final String extension = filepath.split("\\.")[filepath.split("\\.").length - 1];
     return types.getOrDefault(extension, "text/plain");
+  }
+
+  private String resolveFilePath(String path) {
+    // Path can be: /____v2/yasa/index.html
+    if (path.split("/").length < 3) {
+      throw new SolrException(ErrorCode.BAD_REQUEST, "Can't parse path: " + path);
+    }
+    String basepath = "/" + path.split("/")[1] + "/" + path.split("/")[2];
+    String filepath = path.substring(path.indexOf(basepath) + basepath.length());
+
+    if (filepath.startsWith("/")) {
+      filepath = filepath.substring(1);
+    }
+    return filepath;
   }
 }

@@ -57,9 +57,10 @@ address accordingly
 
 == Installation
 
-=== Solr Plugin (Recommended)
+=== Solr Package (Recommended as of Solr 8.6)
 
-You can install **{project-name}** as a Solr Plugin:
+==== Installation
+You can install **{project-name}** as a Solr package:
 
 [source,bash,subs="verbatim,attributes"]
 ----
@@ -67,13 +68,43 @@ bin/solr package add-repo yasa "https://raw.githubusercontent.com/yasa-org/yasa/
 
 bin/solr package install yasa
 
-# Should be unnecessary in the future
-curl "http://localhost:8983/solr/admin/collections?action=CREATE&name=whatever&numShards=1"
-bin/solr package undeploy yasa -y -collections whatever
-bin/solr package deploy yasa -y -collections whatever
+bin/solr package deploy yasa -y -cluster
 ----
 
-Then navigate your browser to http://localhost:8983/v2/plugin/yasa/index.html
+Then navigate your browser to http://localhost:8983/v2/yasa
+
+To register **{project-name}** at another path, you can use:
+[source,bash,subs="verbatim,attributes"]
+----
+bin/solr package deploy yasa -y -cluster -p YASA-PATH-PREFIX=mysolrui
+----
+
+Then navigate your browser to http://localhost:8983/v2/mysolrui
+
+==== Updating to a newer version
+To check installed version and available versions of the package,
+[source,bash,subs="verbatim,attributes"]
+----
+bin/solr package list-installed
+
+bin/solr package list-available
+----
+
+To update to a newer version,
+[source,bash,subs="verbatim,attributes"]
+----
+bin/solr package install yasa:<new-version>
+
+bin/solr package deploy yasa:<new-version> -y -cluster -update
+----
+
+==== Undeploying
+To undeploy,
+[source,bash,subs="verbatim,attributes"]
+----
+bin/solr package undeploy yasa -cluster
+----
+
 
 === Standalone Mode
 
