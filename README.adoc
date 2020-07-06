@@ -102,7 +102,7 @@ bin/solr package deploy yasa:<new-version> -y -cluster -update
 To undeploy,
 [source,bash,subs="verbatim,attributes"]
 ----
-bin/solr package add-repo yasa "https://raw.githubusercontent.com/yasa-org/yasa/master/repo/"
+bin/solr package undeploy yasa -cluster
 ----
 
 

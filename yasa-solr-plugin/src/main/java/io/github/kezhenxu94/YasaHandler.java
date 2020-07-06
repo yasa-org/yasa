@@ -20,7 +20,7 @@ package io.github.kezhenxu94;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
@@ -55,27 +55,28 @@ public class YasaHandler implements ResourceLoaderAware {
   private ResourceLoader loader = null;
 
   @Override
-  public void inform(ResourceLoader loader) throws IOException {
-    this.loader = loader;		
+  public void inform(ResourceLoader loader) {
+    this.loader = loader;
   }
 
   @Command
   public void call(SolrQueryRequest req, SolrQueryResponse rsp) throws IOException {
     String path = req.getHttpSolrCall().getPath();
-	String filepath = resolveFilePath(path);
+    String filepath = resolveFilePath(path);
 
-	InputStream in = loader.openResource(filepath);
-	if (in == null) {
-		throw new SolrException(ErrorCode.NOT_FOUND, "File not found: " + filepath);
-	}
+    InputStream in = loader.openResource(filepath);
+    if (in == null) {
+      throw new SolrException(ErrorCode.NOT_FOUND, "File not found: " + filepath);
+    }
 
     final byte[] data;
     final String contentType;
-    
+
     if ("".equals(filepath)) {
-      String indexPath = path.endsWith("/")? path + "index.html": path + "/index.html";
-      indexPath = indexPath.replaceAll("\\_\\_\\_\\_v2", "v2");
-      data = ("<meta http-equiv=\"Refresh\" content=\"0; url='" + indexPath + "'\" />").getBytes(Charset.forName("UTF-8"));
+      String indexPath = path.endsWith("/") ? path + "index.html" : path + "/index.html";
+      indexPath = indexPath.replaceAll("____v2", "v2");
+      data = ("<meta http-equiv=\"Refresh\" content=\"0; url='" + indexPath + "'\" />").getBytes(
+        StandardCharsets.UTF_8);
       contentType = ContentType.TEXT_HTML.getMimeType();
     } else {
       data = IOUtils.toByteArray(in);
@@ -118,16 +119,18 @@ public class YasaHandler implements ResourceLoaderAware {
     final String extension = filepath.split("\\.")[filepath.split("\\.").length - 1];
     return types.getOrDefault(extension, "text/plain");
   }
-  
+
   private String resolveFilePath(String path) {
     // Path can be: /____v2/yasa/index.html
-    if (path.split("/").length<3) {
-      throw new SolrException(ErrorCode.BAD_REQUEST, "Can't parse path: "+path);
+    if (path.split("/").length < 3) {
+      throw new SolrException(ErrorCode.BAD_REQUEST, "Can't parse path: " + path);
     }
     String basepath = "/" + path.split("/")[1] + "/" + path.split("/")[2];
     String filepath = path.substring(path.indexOf(basepath) + basepath.length());
 
-    if (filepath.startsWith("/")) filepath = filepath.substring(1);
-      return filepath;
+    if (filepath.startsWith("/")) {
+      filepath = filepath.substring(1);
+    }
+    return filepath;
   }
 }
