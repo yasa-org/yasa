@@ -36,25 +36,6 @@ image:https://img.shields.io/github/license/yasa-org/yasa[capition="License", li
 |image:https://user-images.githubusercontent.com/15965696/85683362-bd799900-b6ff-11ea-85f5-a77df20822a1.png[]
 |===
 
-== Try The Live Demo
-
-IMPORTANT: Note that the live demo requires a running Solr server, whose APIs(or default admin) can be accessed via your
-browser, if not, start one locally via Docker.
-
-- Start up a Solr server (if you don't have one running already)
-
-[source,bash,subs="verbatim,attributes"]
-----
-docker run -p 8983:8983 -u root:root solr:8.5 sh -c 'solr start -force -c -e techproducts && tail -f /dev/null'
-----
-
-- Install link:https://www.requestly.in[requestly]
-
-- Import the rules from https://app.requestly.io/rules/#sharedList/1593944721039-YASA , and adjust the targeted Solr API
-address accordingly
-
-- Navigate your browser to https://yasa-org.github.io
-
 == Installation
 
 === Solr Package (Recommended as of Solr 8.6)
