@@ -64,8 +64,8 @@ public class YasaHandler implements ResourceLoaderAware {
     String path = req.getHttpSolrCall().getPath();
     String filepath = resolveFilePath(path);
 
-    InputStream in = loader.openResource(filepath);
-    if (in == null) {
+    final InputStream inputStream = loader.openResource(filepath);
+    if (inputStream == null) {
       throw new SolrException(ErrorCode.NOT_FOUND, "File not found: " + filepath);
     }
 
@@ -79,7 +79,7 @@ public class YasaHandler implements ResourceLoaderAware {
         StandardCharsets.UTF_8);
       contentType = ContentType.TEXT_HTML.getMimeType();
     } else {
-      data = IOUtils.toByteArray(in);
+      data = IOUtils.toByteArray(inputStream);
       contentType = contentType(filepath);
     }
     final ModifiableSolrParams newParams = new ModifiableSolrParams(req.getOriginalParams());
