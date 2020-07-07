@@ -12,6 +12,16 @@
             "sig": "IacTnr889Phi+9fbQ7DCeqNLv5Q0gI9EnbEoAsqDNHzQkVr+PJjrZzFfgnXp39F+yz0/PWeAkaklwChyof2Hug=="
           }
         ]
+      },
+      {
+        "version": "0.5.2",
+        "date": "2020-06-26",
+        "artifacts": [
+          {
+            "url": "https://github.com/yasa-org/yasa/releases/download/v0.5.2/yasa-solr-plugin-0.5.2.jar",
+            "sig": "kc1DYctaUFZw4M9+7SIjroOxCiXrjmsSP1np6R+UIXTGtOcy1OwuDJrTsZA2OYKamTkMIaVRrVPtr2Omqa9u0w=="
+          }
+        ]
       }
     ]
   }
