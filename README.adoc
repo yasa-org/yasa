@@ -86,7 +86,6 @@ To undeploy,
 bin/solr package undeploy yasa -cluster
 ----
 
-
 === Standalone Mode
 
 You can install **{project-name}** in the standalone mode without affecting the official Solr Admin. Here is how:
