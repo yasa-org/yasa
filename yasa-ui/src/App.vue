@@ -133,7 +133,7 @@ export default class App extends Vue {
 
 <style lang="scss">
 @import 'style/common';
-@import '//at.alicdn.com/t/font_767061_pfvdbgcc81c.css';
+@import 'style/iconfont/iconfont.css';
 
 #nav:not(.el-menu--collapse) {
   width: 240px;
