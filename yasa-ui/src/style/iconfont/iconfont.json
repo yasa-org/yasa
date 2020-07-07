@@ -1,0 +1,191 @@
+{
+  "id": "767061",
+  "name": "yasa",
+  "font_family": "iconfont",
+  "css_prefix_text": "el-icon-yasa-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "1013819",
+      "name": "doc文件",
+      "font_class": "doc",
+      "unicode": "e788",
+      "unicode_decimal": 59272
+    },
+    {
+      "icon_id": "1444437",
+      "name": "email",
+      "font_class": "email",
+      "unicode": "e712",
+      "unicode_decimal": 59154
+    },
+    {
+      "icon_id": "1898580",
+      "name": "bug",
+      "font_class": "bug",
+      "unicode": "e630",
+      "unicode_decimal": 58928
+    },
+    {
+      "icon_id": "10561807",
+      "name": "Code",
+      "font_class": "Code",
+      "unicode": "e67c",
+      "unicode_decimal": 59004
+    },
+    {
+      "icon_id": "11903708",
+      "name": "help",
+      "font_class": "help",
+      "unicode": "e65b",
+      "unicode_decimal": 58971
+    },
+    {
+      "icon_id": "1393593",
+      "name": "back",
+      "font_class": "back",
+      "unicode": "e6d8",
+      "unicode_decimal": 59096
+    },
+    {
+      "icon_id": "1099020",
+      "name": "zookeeper",
+      "font_class": "zookeeper",
+      "unicode": "e771",
+      "unicode_decimal": 59249
+    },
+    {
+      "icon_id": "11650582",
+      "name": "cloud",
+      "font_class": "cloud",
+      "unicode": "e7be",
+      "unicode_decimal": 59326
+    },
+    {
+      "icon_id": "1170589",
+      "name": "play",
+      "font_class": "play",
+      "unicode": "e647",
+      "unicode_decimal": 58951
+    },
+    {
+      "icon_id": "1261160",
+      "name": "bars",
+      "font_class": "bars",
+      "unicode": "e63c",
+      "unicode_decimal": 58940
+    },
+    {
+      "icon_id": "219350",
+      "name": "log",
+      "font_class": "logging",
+      "unicode": "e64d",
+      "unicode_decimal": 58957
+    },
+    {
+      "icon_id": "5457474",
+      "name": "config",
+      "font_class": "config",
+      "unicode": "e6db",
+      "unicode_decimal": 59099
+    },
+    {
+      "icon_id": "5555152",
+      "name": "java",
+      "font_class": "java",
+      "unicode": "e727",
+      "unicode_decimal": 59175
+    },
+    {
+      "icon_id": "1245611",
+      "name": "solr",
+      "font_class": "solr",
+      "unicode": "e9bf",
+      "unicode_decimal": 59839
+    },
+    {
+      "icon_id": "3052300",
+      "name": "version",
+      "font_class": "version",
+      "unicode": "e738",
+      "unicode_decimal": 59192
+    },
+    {
+      "icon_id": "5160307",
+      "name": "Monitoring informati监控信息",
+      "font_class": "system",
+      "unicode": "e608",
+      "unicode_decimal": 58888
+    },
+    {
+      "icon_id": "5625757",
+      "name": "sta_bs_instance",
+      "font_class": "instance",
+      "unicode": "e613",
+      "unicode_decimal": 58899
+    },
+    {
+      "icon_id": "2576777",
+      "name": "tree",
+      "font_class": "tree",
+      "unicode": "e6e8",
+      "unicode_decimal": 59112
+    },
+    {
+      "icon_id": "3289623",
+      "name": "alias",
+      "font_class": "alias",
+      "unicode": "e68f",
+      "unicode_decimal": 59023
+    },
+    {
+      "icon_id": "1848113",
+      "name": "ico_replica",
+      "font_class": "replica",
+      "unicode": "e672",
+      "unicode_decimal": 58994
+    },
+    {
+      "icon_id": "3005272",
+      "name": "dataCollectionSys",
+      "font_class": "collections",
+      "unicode": "e623",
+      "unicode_decimal": 58915
+    },
+    {
+      "icon_id": "808469",
+      "name": "chart",
+      "font_class": "chart",
+      "unicode": "e635",
+      "unicode_decimal": 58933
+    },
+    {
+      "icon_id": "1092063",
+      "name": "Dashboard",
+      "font_class": "dashboard",
+      "unicode": "e7f8",
+      "unicode_decimal": 59384
+    },
+    {
+      "icon_id": "1144546",
+      "name": "code",
+      "font_class": "code",
+      "unicode": "e702",
+      "unicode_decimal": 59138
+    },
+    {
+      "icon_id": "2942848",
+      "name": "manage",
+      "font_class": "manage",
+      "unicode": "e675",
+      "unicode_decimal": 58997
+    },
+    {
+      "icon_id": "1585779",
+      "name": "discovery",
+      "font_class": "discovery",
+      "unicode": "e61f",
+      "unicode_decimal": 58911
+    }
+  ]
+}
