@@ -6,6 +6,27 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "186693",
+      "name": "waiting",
+      "font_class": "waiting",
+      "unicode": "e624",
+      "unicode_decimal": 58916
+    },
+    {
+      "icon_id": "5002413",
+      "name": "waiting",
+      "font_class": "waiting1",
+      "unicode": "e626",
+      "unicode_decimal": 58918
+    },
+    {
+      "icon_id": "7720055",
+      "name": "thread",
+      "font_class": "thread",
+      "unicode": "e61c",
+      "unicode_decimal": 58908
+    },
+    {
       "icon_id": "1013819",
       "name": "doc文件",
       "font_class": "doc",

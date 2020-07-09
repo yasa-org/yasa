@@ -101,9 +101,34 @@ export interface SystemResponse {
   node: string;
 }
 
+export interface ThreadDump {
+  id: number;
+  name: string;
+  state: string;
+  cpuTime: string;
+  userTime: string;
+  stackTrace: string[];
+}
+
+export interface ThreadsResponse {
+  responseHeader: Header;
+  system: {
+    threadCount: {
+      current: number;
+      peak: number;
+      daemon: number;
+    };
+    threadDump: (ThreadDump | string)[];
+  };
+}
+
 class InfoService {
   public system(format = 'json'): Promise<AxiosResponse<SystemResponse>> {
     return http.get(`/solr/admin/info/system?wt=${format}`);
+  }
+
+  public threads(format = 'json'): Promise<AxiosResponse<ThreadsResponse>> {
+    return http.get(`/solr/admin/info/threads?wt=${format}`);
   }
 }
 
