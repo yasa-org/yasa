@@ -10,11 +10,11 @@
         active-text-color="#ffd04b"
         router
       >
-        <el-menu-item index="" @click="isCollapse = !isCollapse">
+        <el-menu-item @click="isCollapse = !isCollapse">
           <i class="el-icon-yasa-bars"></i>
           <span slot="title">{{ isCollapse ? $t('menu.expand') : $t('menu.collapse') }}</span>
         </el-menu-item>
-        <el-menu-item index="/legacy-ui" @click="back2LegacyUI()">
+        <el-menu-item @click="back2LegacyUI()">
           <i class="el-icon-yasa-back"></i><span slot="title">{{ $t('menu.back2LegacyUI') }}</span>
         </el-menu-item>
         <el-menu-item index="/dashboard">
@@ -25,6 +25,9 @@
         </el-menu-item>
         <el-menu-item index="/logging">
           <i class="el-icon-yasa-logging"></i><span slot="title">{{ $t('menu.logging') }}</span>
+        </el-menu-item>
+        <el-menu-item index="/thread-dump">
+          <i class="el-icon-yasa-thread"></i><span slot="title">{{ $t('menu.thread-dump') }}</span>
         </el-menu-item>
         <el-menu-item index="/visualize">
           <i class="el-icon-yasa-chart"></i><span slot="title">{{ $t('menu.visualize') }}</span>

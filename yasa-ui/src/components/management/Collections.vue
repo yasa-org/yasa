@@ -1,6 +1,6 @@
 <template>
   <div id="collections-root">
-    <div id="operations" align="right">
+    <div class="operations" align="right">
       <el-button icon="el-icon-plus" type="primary" @click="createCollectionDialogVisible = true">New</el-button>
     </div>
     <el-table id="collections" :data="detailedCollections" v-loading="loadingDetailedCollections" height="100%">
@@ -270,12 +270,12 @@ export default class Collections extends Vue {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 #collections-root {
   height: calc(100% - 52px);
   padding-top: 12px;
 }
-#operations {
+.operations {
   margin-right: 12px;
 }
 .el-select {

@@ -53,6 +53,7 @@ const messages = {
       'issue-tracker': 'Issue Tracker',
       'community-forum': 'Community Forum',
       'solr-query-syntax': 'Solr Query Syntax',
+      'thread-dump': 'Thread Dump',
       logging: 'Logging',
       management: 'Management',
       tree: 'Tree',

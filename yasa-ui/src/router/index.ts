@@ -21,6 +21,7 @@ import CodeEditor from '@components/dev-tools/code-editor/CodeEditor.vue';
 import Dashboard from '@components/dashboard/Dashboard.vue';
 import DevTools from '@components/dev-tools/DevTools.vue';
 import Discover from '@components/discover/Discover.vue';
+import ThreadDump from '@components/thread-dump/ThreadDumpView.vue';
 import Logging from '@components/logging/Logging.vue';
 import Collections from '@components/management/Collections.vue';
 import ConfigSet from '@components/management/ConfigSets.vue';
@@ -48,6 +49,7 @@ export default new Router({
     { path: '/dashboard', component: Dashboard },
 
     { path: '/discover', component: Discover },
+    { path: '/thread-dump', component: ThreadDump },
     { path: '/logging', component: Logging },
 
     { path: '/visualize', component: VisualizeChart },
