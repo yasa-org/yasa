@@ -57,8 +57,8 @@ export default new Router({
 
     { path: '/dev-tools', component: DevTools },
 
-    { path: '/management/config-sets', component: ConfigSet },
-    { path: '/management/collections', component: Collections },
+    { path: '/config-sets', component: ConfigSet },
+    { path: '/collections', component: Collections },
 
     { path: '/cloud/tree', component: Tree },
     { path: '/cloud/zk-status', component: ZookeeperStatus },

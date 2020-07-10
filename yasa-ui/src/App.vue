@@ -23,6 +23,12 @@
         <el-menu-item index="/discover">
           <i class="el-icon-yasa-discovery"></i><span slot="title">{{ $t('menu.discover') }}</span>
         </el-menu-item>
+        <el-menu-item index="/collections" :hidden="solrMode !== 'solrcloud'">
+          <i class="el-icon-yasa-collections"></i><span slot="title">{{ $t('menu.collections') }}</span>
+        </el-menu-item>
+        <el-menu-item index="/dev-tools">
+          <i class="el-icon-yasa-code"></i><span slot="title">{{ $t('menu.devTools') }}</span>
+        </el-menu-item>
         <el-menu-item index="/logging">
           <i class="el-icon-yasa-logging"></i><span slot="title">{{ $t('menu.logging') }}</span>
         </el-menu-item>
@@ -32,21 +38,10 @@
         <el-menu-item index="/visualize">
           <i class="el-icon-yasa-chart"></i><span slot="title">{{ $t('menu.visualize') }}</span>
         </el-menu-item>
-        <el-menu-item index="/dev-tools">
-          <i class="el-icon-yasa-code"></i><span slot="title">{{ $t('menu.devTools') }}</span>
+        <el-menu-item index="/config-sets" :hidden="solrMode !== 'solrcloud'">
+          <i class="el-icon-yasa-config"></i><span slot="title">{{ $t('menu.configSet') }}</span>
         </el-menu-item>
-        <el-submenu index="/management" v-if="solrMode === 'solrcloud'">
-          <template slot="title">
-            <i class="el-icon-yasa-manage"></i><span slot="title">{{ $t('menu.management') }}</span>
-          </template>
-          <el-menu-item index="/management/config-sets">
-            <i class="el-icon-yasa-config"></i><span slot="title">{{ $t('menu.configSet') }}</span>
-          </el-menu-item>
-          <el-menu-item index="/management/collections">
-            <i class="el-icon-yasa-collections"></i><span slot="title">{{ $t('menu.collections') }}</span>
-          </el-menu-item>
-        </el-submenu>
-        <el-submenu index="/cloud" v-if="solrMode === 'solrcloud'">
+        <el-submenu index="/cloud" :hidden="solrMode !== 'solrcloud'">
           <template slot="title">
             <i class="el-icon-yasa-cloud"></i><span slot="title">{{ $t('menu.cloud') }}</span>
           </template>
@@ -126,7 +121,7 @@ export default class App extends Vue {
   get activeNav() {
     const segments = this.$route.path.match(/^(\/[^/]+).*/);
     const firstSegment = segments && segments[1];
-    if (firstSegment && ['/management', '/cloud'].includes(firstSegment)) {
+    if (firstSegment && ['/cloud'].includes(firstSegment)) {
       return this.$route.path;
     }
     return firstSegment;

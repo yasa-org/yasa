@@ -55,7 +55,7 @@
       <el-table-column prop="replicationFactor" label="Replication Factor" show-overflow-tooltip></el-table-column>
       <el-table-column prop="configName" label="Config" show-overflow-tooltip></el-table-column>
       <el-table-column prop="autoAddReplicas" label="Auto Add Replicas" show-overflow-tooltip></el-table-column>
-      <el-table-column label="Operations">
+      <el-table-column label="Operations" width="120">
         <template slot-scope="scope">
           <el-dropdown type="primary" split-button @click="reloadCollection(scope.row)">
             <el-tooltip content="Reload" placement="top"><i class="el-icon-refresh"></i></el-tooltip>
