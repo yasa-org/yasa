@@ -12,6 +12,7 @@
   "dependencies": {
     "axios": "^0.19.2",
     "element-ui": "^2.4.4",
+    "flat": "^5.0.0",
     "monaco-editor": "^0.20.0",
     "vue": "^2.5.2",
     "vue-echarts": "^3.0.9",
@@ -20,6 +21,7 @@
     "vuex": "^3.0.1"
   },
   "devDependencies": {
+    "@types/flat": "^5.0.1",
     "@typescript-eslint/eslint-plugin": "^2.33.0",
     "@typescript-eslint/parser": "^2.33.0",
     "@vue/cli-plugin-eslint": "~4.4.0",

@@ -6,7 +6,7 @@
 import * as monaco from 'monaco-editor';
 import { editor, IPosition, languages } from 'monaco-editor';
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
-import { CommandProps } from '@components/dev-tools/code-editor/CodeEditor';
+import { CommandProps } from '@components/common/code-editor/CodeEditor';
 import IStandaloneCodeEditor = editor.IStandaloneCodeEditor;
 import IMonarchLanguage = languages.IMonarchLanguage;
 

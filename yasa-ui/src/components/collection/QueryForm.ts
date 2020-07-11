@@ -17,14 +17,20 @@
  *
  */
 
-export type WT = 'json' | 'xml' | 'python' | 'ruby' | 'php' | 'csv';
-export const WTs = ['json', 'xml', 'python', 'ruby', 'php', 'csv'];
-
-export interface Header {
-  status: number;
-  QTime: number;
-}
-
-export interface GenericResult {
-  responseHeader: Header;
+export default interface QueryForm {
+  qt: string;
+  q: string;
+  fq?: string;
+  sort?: string;
+  start: number;
+  rows: number;
+  fl?: string;
+  df?: string;
+  rqp?: string;
+  wt: string;
+  facet?: {
+    query: string;
+    field: string;
+    prefix: string;
+  };
 }

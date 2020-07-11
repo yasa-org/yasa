@@ -25,10 +25,10 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import CodeEditor from './code-editor/CodeEditor.vue';
+import CodeEditor from '@components/common/code-editor/CodeEditor.vue';
 import { GenericResult } from '@service/solr/model';
 import { namespace } from 'vuex-class';
-import { CommandProps } from '@components/dev-tools/code-editor/CodeEditor';
+import { CommandProps } from '@components/common/code-editor/CodeEditor';
 import * as monaco from 'monaco-editor';
 import { editor } from 'monaco-editor';
 import ITextModel = editor.ITextModel;

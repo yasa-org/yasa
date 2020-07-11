@@ -61,7 +61,7 @@
 <script lang="ts">
 import { namespace } from 'vuex-class';
 import { Component, Vue } from 'vue-property-decorator';
-import CodeEditor from '@components/dev-tools/code-editor/CodeEditor.vue';
+import CodeEditor from '@components/common/code-editor/CodeEditor.vue';
 import { ZkTreeNode, ZookeeperResponse } from '@service/solr/admin/zookeeper';
 import { ElUpload } from 'element-ui/types/upload';
 import { TreeNode } from 'element-ui/types/tree';

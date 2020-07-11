@@ -17,7 +17,7 @@
 </template>
 
 <script lang="ts">
-import CodeEditor from '../dev-tools/code-editor/CodeEditor.vue';
+import CodeEditor from '../common/code-editor/CodeEditor.vue';
 import { ZkTreeNode } from '@service/solr/admin/zookeeper';
 import { Component, Vue } from 'vue-property-decorator';
 import { TreeNode } from 'element-ui/types/tree';

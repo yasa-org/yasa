@@ -6,6 +6,20 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "12944536",
+      "name": "analysis",
+      "font_class": "analysis",
+      "unicode": "e722",
+      "unicode_decimal": 59170
+    },
+    {
+      "icon_id": "13704422",
+      "name": "documents",
+      "font_class": "ElegantIconsicondocuments",
+      "unicode": "eb3f",
+      "unicode_decimal": 60223
+    },
+    {
       "icon_id": "186693",
       "name": "waiting",
       "font_class": "waiting",
@@ -15,7 +29,7 @@
     {
       "icon_id": "5002413",
       "name": "waiting",
-      "font_class": "waiting1",
+      "font_class": "finished",
       "unicode": "e626",
       "unicode_decimal": 58918
     },

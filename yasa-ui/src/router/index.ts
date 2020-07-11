@@ -17,13 +17,14 @@
  *
  */
 
-import CodeEditor from '@components/dev-tools/code-editor/CodeEditor.vue';
+import CodeEditor from '@components/common/code-editor/CodeEditor.vue';
 import Dashboard from '@components/dashboard/Dashboard.vue';
 import DevTools from '@components/dev-tools/DevTools.vue';
 import Discover from '@components/discover/Discover.vue';
 import ThreadDump from '@components/thread-dump/ThreadDumpView.vue';
 import Logging from '@components/logging/Logging.vue';
-import Collections from '@components/management/Collections.vue';
+import Collections from '@components/collection/Collections.vue';
+import CollectionQuery from '@components/collection/Query.vue';
 import ConfigSet from '@components/management/ConfigSets.vue';
 import Tree from '@components/management/Tree.vue';
 import VisualizeChart from '@components/visualize/Chart.vue';
@@ -59,6 +60,7 @@ export default new Router({
 
     { path: '/config-sets', component: ConfigSet },
     { path: '/collections', component: Collections },
+    { path: '/collections/:name/query', component: CollectionQuery },
 
     { path: '/cloud/tree', component: Tree },
     { path: '/cloud/zk-status', component: ZookeeperStatus },

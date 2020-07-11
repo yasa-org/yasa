@@ -1,42 +1,12 @@
 <template>
   <div id="collections-root">
     <div class="operations" align="right">
-      <el-button icon="el-icon-plus" type="primary" @click="createCollectionDialogVisible = true">New</el-button>
+      <el-button icon="el-icon-plus" type="primary" @click="createCollectionDialogVisible = true"></el-button>
     </div>
     <el-table id="collections" :data="detailedCollections" v-loading="loadingDetailedCollections" height="100%">
       <el-table-column type="expand">
         <template slot-scope="props">
-          <el-table :data="shardsFormatter(props.row.shards)">
-            <el-table-column type="expand">
-              <template slot-scope="shards">
-                <el-collapse>
-                  <el-collapse-item v-for="(replica, name) in shards.row.replicas" :key="name" :name="name">
-                    <template slot="title">
-                      <i class="el-icon-yasa-replica"></i>
-                      <span style="margin-left: 6px;">Replica: {{ name }}</span>
-                    </template>
-                    <el-form label-width="120px" label-suffix=":">
-                      <el-form-item label="Core">
-                        <span>{{ replica.core }}</span>
-                      </el-form-item>
-                      <el-form-item label="Base Url">
-                        <span>{{ replica.base_url }}</span>
-                      </el-form-item>
-                      <el-form-item label="Node Name">
-                        <span>{{ replica.node_name }}</span>
-                      </el-form-item>
-                      <el-form-item label="State">
-                        <span>{{ replica.state }}</span>
-                      </el-form-item>
-                    </el-form>
-                  </el-collapse-item>
-                </el-collapse>
-              </template>
-            </el-table-column>
-            <el-table-column prop="name" label="Shard"></el-table-column>
-            <el-table-column prop="state" label="State"></el-table-column>
-            <el-table-column prop="range" label="Range"></el-table-column>
-          </el-table>
+          <shards-component :shards="props.row.shards"></shards-component>
         </template>
       </el-table-column>
       <el-table-column prop="name" label="Collection" show-overflow-tooltip></el-table-column>
@@ -61,17 +31,28 @@
             <el-tooltip content="Reload" placement="top"><i class="el-icon-refresh"></i></el-tooltip>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item>
-                <el-button type="text" icon="el-icon-delete" @click="deleteCollection(scope.row)">Delete</el-button>
+                <el-button
+                  type="text"
+                  icon="el-icon-search"
+                  @click="$router.push({ path: `/collections/${scope.row.name}/query` })"
+                >
+                  Query
+                </el-button>
               </el-dropdown-item>
               <el-dropdown-item>
-                <el-button type="text" icon="el-icon-yasa-alias" @click="createAliasForCollection(scope.row)"
-                  >Create Alias</el-button
-                >
+                <el-button type="text" icon="el-icon-delete" @click="deleteCollection(scope.row)">
+                  Delete
+                </el-button>
               </el-dropdown-item>
               <el-dropdown-item>
-                <el-button type="text" icon="el-icon-close" @click="deleteAliasOfCollection(scope.row)"
-                  >Delete Alias</el-button
-                >
+                <el-button type="text" icon="el-icon-yasa-alias" @click="createAliasForCollection(scope.row)">
+                  Create Alias
+                </el-button>
+              </el-dropdown-item>
+              <el-dropdown-item>
+                <el-button type="text" icon="el-icon-close" @click="deleteAliasOfCollection(scope.row)">
+                  Delete Alias
+                </el-button>
               </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
@@ -106,14 +87,15 @@
 import { NamedCollectionDetail } from '@store/modules/management/collections';
 import { MessageBoxInputData } from 'element-ui/types/message-box';
 import { Component, Vue, Watch } from 'vue-property-decorator';
-import { Shards } from '@service/solr/collections';
 import { State, namespace } from 'vuex-class';
-import NewCollectionForm from './NewCollectionForm.vue';
+import NewCollectionForm from '../management/NewCollectionForm.vue';
+import ShardsComponent from '@components/collection/ShardsComponent.vue';
 
 const Store = namespace('management/collections');
 
 @Component({
   components: {
+    ShardsComponent,
     NewCollectionForm,
   },
 })
@@ -139,17 +121,9 @@ export default class Collections extends Vue {
     return Object.keys(this.aliases).filter((k) => this.aliases[k] === this.selectedCollection);
   }
 
-  private shardCountFormatter(row: NamedCollectionDetail) {
+  private shardCountFormatter = (row: NamedCollectionDetail) => {
     return Object.keys(row.shards).length;
-  }
-
-  private shardsFormatter(shards: { [name: string]: Shards }) {
-    return Object.keys(shards).map((name) => {
-      const shard = shards[name];
-      shard.name = name;
-      return shard;
-    });
-  }
+  };
 
   private loadAliases() {
     this.$service.solr.admin.zookeeper
