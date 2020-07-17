@@ -122,6 +122,13 @@ export interface ThreadsResponse {
   };
 }
 
+export interface PropertiesResponse {
+  responseHeader: Header;
+  'system.properties': {
+    [key: string]: string;
+  };
+}
+
 class InfoService {
   public system(format = 'json'): Promise<AxiosResponse<SystemResponse>> {
     return http.get(`/solr/admin/info/system?wt=${format}`);
@@ -129,6 +136,10 @@ class InfoService {
 
   public threads(format = 'json'): Promise<AxiosResponse<ThreadsResponse>> {
     return http.get(`/solr/admin/info/threads?wt=${format}`);
+  }
+
+  public properties(format = 'json'): Promise<AxiosResponse<PropertiesResponse>> {
+    return http.get(`/solr/admin/info/properties?wt=${format}`);
   }
 }
 

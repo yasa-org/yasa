@@ -84,6 +84,11 @@
           <el-form-item label="Arguments">
             <div class="arg" v-for="(arg, index) in jvm.jmx.commandLineArgs" :key="index">{{ arg }}</div>
           </el-form-item>
+          <el-form-item label="Properties">
+            <div class="arg" v-for="(val, key) in propsResponse['system.properties']" :key="key">
+              {{ key }}={{ val }}
+            </div>
+          </el-form-item>
         </el-form>
       </el-collapse-item>
     </el-collapse>
@@ -92,7 +97,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import { SystemResponse } from '@service/solr/admin/info';
+import { PropertiesResponse, SystemResponse } from '@service/solr/admin/info';
 import Gauge from '@components/dashboard/Gauge.vue';
 
 @Component({
@@ -104,6 +109,9 @@ export default class Dashboard extends Vue {
   private response: SystemResponse = {
     lucene: {},
   } as SystemResponse;
+  private propsResponse: PropertiesResponse = {
+    'system.properties': {},
+  } as PropertiesResponse;
 
   created() {
     this.loadingSystemInfo = true;
@@ -112,6 +120,10 @@ export default class Dashboard extends Vue {
       .then((res) => (this.response = res.data))
       .catch((err) => this.$notify.error(err.message))
       .finally(() => (this.loadingSystemInfo = false));
+    this.$service.solr.admin.info
+      .properties()
+      .then((res) => (this.propsResponse = res.data))
+      .catch((err) => this.$notify.error(err.message));
   }
 
   private get system() {
