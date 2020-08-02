@@ -86,6 +86,8 @@ To undeploy,
 bin/solr package undeploy yasa -cluster
 ----
 
+Colab demo: https://colab.research.google.com/github/TheSearchStack/notebooks/blob/master/Apache_Solr_with_Yasa_Dashboard.ipynb
+
 === Standalone Mode
 
 You can install **{project-name}** in the standalone mode without affecting the official Solr Admin. Here is how:
