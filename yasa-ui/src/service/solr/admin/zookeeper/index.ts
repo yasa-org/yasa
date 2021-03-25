@@ -46,7 +46,7 @@ export interface ZkTreeNode {
   a_attr?: {
     href: string;
   };
-  children: [];
+  children: never[];
 
   ephemeral: boolean;
   version: number;
