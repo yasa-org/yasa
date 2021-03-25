@@ -32,6 +32,7 @@ import ZookeeperStatus from '@components/cloud/ZookeeperStatus.vue';
 import Vue from 'vue';
 import Router from 'vue-router';
 import { RawLocation, Route } from 'vue-router/types/router';
+import Callback from '@components/login/Callback.vue';
 
 Vue.use(Router);
 
@@ -44,6 +45,8 @@ Router.prototype.push = function push(location: RawLocation) {
 export default new Router({
   routes: [
     { path: '/', redirect: '/dashboard' },
+
+    { path: '/callback', component: Callback },
 
     { path: '/test', component: CodeEditor },
 

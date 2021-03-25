@@ -37,6 +37,9 @@ const params = {
 const store = new Vuex.Store({
   actions: {
     loadCollections: (context) => {
+      if (sessionStorage.getItem('auth.status') === '401') {
+        return;
+      }
       if (context.state.loadingCollections) {
         return;
       }
