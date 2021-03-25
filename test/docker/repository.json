@@ -1,0 +1,18 @@
+[
+  {
+    "name": "yasa",
+    "description": "Yet Another Solr Admin",
+    "versions": [
+      {
+        "version": "0.0.0",
+        "date": "2021-01-01",
+        "artifacts": [
+          {
+            "url": "http://server:8000/yasa.jar",
+            "sig": "{sig}"
+          }
+        ]
+      }
+    ]
+  }
+]

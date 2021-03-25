@@ -19,23 +19,29 @@ version: '2'
 
 services:
   solr:
-    image: solr:8.5
+    image: solr:8.8.1
     ports:
       - 8983:8983
-    networks:
-      - yasa
     user: 'root:root'
-    entrypoint: ['sh', '-c', 'solr start -force -c -e techproducts -Denable.packages=true && tail -f /dev/null']
-
-  yasa:
-    image: nginx:1.17
-    ports:
-      - 8080:8080
-    networks:
-      - yasa
     volumes:
-      - ../dist:/yasa
-      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./security.json:/opt/solr-8.8.1/server/solr/security.json
+    environment:
+      SOLR_AUTH_TYPE: "basic"
+      SOLR_AUTHENTICATION_OPTS: "-Dbasicauth=solr:SolrRocks"
+    entrypoint:
+      - sh
+      - -c
+      - |
+        solr start -force -e cloud -noprompt -Denable.packages=true
+        bin/solr zk cp file:server/solr/security.json zk:/security.json -z localhost:9983
+        bin/solr package add-repo yasa "http://server:8000/"
+        bin/solr package install yasa
+        bin/solr package deploy yasa -y -cluster
+        tail -f /dev/null
 
-networks:
-  yasa:
+  server:
+    build:
+      context: ../..
+      dockerfile: test/docker/Dockerfile
+    expose:
+      - 8000

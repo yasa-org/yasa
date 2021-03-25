@@ -96,7 +96,7 @@ You can install **{project-name}** in the standalone mode without affecting the 
 - Extract files from `{project-name-lower}-vX.Y.tgz` (where `X.Y` is the version number) to a directory, say `{project-name}_HOME`.
 - Configure your Nginx server and proxy `/solr/**` to your actual Solr Admin address, for example, `http://127.0.0.1:8983/solr`.
 
-Here is link:docker/nginx.conf[an Nginx configuration sample].
+Here is link:test/nginx.conf[an Nginx configuration sample].
 
 === Integrated Mode
 

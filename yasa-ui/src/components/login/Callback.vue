@@ -5,7 +5,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 
-@Component()
+@Component
 export default class Callback extends Vue {
   created() {
     sessionStorage.setItem('Authorization', `${this.$route.query['token_type']} ${this.$route.query['access_token']}`);
