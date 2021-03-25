@@ -33,10 +33,10 @@ services:
       - -c
       - |
         solr start -force -e cloud -noprompt -Denable.packages=true
-        bin/solr zk cp file:server/solr/security.json zk:/security.json -z localhost:9983
         bin/solr package add-repo yasa "http://server:8000/"
         bin/solr package install yasa
         bin/solr package deploy yasa -y -cluster
+        bin/solr zk cp file:server/solr/security.json zk:/security.json -z localhost:9983
         tail -f /dev/null
 
   server:
