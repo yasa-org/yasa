@@ -24,10 +24,9 @@ services:
       - 8983:8983
     user: 'root:root'
     volumes:
-      - ./security.basic.json:/opt/solr-8.8.1/server/solr/security.json
+      - ./security.jwt.json:/opt/solr-8.8.1/server/solr/security.json
     environment:
-      SOLR_AUTH_TYPE: "basic"
-      SOLR_AUTHENTICATION_OPTS: "-Dbasicauth=solr:SolrRocks"
+      SOLR_OPTS: "-Dsolr.auth.jwt.allowOutboundHttp=true -Denable.packages=true"
     entrypoint:
       - sh
       - -c
@@ -41,6 +40,24 @@ services:
     depends_on:
       server:
         condition: service_healthy
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:12.0.2
+    command: [ "-b", "0.0.0.0", "-Dkeycloak.migration.action=import", "-Dkeycloak.migration.provider=dir", "-Dkeycloak.migration.dir=/opt/jboss/keycloak/realm-config", "-Dkeycloak.migration.strategy=OVERWRITE_EXISTING", "-Djboss.socket.binding.port-offset=1000", "-Dkeycloak.profile.feature.upload_scripts=enabled" ]
+    ports:
+      - 9080:9080
+      - 9443:9443
+    environment:
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: password
+      DB_VENDOR: h2
+    volumes:
+      - ./keycloak/realm-config:/opt/jboss/keycloak/realm-config
+    healthcheck:
+      test: [ "CMD", "bash", "-c", "curl -s 'http://localhost:9080/auth/realms/solr'" ]
+      interval: 5s
+      timeout: 60s
+      retries: 120
 
   server:
     build:

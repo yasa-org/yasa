@@ -23,6 +23,7 @@ import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
+
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.entity.ContentType;
@@ -64,42 +65,43 @@ public class YasaHandler implements ResourceLoaderAware {
     String path = req.getHttpSolrCall().getPath();
     String filepath = resolveFilePath(path);
 
-    final InputStream inputStream = loader.openResource(filepath);
-    if (inputStream == null) {
-      throw new SolrException(ErrorCode.NOT_FOUND, "File not found: " + filepath);
-    }
-
-    final byte[] data;
-    final String contentType;
-
-    if ("".equals(filepath)) {
-      String indexPath = path.endsWith("/") ? path + "index.html" : path + "/index.html";
-      indexPath = indexPath.replaceAll("____v2", "v2");
-      data = ("<meta http-equiv=\"Refresh\" content=\"0; url='" + indexPath + "'\" />").getBytes(
-        StandardCharsets.UTF_8);
-      contentType = ContentType.TEXT_HTML.getMimeType();
-    } else {
-      data = IOUtils.toByteArray(inputStream);
-      contentType = contentType(filepath);
-    }
-    final ModifiableSolrParams newParams = new ModifiableSolrParams(req.getOriginalParams());
-    newParams.set(CommonParams.WT, ReplicationHandler.FILE_STREAM);
-    req.setParams(newParams);
-
-    final SolrCore.RawWriter writer = new SolrCore.RawWriter() {
-
-      @Override
-      public void write(OutputStream os) throws IOException {
-        os.write(data);
+    try (final InputStream inputStream = loader.openResource(filepath)) {
+      if (inputStream == null) {
+        throw new SolrException(ErrorCode.NOT_FOUND, "File not found: " + filepath);
       }
 
-      @Override
-      public String getContentType() {
-        return contentType;
-      }
-    };
+      final byte[] data;
+      final String contentType;
 
-    rsp.add(ReplicationHandler.FILE_STREAM, writer);
+      if ("".equals(filepath)) {
+        String indexPath = path.endsWith("/") ? path + "index.html" : path + "/index.html";
+        indexPath = indexPath.replaceAll("____v2", "v2");
+        data = ("<meta http-equiv=\"Refresh\" content=\"0; url='" + indexPath + "'\" />").getBytes(
+          StandardCharsets.UTF_8);
+        contentType = ContentType.TEXT_HTML.getMimeType();
+      } else {
+        data = IOUtils.toByteArray(inputStream);
+        contentType = contentType(filepath);
+      }
+      final ModifiableSolrParams newParams = new ModifiableSolrParams(req.getOriginalParams());
+      newParams.set(CommonParams.WT, ReplicationHandler.FILE_STREAM);
+      req.setParams(newParams);
+
+      final SolrCore.RawWriter writer = new SolrCore.RawWriter() {
+
+        @Override
+        public void write(OutputStream os) throws IOException {
+          os.write(data);
+        }
+
+        @Override
+        public String getContentType() {
+          return contentType;
+        }
+      };
+
+      rsp.add(ReplicationHandler.FILE_STREAM, writer);
+    }
   }
 
   private String contentType(final String filepath) {
