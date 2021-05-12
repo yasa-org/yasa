@@ -45,7 +45,7 @@
     <maven.compiler.target>9</maven.compiler.target>
 
     <lombok.version>1.18.10</lombok.version>
-    <solr-core-version>8.4.0</solr-core-version>
+    <solr-core-version>8.8.2</solr-core-version>
     <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
     <frontend-maven-plugin.version>1.10.0</frontend-maven-plugin.version>
     <maven-resources-plugin.version>3.1.0</maven-resources-plugin.version>
