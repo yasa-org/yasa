@@ -20,3 +20,6 @@ target/
 node/
 
 *.iml
+package-lock.json
+yasa-ui/package-lock.json
+.history/
