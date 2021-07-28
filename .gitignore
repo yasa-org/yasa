@@ -20,3 +20,5 @@ target/
 node/
 
 *.iml
+.history
+package-lock.json
