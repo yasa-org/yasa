@@ -45,8 +45,8 @@ module.exports = {
         link: "/config/"
       },
       {
-        text: "VuePress",
-        link: "https://v1.vuepress.vuejs.org"
+        text: "Github",
+        link: "https://github.com/yasa-org/yasa"
       }
     ],
     sidebar: {
