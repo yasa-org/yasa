@@ -1,15 +1,15 @@
 ---
 home: true
-heroImage: https://v1.vuepress.vuejs.org/hero.png
+heroImage: https://raw.githubusercontent.com/almogtavor/yasa/docs-creation/docs/src/assets/logo.png
 tagline: Yasa documentation
 actionText: Quick Start →
 actionLink: /guide/
 features:
-- title: Feature 1 Title
-  details: Feature 1 Description
-- title: Feature 2 Title
-  details: Feature 2 Description
-- title: Feature 3 Title
-  details: Feature 3 Description
-footer: Made by  with ❤️
+- title: Discover
+  details: Take a look at fields easily
+- title: Visualize
+  details: New ways to visualize Solr like never before
+- title: Dashboard
+  details: View Solr metrics quickly
+footer: Made by YASA-org with ❤️
 ---

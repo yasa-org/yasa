@@ -1,6 +1,7 @@
 {
   "name": "docs",
   "version": "0.0.1",
+  "title": "Yet Another Solr Admin",
   "description": "Yasa documentation",
   "main": "index.js",
   "authors": {
@@ -9,11 +10,16 @@
   },
   "repository": "/docs",
   "scripts": {
+    "preinstall": "npx npm-force-resolutions",
     "dev": "vuepress dev src",
-    "build": "vuepress build src"
+    "build": "vuepress build src",
+    "start": "nodemon --ext md,vue --watch .vuepress --watch . --exec vuepress dev src --host localhost"
   },
   "license": "MIT",
   "devDependencies": {
     "vuepress": "^1.5.3"
+  },
+  "resolutions": {
+    "watchpack": "1.6.1"
   }
 }
