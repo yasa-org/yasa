@@ -1,6 +1,6 @@
 ---
 home: true
-heroImage: https://raw.githubusercontent.com/almogtavor/yasa/docs-creation/docs/src/assets/logo.png
+heroImage: https://raw.githubusercontent.com/almogtavor/yasa/docs-creation/docs/src/.vuepress/public/assets/logo.png
 tagline: YASA documentation
 actionText: Quick Start →
 actionLink: /guide/
