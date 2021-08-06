@@ -36,7 +36,7 @@ module.exports = {
     editLinkText: "",
     lastUpdated: false,
     logo:
-      "https://raw.githubusercontent.com/almogtavor/yasa/docs-creation/docs/src/.vuepress/public/assets/logo.png",
+      "https://raw.githubusercontent.com/yasa-org/yasa/docs-creation/docs/src/.vuepress/public/assets/logo.png",
     nav: [
       {
         text: "Guide",
