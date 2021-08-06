@@ -51,5 +51,5 @@ jobs:
         with:
           publish_dir: yasa-ui/dist
           deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
-          external_repository: yasa-org/yasa-org.github.io
+          external_repository: yasa-org/demo
           publish_branch: master
