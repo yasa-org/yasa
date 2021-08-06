@@ -35,6 +35,8 @@ module.exports = {
     docsDir: "",
     editLinkText: "",
     lastUpdated: false,
+    logo:
+      "https://raw.githubusercontent.com/almogtavor/yasa/docs-creation/docs/src/assets/logo.png",
     nav: [
       {
         text: "Guide",
@@ -54,7 +56,13 @@ module.exports = {
         {
           title: "Guide",
           collapsable: false,
-          children: ["", "using-vue", "using-yasa"]
+          children: [
+            "",
+            "installation",
+            "getting-started",
+            "contribution",
+            "acknowledgements"
+          ]
         }
       ]
     }
