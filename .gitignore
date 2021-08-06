@@ -20,3 +20,4 @@ target/
 node/
 
 *.iml
+.history
