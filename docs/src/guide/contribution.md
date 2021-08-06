@@ -4,7 +4,7 @@ Any contribution is highly appreciated. You can open issues or pull requests to 
 
 ## Star YASA on Github!
 
-If you liked YASA we would be glad if you'd star us on [Github](https://github.com/yasa-org/yasa).
+If you liked YASA we would be glad if you'd star us on [GitHub](https://github.com/yasa-org/yasa).
 
 You have just learned the **basics of YASA**.
 Anything **unclear** or **buggy** in this tutorial or in YASA? [Please report it!](https://github.com/yasa-org/yasa/issues)
