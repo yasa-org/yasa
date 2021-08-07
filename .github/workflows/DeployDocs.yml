@@ -35,5 +35,5 @@ jobs:
           publish_dir: docs/src/.vuepress/dist
           deploy_key: ${{ secrets.ACTIONS_DOCS_DEPLOY_KEY }}
           external_repository: yasa-org/yasa-org.github.io
-          publish_branch: master
+          publish_branch: main
 
