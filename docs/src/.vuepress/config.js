@@ -20,8 +20,8 @@ module.exports = {
     ["meta", { name: "apple-mobile-web-app-capable", content: "yes" }],
     [
       "meta",
-      { name: "apple-mobile-web-app-status-bar-style", content: "black" }
-    ]
+      { name: "apple-mobile-web-app-status-bar-style", content: "black" },
+    ],
   ],
 
   /**
@@ -35,21 +35,16 @@ module.exports = {
     docsDir: "",
     editLinkText: "",
     lastUpdated: false,
-    logo:
-      "https://raw.githubusercontent.com/yasa-org/yasa/master/docs/src/.vuepress/public/assets/logo.png",
+    logo: "https://raw.githubusercontent.com/yasa-org/yasa/master/docs/src/.vuepress/public/assets/logo.png",
     nav: [
       {
         text: "Guide",
-        link: "/guide/"
-      },
-      {
-        text: "Config",
-        link: "/config/"
+        link: "/guide/",
       },
       {
         text: "Github",
-        link: "https://github.com/yasa-org/yasa"
-      }
+        link: "https://github.com/yasa-org/yasa",
+      },
     ],
     sidebar: {
       "/guide/": [
@@ -61,14 +56,14 @@ module.exports = {
             "installation",
             "getting-started",
             "contribution",
-            "acknowledgements"
-          ]
-        }
-      ]
-    }
+            "acknowledgements",
+          ],
+        },
+      ],
+    },
   },
   /**
    * Apply plugins，ref：https://v1.vuepress.vuejs.org/zh/plugin/
    */
-  plugins: ["@vuepress/plugin-back-to-top", "@vuepress/plugin-medium-zoom"]
+  plugins: ["@vuepress/plugin-back-to-top", "@vuepress/plugin-medium-zoom"],
 };
