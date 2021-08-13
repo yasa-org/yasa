@@ -15,7 +15,7 @@ This pull request is in the type of:
 
 ### What does this PR do?
 
-<!-- USE ONCE SENTENCE TO DESCRIBE WHAT THIS PR DOES. -->
+<!-- USE ONE SENTENCE TO DESCRIBE WHAT THIS PR DOES. -->
 
 
 ### Fixed issues
