@@ -11,6 +11,12 @@ image:https://img.shields.io/badge/SolrCloud-6.1.0+-D9411E.svg[capition="Solr Ve
 image:https://img.shields.io/badge/VueJS-2.5.2-4fc08d.svg[capition="VueJS Version", link=https://vuejs.org]
 image:https://img.shields.io/github/license/yasa-org/yasa[capition="License", link=http://www.apache.org/licenses/LICENSE-2.0]
 
+++++
+<p align="center">
+  <img width="350" height="350" src="https://github.com/yasa-org/yasa/blob/master/docs/src/assets/logo.svg">
+</p>
+++++
+
 == Features
 
 [cols="^,^,^", options="header"]
