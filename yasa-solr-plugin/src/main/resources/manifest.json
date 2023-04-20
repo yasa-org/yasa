@@ -1,5 +1,5 @@
 {
-  "version-constraint": "8 - 9",
+  "version-constraint": "9 - 10",
   "plugins": [
     {
       "name": "yasa",
