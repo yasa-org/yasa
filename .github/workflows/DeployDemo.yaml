@@ -16,21 +16,19 @@
 #
 
 name: Deploy Demo
-
 on:
   push:
     branches:
       - master
-
 jobs:
   DeployDemo:
     name: Deploy Demo
     runs-on: ubuntu-latest
     steps:
       - name: Checkout source codes
-        uses: actions/checkout@v2
+        uses: actions/checkout@v6
       - name: Cache node modules
-        uses: actions/cache@v1
+        uses: actions/cache@v5
         with:
           path: ~/.npm
           key: ${{ runner.os }}-build-${{ hashFiles('**/package.json') }}
